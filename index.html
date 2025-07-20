@@ -29,6 +29,7 @@
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        html { scroll-behavior: smooth; } /* For smooth scrolling */
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-body">
@@ -39,7 +40,7 @@
         x-cloak
     >
         <!-- Título y Encabezado -->
-        <header class="text-center mb-8">
+        <header id="header" class="text-center mb-8">
             <div class="flex justify-center items-center space-x-4">
                 <img src="https://i.ibb.co/svMK2wRn/Airbrush-Image-Enhancer-1752901262222.jpg" alt="Logo Izquierda" class="h-28 w-auto">
                 <h1 class="text-5xl sm:text-6xl font-elegant font-bold text-slate-900">Tu Mezcla ideal</h1>
@@ -51,7 +52,7 @@
         </header>
 
         <!-- Pestañas de Modo -->
-        <div class="mb-8 flex justify-center border border-slate-300 rounded-lg p-1 bg-slate-200 w-full sm:w-auto mx-auto">
+        <div id="builder" class="mb-8 flex justify-center border border-slate-300 rounded-lg p-1 bg-slate-200 w-full sm:w-auto mx-auto">
             <button @click="changeMode('quantity')" :class="{ 'bg-white text-emerald-800 shadow-md': mode === 'quantity', 'text-slate-600': mode !== 'quantity' }" class="px-4 py-2 w-1/3 sm:w-auto rounded-md font-semibold transition-colors">
                 Por Cantidad
             </button>
@@ -85,7 +86,7 @@
                 <div class="grid grid-cols-1 divide-y divide-slate-200">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco</span><span class="md:text-center">Porcentaje</span><span class="md:text-right">Gramos Calculados</span></div>
                     <template x-for="nut in nuts" :key="nut.name">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-3"><span x-text="nut.name" class="font-medium text-slate-700 px-2"></span><div class="flex items-center gap-2"><input type="range" min="0" max="100" x-model.number="nut.percentage" class="w-full accent-emerald-800"><div class="relative w-24"><input type="number" min="0" max="100" x-model.number.debounce="nut.percentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-1 focus:border-emerald-800 focus:ring-emerald-800"><span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 select-none">%</span></div></div><span class="md:text-right font-mono text-slate-800 px-2" x-text="calculateNutGrams(nut.percentage) + ' g'"></span></div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-3"><span x-text="nut.name" class="font-medium text-slate-700 px-2"></span><div class="flex items-center gap-2"><input type="range" min="0" max="100" x-model.number="nut.percentage" class="w-2/3 accent-emerald-800"><div class="relative w-1/3"><input type="number" min="0" max="100" x-model.number.debounce="nut.percentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-1 focus:border-emerald-800 focus:ring-emerald-800"><span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 select-none">%</span></div></div><span class="md:text-right font-mono text-slate-800 px-2" x-text="calculateNutGrams(nut.percentage) + ' g'"></span></div>
                     </template>
                 </div>
             </div>
@@ -122,37 +123,28 @@
             </div>
             <div x-show="mode !== 'prices'" class="mt-6">
                 <button @click="addToCart()" :disabled="!isActionEnabled" class="w-full font-bold py-3 px-4 rounded-lg transition-all" :class="{'bg-green-700 hover:bg-green-800 text-white shadow-lg': isActionEnabled, 'bg-slate-300 cursor-not-allowed text-slate-500': !isActionEnabled}">Añadir Compra</button>
+                <p class="text-center text-sm text-slate-500 mt-2">Puedes añadir las mezclas que desees.</p>
             </div>
         </section>
 
         <!-- Carrito de Compras -->
-        <div class="overflow-hidden transition-height" :style="cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0px'">
+        <div id="cart" class="overflow-hidden transition-height" :style="cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0px'">
             <section class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200">
                 <h2 class="text-2xl font-bold text-slate-800 mb-4">Paso 2: Revisa tu Carrito</h2>
                 <div class="space-y-4">
                     <template x-for="(item, index) in cart" :key="index">
-                        <div class="flex items-center justify-between bg-slate-100 p-3 rounded-md">
-                            <div class="flex-1">
-                                <p class="font-bold" x-text="`Mezcla #${index + 1}`"></p>
-                                <ul class="text-sm text-slate-600 list-disc list-inside">
-                                    <template x-for="nut in item.nuts.filter(n => n.grams > 0)" :key="nut.name"><li><span x-text="`${nut.name}: ${nut.grams.toFixed(0)}g`"></span></li></template>
-                                </ul>
-                                <p x-show="item.discount > 0" class="text-xs text-green-700 font-bold mt-1" x-text="`(Incluye ${item.discountPercentage}% de descuento por volumen)`"></p>
-                            </div>
-                            <div class="text-right mx-4">
-                                <p class="font-semibold" x-text="formatCurrency(item.cost)"></p>
-                                <p class="text-sm text-slate-500" x-text="`${item.totalGrams.toFixed(0)} g`"></p>
-                            </div>
-                            <button @click="removeFromCart(index)" class="text-red-500 hover:text-red-700 font-bold text-2xl p-2">×</button>
-                        </div>
+                        <div class="flex items-center justify-between bg-slate-100 p-3 rounded-md"><div class="flex-1"><p class="font-bold" x-text="`Mezcla #${index + 1}`"></p><ul class="text-sm text-slate-600 list-disc list-inside"><template x-for="nut in item.nuts.filter(n => n.grams > 0)" :key="nut.name"><li><span x-text="`${nut.name}: ${nut.grams.toFixed(0)}g`"></span></li></template></ul><p x-show="item.discount > 0" class="text-xs text-green-700 font-bold mt-1" x-text="`(Incluye ${item.discountPercentage}% de descuento por volumen)`"></p></div><div class="text-right mx-4"><p class="font-semibold" x-text="formatCurrency(item.cost)"></p><p class="text-sm text-slate-500" x-text="`${item.totalGrams.toFixed(0)} g`"></p></div><button @click="removeFromCart(index)" class="text-red-500 hover:text-red-700 font-bold text-2xl p-2">×</button></div>
                     </template>
-                    <div x-show="cart.length > 0" class="text-right mt-4"><button @click="showOrderSection = true; $nextTick(() => document.getElementById('contact-name').focus())" class="font-bold py-2 px-4 rounded-lg bg-emerald-800 hover:bg-emerald-900 text-white shadow-lg">Comprar</button></div>
+                    <div x-show="cart.length > 0" class="flex justify-end items-center gap-4 mt-4">
+                        <button @click="scrollToElement('#builder')" type="button" class="font-bold py-2 px-4 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700">Continuar Seleccionando</button>
+                        <button @click="scrollToElement('#order-section')" type="button" class="font-bold py-2 px-4 rounded-lg bg-emerald-800 hover:bg-emerald-900 text-white shadow-lg">Proceder a la Compra</button>
+                    </div>
                 </div>
             </section>
         </div>
         
         <!-- Sección de Pedido Final -->
-        <div class="overflow-hidden transition-height" :style="showOrderSection && cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0'">
+        <div id="order-section" class="overflow-hidden transition-height" :style="cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0'">
             <section class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200">
                 <form id="order-form" @submit.prevent="placeOrder">
                     <h2 class="text-2xl font-bold text-slate-800 mb-4">Paso 3: Completa tu Pedido</h2>
@@ -306,9 +298,18 @@
                     if (this.mode === 'percentage') return this.currentMix.totalPercentage === 100 && this.currentMix.totalGrams > 0;
                     return false; // Disable for 'prices' tab
                 },
-
-                addToCart() { if (!this.isActionEnabled) return; this.cart.push(this.currentMix); this.resetBuilder(); },
-                buyNow() { if (!this.isActionEnabled) return; this.cart = [this.currentMix]; this.showOrderSection = true; this.$nextTick(() => document.getElementById('contact-name').focus()); },
+                
+                scrollToElement(selector) {
+                    document.querySelector(selector).scrollIntoView({ behavior: 'smooth' });
+                },
+                
+                addToCart() { 
+                    if (!this.isActionEnabled) return; 
+                    this.cart.push(this.currentMix); 
+                    this.resetBuilder();
+                    this.$nextTick(() => this.scrollToElement('#cart'));
+                },
+                buyNow() { if (!this.isActionEnabled) return; this.cart = [this.currentMix]; this.$nextTick(() => { this.showOrderSection = true; this.$nextTick(() => this.scrollToElement('#order-section')); }); },
                 resetBuilder() { this.nuts.forEach(nut => { nut.grams = 0; nut.percentage = 0; }); },
                 changeMode(newMode) { this.mode = newMode; if (newMode !== 'prices') this.resetBuilder(); },
                 removeFromCart(index) { this.cart.splice(index, 1); if (this.cart.length === 0) { this.showOrderSection = false; } },
