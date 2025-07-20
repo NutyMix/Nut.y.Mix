@@ -74,7 +74,7 @@
         <section class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
             <!-- Modo Cantidad -->
             <div x-show="mode === 'quantity'" x-transition>
-                <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Puedes crear tu mezcla ideal indicando los gramos exactos de cada fruto seco. O si lo prefieres, ¡también puedes usarla para llevar un solo fruto seco en la cantidad que necesites!"</p>
+                <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Crea tu mezcla perfecta gramo a gramo. ¿O prefieres algo más simple? Elige la cantidad exacta de tu fruto seco favorito. Tú mandas."</p>
                 <div class="grid grid-cols-1 divide-y divide-slate-200">
                     <div class="grid grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco</span><span class="text-center">Cantidad</span><span class="text-right">Porcentaje</span></div>
                     <template x-for="nut in nuts" :key="nut.name">
@@ -84,7 +84,7 @@
             </div>
             <!-- Modo Porcentaje -->
             <div x-show="mode === 'percentage'" x-transition>
-                <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Establece una cantidad total para tu mezcla y luego diseña tu balance perfecto asignando porcentajes a tus frutos favoritos."</p>
+                <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Aquí tú tienes el control total. Elige la cantidad total para tu mezcla y luego diseña el balance perfecto de sabores asignando porcentajes a tus frutos favoritos."</p>
                 <div class="mb-6">
                     <label for="totalGrams" class="block text-sm font-medium text-slate-700 text-center mb-2">Cantidad total de tu Mezcla (Gramos)</label>
                     <div class="relative max-w-xs mx-auto"><input id="totalGrams" type="number" min="0" x-model.number="totalGramsForPercentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800"></div>
@@ -106,11 +106,11 @@
             </div>
             <!-- Modo Precios -->
             <div x-show="mode === 'prices'" x-transition>
-                 <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"A continuación, se detalla el costo por gramo para cada uno de nuestros frutos secos disponibles."</p>
+                 <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Transparencia y calidad en cada gramo. Conoce los precios de nuestra selección premium para que diseñes tu mezcla con total confianza."</p>
                  <div class="text-center text-sm text-slate-600 mb-6 bg-emerald-50 p-3 rounded-md border border-emerald-200">
                     <p class="font-bold text-emerald-800">Compra de forma inteligente. Ahorra en grande.</p>
-                    <p>Lleva <b>500g</b> o más y obtén un <b>2% de descuento</b> en tu mezcla.</p>
-                    <p>Lleva <b>1kg</b> o más y disfruta de un <b>5% de descuento</b> en tu mezcla.</p>
+                    <p>Lleva <b>500gr</b> o más en una sola mezcla y obtén un <b>2% de descuento</b>.</p>
+                    <p>Lleva <b>1kg</b> o más en una sola mezcla y disfruta de un <b>5% de descuento</b>.</p>
                  </div>
                 <div class="grid grid-cols-1 divide-y divide-slate-200">
                     <div class="grid grid-cols-2 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco</span><span class="text-right">Precio por Gramo</span></div>
