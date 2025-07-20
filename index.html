@@ -68,7 +68,7 @@
         <section class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
             <!-- Modo Cantidad -->
             <div x-show="mode === 'quantity'" x-transition>
-                <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Puedes crear tu mezcla ideal indicando los gramos exactos de cada fruto seco. O si lo prefieres, ¡también puedes usarla para llevar un solo fruto seco en la cantidad que necesites!"</p>
+                <p class="mb-6 text-center font-bold text-slate-700 text-lg">"Puedes crear tu mezcla ideal indicando los gramos exactos de cada fruto seco. O si lo prefieres, ¡también puedes usarla para llevar un solo fruto seco en la cantidad que necesites!"</p>
                 <div class="grid grid-cols-1 divide-y divide-slate-200">
                     <div class="grid grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco</span><span class="text-center">Cantidad</span><span class="text-right">Porcentaje</span></div>
                     <template x-for="nut in nuts" :key="nut.name">
@@ -78,13 +78,13 @@
             </div>
             <!-- Modo Porcentaje -->
             <div x-show="mode === 'percentage'" x-transition>
-                <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Establece un peso total para tu mezcla y luego diseña tu balance perfecto asignando porcentajes a tus frutos favoritos."</p>
+                <p class="mb-6 text-center font-bold text-slate-700 text-lg">"Establece un peso total para tu mezcla y luego diseña tu balance perfecto asignando porcentajes a tus frutos favoritos."</p>
                 <div class="mb-6">
                     <label for="totalGrams" class="block text-sm font-medium text-slate-700 text-center mb-2">Cantidad total de tu Mezcla en gramos</label>
                     <div class="relative max-w-xs mx-auto"><input id="totalGrams" type="number" min="0" x-model.number="totalGramsForPercentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800"></div>
                 </div>
                 <div class="grid grid-cols-1 divide-y divide-slate-200">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco</span><span class="md:text-center">Porcentaje</span><span class="md:text-right">Gramos</span></div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco</span><span class="md:text-center">Porcentaje</span><span class="md:text-right">Gramos Calculados</span></div>
                     <template x-for="nut in nuts" :key="nut.name">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-3"><span x-text="nut.name" class="font-medium text-slate-700 px-2"></span><div class="flex items-center gap-2"><input type="range" min="0" max="100" x-model.number="nut.percentage" class="w-2/3 accent-emerald-800"><div class="relative w-1/3"><input type="number" min="0" max="100" x-model.number.debounce="nut.percentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-1 focus:border-emerald-800 focus:ring-emerald-800"><span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 select-none">%</span></div></div><span class="md:text-right font-mono text-slate-800 px-2" x-text="calculateNutGrams(nut.percentage) + ' g'"></span></div>
                     </template>
@@ -92,7 +92,7 @@
             </div>
             <!-- Modo Precios -->
             <div x-show="mode === 'prices'" x-transition>
-                 <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"A continuación, se detalla el costo por gramo para cada uno de nuestros frutos secos disponibles."</p>
+                 <p class="mb-6 text-center font-bold text-slate-700 text-lg">"A continuación, se detalla el costo por gramo para cada uno de nuestros frutos secos disponibles."</p>
                  <div class="text-center text-sm text-slate-600 mb-6 bg-emerald-50 p-3 rounded-md border border-emerald-200">
                     <p class="font-bold text-emerald-800">Compra de forma inteligente. Ahorra en grande.</p>
                     <p>Lleva <b>500g</b> o más y obtén un <b>2% de descuento</b> en tu mezcla.</p>
@@ -149,16 +149,16 @@
                 <form id="order-form" @submit.prevent="placeOrder">
                     <h2 class="text-2xl font-bold text-slate-800 mb-4">Paso 3: Completa tu Pedido</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                        <div><label for="contact-name" class="block font-medium">Nombre de Contacto</label><input id="contact-name" type="text" x-model="contactInfo.name" required class="w-full border-slate-300 rounded-md shadow-sm"></div>
-                        <div><label for="contact-phone" class="block font-medium">Celular de Contacto</label><input id="contact-phone" type="tel" x-model="contactInfo.phone" required class="w-full border-slate-300 rounded-md shadow-sm"></div>
+                        <div><label for="contact-name" class="block font-medium">Nombre de Contacto <span class="text-red-500">*</span></label><input id="contact-name" type="text" x-model="contactInfo.name" required class="w-full border-slate-300 rounded-md shadow-sm"></div>
+                        <div><label for="contact-phone" class="block font-medium">Celular de Contacto <span class="text-red-500">*</span></label><input id="contact-phone" type="tel" x-model="contactInfo.phone" required class="w-full border-slate-300 rounded-md shadow-sm"></div>
                     </div>
                     <div class="flex gap-4 mb-4"><button type="button" @click="delivery.mode = 'pickup'" :class="{'bg-emerald-800 text-white': delivery.mode === 'pickup', 'bg-slate-200': delivery.mode !== 'pickup'}" class="flex-1 py-2 px-4 rounded-md font-semibold">Recoger en Tienda</button><button type="button" @click="delivery.mode = 'delivery'" :class="{'bg-emerald-800 text-white': delivery.mode === 'delivery', 'bg-slate-200': delivery.mode !== 'delivery'}" class="flex-1 py-2 px-4 rounded-md font-semibold">Domicilio</button></div>
                     <div x-show="delivery.mode === 'pickup'" x-transition class="p-4 bg-blue-50 border border-blue-200 rounded-md text-center text-blue-800 mb-6"><p>Puedes recoger tu pedido en:</p><p class="font-bold">Carrera 19 # 183-30, Usaquén</p></div>
                     <div x-show="delivery.mode === 'delivery'" x-transition class="space-y-4 mb-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div><label for="address-input" class="block font-medium">Dirección</label><input id="address-input" type="text" placeholder="Ej: Carrera 7 # 72-50" x-model="delivery.address" @input.debounce.750ms="getCoordinates()" class="w-full border-slate-300 rounded-md shadow-sm"></div>
+                            <div><label for="address-input" class="block font-medium">Dirección <span class="text-red-500">*</span></label><input id="address-input" type="text" placeholder="Ej: Carrera 7 # 72-50" x-model="delivery.address" @input.debounce.750ms="getCoordinates()" class="w-full border-slate-300 rounded-md shadow-sm"></div>
                             <div>
-                                <label for="locality-input" class="block font-medium">Localidad</label>
+                                <label for="locality-input" class="block font-medium">Localidad <span class="text-red-500">*</span></label>
                                 <select id="locality-input" x-model="delivery.locality" @change="getCoordinates()" class="w-full border-slate-300 rounded-md shadow-sm">
                                     <option value="">Selecciona una localidad</option>
                                     <template x-for="locality in localities" :key="locality">
@@ -193,27 +193,25 @@
         </div>
     </div>
     
+    <!-- WhatsApp Floating Button with Visible Text -->
+    <a href="https://wa.me/573102416762?text=Hola%2C%2C%20necesito%20ayuda%20con%20mi%20mezcla%20de%20frutos%20secos."
+       target="_blank" 
+       rel="noopener noreferrer"
+       class="fixed bottom-6 right-6 flex items-center gap-3 bg-white p-3 rounded-full shadow-lg z-50 transition-transform transform hover:scale-105 border border-slate-200">
+        
+        <span class="font-semibold text-slate-800">¿Necesitas Ayuda?</span>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-8 h-8 text-green-500">
+            <path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zM223.9 439.6c-38.2 0-73.7-11.8-103.6-32.5L100 419.5l-2.3-1.4-86.8 22.7L32.6 351.6c-19.8-31.5-31.5-68.4-31.5-107.6 0-110.3 89.7-200 200-200 55.1 0 105.9 21.6 143.4 59.1 37.5 37.5 59.1 88.3 59.1 143.4-.1 110.4-89.8 200-200.1 200zM324.9 288c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+        </svg>
+    </a>
+
     <script>
         function mixBuilder() {
             return {
                 mode: 'quantity',
                 totalGramsForPercentage: 500,
-                nuts: [
-                    { name: 'Almendra laminada', price: 50, grams: 0, percentage: 0 },
-                    { name: 'Almendra', price: 55, grams: 0, percentage: 0 },
-                    { name: 'Avellana', price: 60, grams: 0, percentage: 0 },
-                    { name: 'Macadamia', price: 65, grams: 0, percentage: 0 },
-                    { name: 'Maní con sal', price: 70, grams: 0, percentage: 0 },
-                    { name: 'Maní sin sal', price: 75, grams: 0, percentage: 0 },
-                    { name: 'Marañón con sal', price: 80, grams: 0, percentage: 0 },
-                    { name: 'Marañón sin sal', price: 85, grams: 0, percentage: 0 },
-                    { name: 'Nuez del Brasil', price: 90, grams: 0, percentage: 0 },
-                    { name: 'Nuez del Nogal', price: 95, grams: 0, percentage: 0 },
-                    { name: 'Pistacho', price: 100, grams: 0, percentage: 0 },
-                    { name: 'Nuez Pecan', price: 105, grams: 0, percentage: 0 },
-                    { name: 'Arándano deshidratado', price: 110, grams: 0, percentage: 0 },
-                    { name: 'Dátiles', price: 115, grams: 0, percentage: 0 }
-                ],
+                nuts: [],
                 localities: [
                     'Usaquén', 'Chapinero', 'Santa Fe', 'San Cristóbal', 'Usme', 'Tunjuelito', 'Bosa', 'Kennedy',
                     'Fontibón', 'Engativá', 'Suba', 'Barrios Unidos', 'Teusaquillo', 'Los Mártires', 'Antonio Nariño',
@@ -226,6 +224,10 @@
                 formStatus: 'Confirmar Pedido',
                 showConfirmationModal: false,
                 confirmationDetails: { title: '', message: '', summary: '' },
+
+                init() {
+                    this.resetBuilder();
+                },
 
                 async getCoordinates() {
                     if (this.delivery.address.trim().length < 5 || !this.delivery.locality) { this.delivery.status = 'Por favor, completa la dirección y selecciona una localidad.'; this.delivery.error = true; return; }
@@ -310,7 +312,11 @@
                     this.$nextTick(() => this.scrollToElement('#cart'));
                 },
                 buyNow() { if (!this.isActionEnabled) return; this.cart = [this.currentMix]; this.$nextTick(() => { this.showOrderSection = true; this.$nextTick(() => this.scrollToElement('#order-section')); }); },
-                resetBuilder() { this.nuts.forEach(nut => { nut.grams = 0; nut.percentage = 0; }); },
+                resetBuilder() { 
+                    this.nuts = [
+                        { name: 'Almendra laminada', price: 50, grams: 0, percentage: 0 }, { name: 'Almendra', price: 55, grams: 0, percentage: 0 }, { name: 'Avellana', price: 60, grams: 0, percentage: 0 }, { name: 'Macadamia', price: 65, grams: 0, percentage: 0 }, { name: 'Maní con sal', price: 70, grams: 0, percentage: 0 }, { name: 'Maní sin sal', price: 75, grams: 0, percentage: 0 }, { name: 'Marañón con sal', price: 80, grams: 0, percentage: 0 }, { name: 'Marañón sin sal', price: 85, grams: 0, percentage: 0 }, { name: 'Nuez del Brasil', price: 90, grams: 0, percentage: 0 }, { name: 'Nuez del Nogal', price: 95, grams: 0, percentage: 0 }, { name: 'Pistacho', price: 100, grams: 0, percentage: 0 }, { name: 'Nuez Pecan', price: 105, grams: 0, percentage: 0 }, { name: 'Arándano deshidratado', price: 110, grams: 0, percentage: 0 }, { name: 'Dátiles', price: 115, grams: 0, percentage: 0 }
+                    ];
+                },
                 changeMode(newMode) { this.mode = newMode; if (newMode !== 'prices') this.resetBuilder(); },
                 removeFromCart(index) { this.cart.splice(index, 1); if (this.cart.length === 0) { this.showOrderSection = false; } },
 
