@@ -74,7 +74,7 @@
         <section class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
             <!-- Modo Cantidad -->
             <div x-show="mode === 'quantity'" x-transition>
-                <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Crea tu mezcla perfecta gramo a gramo. ¿O prefieres algo más simple? Elige la cantidad exacta de tu fruto seco favorito. Tú mandas."</p>
+                <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Crea tu mezcla perfecta gramo a gramo. ¿O prefieres algo más simple? Elige la cantidad exacta de tu fruto seco favorito. Tú elijes."</p>
                 <div class="grid grid-cols-1 divide-y divide-slate-200">
                     <div class="grid grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco</span><span class="text-center">Cantidad</span><span class="text-right">Porcentaje</span></div>
                     <template x-for="nut in nuts" :key="nut.name">
@@ -106,7 +106,7 @@
             </div>
             <!-- Modo Precios -->
             <div x-show="mode === 'prices'" x-transition>
-                 <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Transparencia y calidad en cada gramo. Conoce los precios de nuestra selección premium para que diseñes tu mezcla con total confianza."</p>
+                 <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Transparencia y calidad en cada gramo. Conoce los precios de nuestra selección premium para que diseñes tu mezcla con total libertad."</p>
                  <div class="text-center text-sm text-slate-600 mb-6 bg-emerald-50 p-3 rounded-md border border-emerald-200">
                     <p class="font-bold text-emerald-800">Compra de forma inteligente. Ahorra en grande.</p>
                     <p>Lleva <b>500gr</b> o más en una sola mezcla y obtén un <b>2% de descuento</b>.</p>
@@ -172,7 +172,7 @@
                         <div><label for="contact-name" class="block font-medium">Nombre de Contacto <span class="text-red-500">*</span></label><input id="contact-name" type="text" x-model="contactInfo.name" required class="w-full border-slate-300 rounded-md shadow-sm"></div>
                         <div><label for="contact-phone" class="block font-medium">Celular de Contacto <span class="text-red-500">*</span></label><input id="contact-phone" type="tel" x-model="contactInfo.phone" required class="w-full border-slate-300 rounded-md shadow-sm"></div>
                     </div>
-
+                    
                     <!-- Botones de modo de entrega -->
                     <div class="mb-6">
                         <h3 class="text-lg font-semibold text-slate-700 mb-3 text-center sm:text-left">Método de Entrega <span class="text-red-500">*</span></h3>
@@ -237,6 +237,17 @@
             </section>
         </div>
 
+        <!-- Pre-Confirmation Modal -->
+        <div x-show="showPreConfirmationModal" @keydown.escape.window="showPreConfirmationModal = false" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
+            <div @click.away="showPreConfirmationModal = false" class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md text-center">
+                <p class="text-slate-700 mb-6 text-lg">Estás a un paso de finalizar. Una vez confirmado, tu pedido será enviado para ser procesado. ¿Deseas continuar?</p>
+                <div class="flex justify-center gap-4">
+                    <button @click="showPreConfirmationModal = false" type="button" class="font-bold py-2 px-6 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700">Volver y revisar</button>
+                    <button @click="executeOrder()" type="button" class="font-bold py-2 px-6 rounded-lg bg-green-700 hover:bg-green-800 text-white shadow-lg">Confirmar Pedido</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Confirmation Modal -->
         <div x-show="showConfirmationModal" @keydown.escape.window="closeConfirmationModal()" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
             <div @click.away="closeConfirmationModal()" class="bg-white rounded-lg shadow-xl p-8 w-full max-w-2xl max-h-screen overflow-y-auto text-center">
@@ -278,6 +289,7 @@
                 delivery: { mode: 'domicilio', address: '', locality: '', distance: null, cost: 0, status: '', error: false, isLoading: false },
                 formStatus: 'Confirmar Pedido',
                 showConfirmationModal: false,
+                showPreConfirmationModal: false,
                 confirmationDetails: { title: '', message: '', summary: '' },
 
                 init() {
@@ -389,14 +401,18 @@
                 
                 get isOrderButtonEnabled() {
                     if (this.cart.length === 0) return false;
-                    if (!this.contactInfo.name || !this.contactInfo.phone) return false;
+                    if (!this.contactInfo.name || !this.contactInfo.phone ) return false;
                     if (this.delivery.mode === 'domicilio' && (this.delivery.distance === null || this.delivery.isLoading || !this.delivery.address || !this.delivery.locality)) return false;
                     return true;
                 },
 
-                async placeOrder() {
+                placeOrder() {
                     if (!this.isOrderButtonEnabled) return;
-                    if (!confirm("¿Estás seguro de que quieres confirmar este pedido?")) return;
+                    this.showPreConfirmationModal = true;
+                },
+
+                async executeOrder() {
+                    this.showPreConfirmationModal = false;
                     this.formStatus = 'Enviando...';
 
                     let orderSummary = `Nuevo Pedido de Frutos Secos\n=================================\n\n`;
@@ -446,7 +462,16 @@
                 
                 showConfirmation(summary) {
                     this.confirmationDetails.title = '¡Solicitud enviada con éxito!';
-                    this.confirmationDetails.message = `<p class="font-bold">¡Gracias por elegirnos!</p> Uno de nuestros especialistas se comunicará muy pronto contigo para coordinar el método de pago y agendar tu entrega.<br><br>Agradecemos su confianza.<div class='flex justify-center mt-4'><img src='https://i.ibb.co/jkmzGCDZ/Airbrush-Image-Enhancer-1752901262222.jpg' alt='Logo de Agradecimiento' class='h-32 w-auto' /></div>`;
+                    let messageBody = '';
+                    const imageHtml = `<div class='flex justify-center mt-4'><img src='https://i.ibb.co/jkmzGCDZ/Airbrush-Image-Enhancer-1752901262222.jpg' alt='Logo de Agradecimiento' class='h-32 w-auto' /></div>`;
+
+                    if (this.delivery.mode === 'recoger') {
+                        messageBody = `<p>¡Gracias por elegirnos! Estamos seleccionando los frutos para tu mezcla. En breve, uno de nuestros expertos te contactará para coordinar el metodo de pago y agendar el momento perfecto para que vengas por tu mezcla.<br><br>Agradecemos tu confianza.</p>`;
+                    } else { // 'domicilio'
+                        messageBody = `<p>¡Gracias por elegirnos! Estamos seleccionando los frutos para tu mezcla. En breve, uno de nuestros expertos te contactará para coordinar el metodo de pago y programar la entrega en tu dirección.<br><br>Agradecemos tu confianza.</p>`;
+                    }
+
+                    this.confirmationDetails.message = messageBody + imageHtml;
                     this.confirmationDetails.summary = summary;
                     this.showConfirmationModal = true;
                 },
