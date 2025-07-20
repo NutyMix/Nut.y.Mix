@@ -84,7 +84,7 @@
             </div>
             <!-- Modo Porcentaje -->
             <div x-show="mode === 'percentage'" x-transition>
-                <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Establece un peso total para tu mezcla y luego diseña tu balance perfecto asignando porcentajes a tus frutos favoritos."</p>
+                <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Establece una cantidad total para tu mezcla y luego diseña tu balance perfecto asignando porcentajes a tus frutos favoritos."</p>
                 <div class="mb-6">
                     <label for="totalGrams" class="block text-sm font-medium text-slate-700 text-center mb-2">Cantidad total de tu Mezcla (Gramos)</label>
                     <div class="relative max-w-xs mx-auto"><input id="totalGrams" type="number" min="0" x-model.number="totalGramsForPercentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800"></div>
@@ -130,7 +130,7 @@
                 <p x-show="mode === 'percentage' && currentMix.totalPercentage !== 100" class="text-red-600 text-sm text-right">El total debe ser 100% para añadir.</p>
                 <div class="flex justify-between"><span class="text-slate-600">Subtotal:</span><span class="font-semibold" x-text="formatCurrency(currentMix.subtotal)"></span></div>
                 <div x-show="currentMix.discount > 0" class="flex justify-between text-green-700">
-                    <span class="text-green-700" x-text="`Descuento por volumen (${currentMix.discountPercentage}%):`"></span>
+                    <span class="text-green-700" x-text="`Descuento por cantidad (${currentMix.discountPercentage}%):`"></span>
                     <span class="font-semibold" x-text="'-' + formatCurrency(currentMix.discount)"></span>
                 </div>
                 <div class="flex justify-between text-xl"><span class="font-bold">Costo Mezcla:</span><span class="font-bold text-emerald-800" x-text="formatCurrency(currentMix.cost)"></span></div>
@@ -142,23 +142,29 @@
         </section>
 
         <!-- Carrito de Compras -->
-        <div id="cart" class="overflow-hidden transition-height" :style="cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0px'">
-            <section class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200">
-                <h2 class="text-2xl font-bold text-slate-800 mb-4">Paso 2: Revisa tu Carrito</h2>
-                <div class="space-y-4">
-                    <template x-for="(item, index) in cart" :key="index">
-                        <div class="flex items-center justify-between bg-slate-100 p-3 rounded-md"><div class="flex-1"><p class="font-bold" x-text="`Mezcla #${index + 1}`"></p><ul class="text-sm text-slate-600 list-disc list-inside"><template x-for="nut in item.nuts.filter(n => n.grams > 0)" :key="nut.name"><li><span x-text="`${nut.name}: ${nut.grams.toFixed(0)}g`"></span></li></template></ul><p x-show="item.discount > 0" class="text-xs text-green-700 font-bold mt-1" x-text="`(Incluye ${item.discountPercentage}% de descuento por volumen)`"></p></div><div class="text-right mx-4"><p class="font-semibold" x-text="formatCurrency(item.cost)"></p><p class="text-sm text-slate-500" x-text="`${item.totalGrams.toFixed(0)} g`"></p></div><button @click="removeFromCart(index)" class="text-red-500 hover:text-red-700 font-bold text-2xl p-2">×</button></div>
-                    </template>
-                    <div x-show="cart.length > 0" class="flex justify-end items-center gap-4 mt-4">
-                        <button @click="scrollToElement('#builder')" type="button" class="font-bold py-2 px-4 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700">Continuar Seleccionando</button>
-                        <button @click="scrollToElement('#order-section')" type="button" class="font-bold py-2 px-4 rounded-lg bg-emerald-800 hover:bg-emerald-900 text-white shadow-lg">Proceder a la Compra</button>
-                    </div>
+        <section id="cart" class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200" x-show="mode !== 'prices'">
+            <h2 class="text-2xl font-bold text-slate-800 mb-4">Paso 2: Revisa tu Carrito</h2>
+            
+            <!-- Mensaje de carrito vacío -->
+            <div x-show="cart.length === 0" class="text-center text-slate-500 py-8 border-2 border-dashed border-slate-300 rounded-lg">
+                <p class="font-medium">Tu carrito está vacío.</p>
+                <p class="text-sm">Añade tus mezclas perfectas para verlas aquí.</p>
+            </div>
+
+            <!-- Contenido del carrito -->
+            <div x-show="cart.length > 0" class="space-y-4" x-transition>
+                <template x-for="(item, index) in cart" :key="index">
+                    <div class="flex items-center justify-between bg-slate-100 p-3 rounded-md"><div class="flex-1"><p class="font-bold" x-text="`Mezcla #${index + 1}`"></p><ul class="text-sm text-slate-600 list-disc list-inside"><template x-for="nut in item.nuts.filter(n => n.grams > 0)" :key="nut.name"><li><span x-text="`${nut.name}: ${nut.grams.toFixed(0)}g`"></span></li></template></ul><p x-show="item.discount > 0" class="text-xs text-green-700 font-bold mt-1" x-text="`(Incluye ${item.discountPercentage}% de descuento por cantidad)`"></p></div><div class="text-right mx-4"><p class="font-semibold" x-text="formatCurrency(item.cost)"></p><p class="text-sm text-slate-500" x-text="`${item.totalGrams.toFixed(0)} g`"></p></div><button @click="removeFromCart(index)" class="text-red-500 hover:text-red-700 font-bold text-2xl p-2">×</button></div>
+                </template>
+                <div x-show="cart.length > 0" class="flex justify-end items-center gap-4 mt-4">
+                    <button @click="scrollToElement('#builder')" type="button" class="font-bold py-2 px-4 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700">Continuar Seleccionando</button>
+                    <button @click="scrollToElement('#order-section')" type="button" class="font-bold py-2 px-4 rounded-lg bg-emerald-800 hover:bg-emerald-900 text-white shadow-lg">Proceder a la Compra</button>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
         
         <!-- Sección de Pedido Final -->
-        <div id="order-section" class="overflow-hidden transition-height" :style="cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0'">
+        <div id="order-section" class="overflow-hidden transition-height" :style="cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0'" x-show="mode !== 'prices'">
             <section class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200">
                 <form id="order-form" @submit.prevent="placeOrder">
                     <h2 class="text-2xl font-bold text-slate-800 mb-4">Paso 3: Completa tu Pedido</h2>
@@ -166,7 +172,36 @@
                         <div><label for="contact-name" class="block font-medium">Nombre de Contacto <span class="text-red-500">*</span></label><input id="contact-name" type="text" x-model="contactInfo.name" required class="w-full border-slate-300 rounded-md shadow-sm"></div>
                         <div><label for="contact-phone" class="block font-medium">Celular de Contacto <span class="text-red-500">*</span></label><input id="contact-phone" type="tel" x-model="contactInfo.phone" required class="w-full border-slate-300 rounded-md shadow-sm"></div>
                     </div>
-                    <div class="space-y-4 mb-6">
+
+                    <!-- Botones de modo de entrega -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-slate-700 mb-3 text-center sm:text-left">Método de Entrega <span class="text-red-500">*</span></h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <button 
+                                type="button" 
+                                @click="delivery.mode = 'domicilio'" 
+                                :class="{ 
+                                    'bg-emerald-700 text-white border-emerald-700 shadow-lg': delivery.mode === 'domicilio', 
+                                    'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300': delivery.mode !== 'domicilio' 
+                                }" 
+                                class="w-full py-3 rounded-lg font-bold border-2 transition-all">
+                                Domicilio
+                            </button>
+                            <button 
+                                type="button" 
+                                @click="delivery.mode = 'recoger'" 
+                                :class="{ 
+                                    'bg-emerald-700 text-white border-emerald-700 shadow-lg': delivery.mode === 'recoger', 
+                                    'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300': delivery.mode !== 'recoger'
+                                }" 
+                                class="w-full py-3 rounded-lg font-bold border-2 transition-all">
+                                Recoger
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección de Domicilio -->
+                    <div x-show="delivery.mode === 'domicilio'" class="space-y-4 mb-6" x-transition>
                         <h3 class="text-lg font-semibold text-slate-700">Información de Domicilio</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div><label for="address-input" class="block font-medium">Dirección <span class="text-red-500">*</span></label><input id="address-input" type="text" placeholder="Ej: Carrera 7 # 72-50" x-model="delivery.address" @input.debounce.750ms="getCoordinates()" class="w-full border-slate-300 rounded-md shadow-sm"></div>
@@ -185,6 +220,13 @@
                             <div x-show="delivery.status" x-text="delivery.status" :class="{'text-red-600': delivery.error, 'text-green-700': !delivery.error}" class="text-sm"></div>
                         </div>
                         <div x-show="delivery.distance !== null" class="text-sm text-slate-600">Distancia en línea recta: <span class="font-semibold" x-text="delivery.distance.toFixed(2) + ' km'"></span></div>
+                    </div>
+
+                    <!-- Sección de Recogida -->
+                    <div x-show="delivery.mode === 'recoger'" class="space-y-4 mb-6 bg-slate-100 p-4 rounded-lg text-center" x-transition>
+                         <h3 class="text-lg font-semibold text-slate-700">Información de Recogida</h3>
+                         <p class="text-slate-800">Puedes recoger tu pedido en la siguiente dirección:</p>
+                         <p class="font-bold text-emerald-800 text-lg">Carrera 19 # 183-30 (Usaquén, Bogotá)</p>
                     </div>
                     
                     <footer class="mt-8 pt-6 border-t"><h3 class="text-xl font-bold text-slate-800 mb-4">Resumen Final</h3><div class="bg-slate-100 p-4 rounded-lg space-y-2"><div class="flex justify-between"><span class="text-slate-600">Subtotal Compra</span><span class="font-semibold" x-text="formatCurrency(finalSummary.subtotal)"></span></div><div class="flex justify-between"><span class="text-slate-600">Costo Domicilio</span><span class="font-semibold" x-text="formatCurrency(finalSummary.deliveryCostRaw)"></span></div><div x-show="finalSummary.discount > 0" class="flex justify-between text-green-700"><span class="text-green-700">Descuento Domicilio</span><span class="font-semibold" x-text="'- ' + formatCurrency(finalSummary.discount)"></span></div><hr class="my-1 border-slate-300"><div class="flex justify-between text-xl font-bold"><span class="">Total a Pagar</span><span x-text="formatCurrency(finalSummary.total)"></span></div></div>
@@ -233,7 +275,7 @@
                 cart: [],
                 showOrderSection: false,
                 contactInfo: { name: '', phone: '' },
-                delivery: { mode: 'delivery', address: '', locality: '', distance: null, cost: 0, status: '', error: false, isLoading: false },
+                delivery: { mode: 'domicilio', address: '', locality: '', distance: null, cost: 0, status: '', error: false, isLoading: false },
                 formStatus: 'Confirmar Pedido',
                 showConfirmationModal: false,
                 confirmationDetails: { title: '', message: '', summary: '' },
@@ -335,7 +377,7 @@
 
                 get finalSummary() {
                     const subtotal = this.cart.reduce((acc, item) => acc + item.cost, 0);
-                    const deliveryCostRaw = (this.delivery.mode === 'delivery') ? this.delivery.cost : 0;
+                    const deliveryCostRaw = (this.delivery.mode === 'domicilio') ? this.delivery.cost : 0;
                     let discount = 0;
                     if (deliveryCostRaw > 0) {
                         if (subtotal >= 200000) discount = deliveryCostRaw;
@@ -348,7 +390,7 @@
                 get isOrderButtonEnabled() {
                     if (this.cart.length === 0) return false;
                     if (!this.contactInfo.name || !this.contactInfo.phone) return false;
-                    if (this.delivery.mode === 'delivery' && (this.delivery.distance === null || this.delivery.isLoading || !this.delivery.address || !this.delivery.locality)) return false;
+                    if (this.delivery.mode === 'domicilio' && (this.delivery.distance === null || this.delivery.isLoading || !this.delivery.address || !this.delivery.locality)) return false;
                     return true;
                 },
 
@@ -363,14 +405,20 @@
                     this.cart.forEach((item, index) => {
                         orderSummary += `--- Mezcla #${index + 1} (${item.totalGrams.toFixed(0)}g) - ${this.formatCurrency(item.cost)} ---\n`;
                         if (item.discount > 0) {
-                            orderSummary += `  (Descuento por volumen del ${item.discountPercentage}% aplicado)\n`;
+                            orderSummary += `  (Descuento por cantidad del ${item.discountPercentage}% aplicado)\n`;
                         }
                         item.nuts.filter(n => n.grams > 0).forEach(nut => { orderSummary += `  - ${nut.name}: ${nut.grams.toFixed(0)}g\n`; });
                         orderSummary += `\n`;
                     });
                     orderSummary += `**Resumen de Costos:**\nSubtotal: ${this.formatCurrency(this.finalSummary.subtotal)}\n`;
-                    orderSummary += `Método: Domicilio\nDirección: ${this.delivery.address}, ${this.delivery.locality}, Bogotá\nDistancia: ${this.delivery.distance.toFixed(2)} km\nCosto Domicilio: ${this.formatCurrency(this.finalSummary.deliveryCostRaw)}\n`;
-                    if (this.finalSummary.discount > 0) orderSummary += `Descuento Domicilio: -${this.formatCurrency(this.finalSummary.discount)}\n`;
+                    
+                    if(this.delivery.mode === 'domicilio') {
+                        orderSummary += `Método: Domicilio\nDirección: ${this.delivery.address}, ${this.delivery.locality}, Bogotá\nDistancia: ${this.delivery.distance.toFixed(2)} km\nCosto Domicilio: ${this.formatCurrency(this.finalSummary.deliveryCostRaw)}\n`;
+                        if (this.finalSummary.discount > 0) orderSummary += `Descuento Domicilio: -${this.formatCurrency(this.finalSummary.discount)}\n`;
+                    } else {
+                        orderSummary += `Método: Recoger en Tienda\nDirección de Recogida: Carrera 19 # 183-30 (Usaquén, Bogotá)\nCosto Domicilio: ${this.formatCurrency(0)}\n`;
+                    }
+
                     orderSummary += `-------------------\nTOTAL: ${this.formatCurrency(this.finalSummary.total)}\n`;
 
                     const formData = new FormData();
@@ -386,7 +434,7 @@
                         if (response.ok) {
                             this.showConfirmation(orderSummary);
                             this.cart = []; this.resetBuilder();
-                            this.delivery = { mode: 'delivery', address: '', locality: '', distance: null, cost: 0, status: '', error: false, isLoading: false };
+                            this.delivery = { mode: 'domicilio', address: '', locality: '', distance: null, cost: 0, status: '', error: false, isLoading: false };
                             this.contactInfo = { name: '', phone: '' }; this.showOrderSection = false;
                         } else { throw new Error('Error en el servidor de Formspree.'); }
                     } catch (error) {
@@ -398,7 +446,7 @@
                 
                 showConfirmation(summary) {
                     this.confirmationDetails.title = '¡Solicitud enviada con éxito!';
-                    this.confirmationDetails.message = `<p class="font-bold">¡Gracias por elegirnos!</p> Uno de nuestros especialistas se comunicará muy pronto contigo para coordinar el método de pago y agendar tu entrega.<br><br>Agradecemos su confianza.`;
+                    this.confirmationDetails.message = `<p class="font-bold">¡Gracias por elegirnos!</p> Uno de nuestros especialistas se comunicará muy pronto contigo para coordinar el método de pago y agendar tu entrega.<br><br>Agradecemos su confianza.<div class='flex justify-center mt-4'><img src='https://i.ibb.co/jkmzGCDZ/Airbrush-Image-Enhancer-1752901262222.jpg' alt='Logo de Agradecimiento' class='h-32 w-auto' /></div>`;
                     this.confirmationDetails.summary = summary;
                     this.showConfirmationModal = true;
                 },
