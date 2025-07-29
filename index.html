@@ -58,103 +58,205 @@
         </header>
 
         <!-- Pestañas de Modo -->
-        <div id="builder" class="mb-8 flex justify-center border border-slate-300 rounded-lg p-1 bg-slate-200 w-full sm:w-auto mx-auto">
-            <button @click="changeMode('quantity')" :class="{ 'bg-white text-emerald-800 shadow-md': mode === 'quantity', 'text-slate-600': mode !== 'quantity' }" class="px-4 py-2 w-1/3 sm:w-auto rounded-md font-semibold transition-colors">
+        <div id="builder" class="relative mb-8 flex justify-center border border-slate-300 rounded-lg p-1 bg-slate-200 w-full sm:w-auto mx-auto">
+            <button @click="changeMode('quantity')" :class="{ 'bg-white text-emerald-800 shadow-md': mode === 'quantity', 'text-slate-600': mode !== 'quantity' }" class="px-4 py-2 w-auto rounded-md font-semibold transition-colors">
                 Por Cantidad
             </button>
-            <button @click="changeMode('percentage')" :class="{ 'bg-white text-emerald-800 shadow-md': mode === 'percentage', 'text-slate-600': mode !== 'percentage' }" class="px-4 py-2 w-1/3 sm:w-auto rounded-md font-semibold transition-colors">
+            <button @click="changeMode('percentage')" :class="{ 'bg-white text-emerald-800 shadow-md': mode === 'percentage', 'text-slate-600': mode !== 'percentage' }" class="px-4 py-2 w-auto rounded-md font-semibold transition-colors">
                 Por Porcentaje
             </button>
-            <button @click="changeMode('prices')" :class="{ 'bg-white text-emerald-800 shadow-md': mode === 'prices', 'text-slate-600': mode !== 'prices' }" class="px-4 py-2 w-1/3 sm:w-auto rounded-md font-semibold transition-colors">
-                Ver Precios
+            <!-- Botón de Productos -->
+            <div class="w-auto" @click.away="productDropdownOpen = false">
+                <button @click="productDropdownOpen = !productDropdownOpen" type="button" :class="{ 'bg-white text-emerald-800 shadow-md': mode === 'productDetail' || productDropdownOpen, 'text-slate-600': mode !== 'productDetail' }" class="px-4 py-2 w-full rounded-md font-semibold transition-colors flex items-center justify-center gap-1">
+                    Productos
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition-transform" :class="{'rotate-180': productDropdownOpen}"><path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 011.06 0L10 11.94l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 9.28a.75.75 0 010-1.06z" clip-rule="evenodd" /></svg>
+                </button>
+            </div>
+            <!-- Botón de Mixes Vitales -->
+            <button @click="changeMode('predefinedMixes')" :class="{ 'bg-white text-emerald-800 shadow-md': mode === 'predefinedMixes', 'text-slate-600': mode !== 'predefinedMixes' }" class="px-4 py-2 w-auto rounded-md font-semibold transition-colors">
+                Mixes Vitales
             </button>
-        </div>
-
-        <!-- Constructor de Mezcla -->
-        <section class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
-            <!-- Modo Cantidad -->
-            <div x-show="mode === 'quantity'" x-transition>
-                <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Crea tu mezcla perfecta gramo a gramo. ¿O prefieres algo más simple? Elige la cantidad exacta de tu fruto seco favorito. Tú elijes."</p>
-                <div class="grid grid-cols-1 divide-y divide-slate-200">
-                    <div class="grid grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco</span><span class="text-center">Cantidad</span><span class="text-right">Porcentaje</span></div>
+            <!-- Panel Desplegable de Productos -->
+            <div x-show="productDropdownOpen" x-transition 
+                 class="absolute top-full left-0 right-0 mt-2 bg-white rounded-md shadow-lg z-10 border border-slate-200">
+                <div class="p-4 flex flex-wrap gap-x-2 gap-y-1 justify-center">
                     <template x-for="nut in nuts" :key="nut.name">
-                        <div class="grid grid-cols-3 gap-4 items-center py-3"><span x-text="nut.name" class="font-medium text-slate-700 px-2"></span><div class="relative"><input type="number" min="0" x-model.number.debounce="nut.grams" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800 pr-8"><span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">gr</span></div><span class="text-right font-mono text-slate-800 px-2" x-text="calculateNutPercentage(nut.grams) + '%'"></span></div>
+                        <a href="#" @click.prevent="viewProduct(nut)" 
+                           class="px-3 py-1 text-sm rounded-md transition-colors"
+                           :class="{
+                               'bg-[#5a6e5a] text-white': selectedNut && selectedNut.name === nut.name,
+                               'text-slate-700 hover:bg-slate-100': !selectedNut || selectedNut.name !== nut.name
+                           }"
+                           x-text="nut.name"></a>
                     </template>
                 </div>
             </div>
-            <!-- Modo Porcentaje -->
-            <div x-show="mode === 'percentage'" x-transition>
-                <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Aquí tú tienes el control total. Elige la cantidad total para tu mezcla y luego diseña el balance perfecto de sabores asignando porcentajes a tus frutos favoritos."</p>
-                <div class="mb-6">
-                    <label for="totalGrams" class="block text-sm font-medium text-slate-700 text-center mb-2">Cantidad total de tu Mezcla (Gramos)</label>
-                    <div class="relative max-w-xs mx-auto"><input id="totalGrams" type="number" min="0" x-model.number="totalGramsForPercentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800"></div>
-                </div>
-                <div class="relative grid grid-cols-1 divide-y divide-slate-200">
-                    <div class="grid grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco</span><span class="text-center">Porcentaje</span><span class="text-right">Gramos</span></div>
-                    <template x-for="nut in nuts" :key="nut.name">
-                        <div class="relative group grid grid-cols-3 gap-4 items-center py-3">
-                            <span x-text="nut.name" class="font-medium text-slate-700 px-2"></span>
-                            <div class="relative">
-                                <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-xs bg-gray-700 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">La sumatoria de todos los porcentajes debe ser 100%</span>
-                                <input type="number" min="0" max="100" x-model.number.debounce="nut.percentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800 pr-8">
-                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">%</span>
+        </div>
+
+
+        <!-- Contenido Principal -->
+        <section class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+            
+            <!-- Vista del Constructor -->
+            <div x-show="mode === 'quantity' || mode === 'percentage'">
+                <!-- Modo Cantidad -->
+                <div x-show="mode === 'quantity'" x-transition>
+                    <p class="mb-6 text-center font-elegant text-slate-700 text-lg">Crea tu mezcla perfecta gramo a gramo. ¿O prefieres algo más simple? Elige la cantidad exacta de tu fruto seco favorito. Tú elijes.</p>
+                    <div class="text-center text-sm text-slate-600 mb-6 bg-emerald-50 p-3 rounded-md border border-emerald-200">
+                        <p class="font-bold text-emerald-800">Compra de forma inteligente. Ahorra en grande.</p>
+                        <p>Lleva <b>500gr</b> o más en una sola mezcla y obtén un <b>2% de descuento</b>.</p>
+                        <p>Lleva <b>1kg</b> o más en una sola mezcla y disfruta de un <b>5% de descuento</b>.</p>
+                    </div>
+                    <div class="grid grid-cols-1 divide-y divide-slate-200">
+                        <div class="grid grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco (Costo Gramo)</span><span class="text-center">Cantidad</span><span class="text-right">Porcentaje</span></div>
+                        <template x-for="nut in nuts" :key="nut.name">
+                            <div class="grid grid-cols-3 gap-4 items-center py-3">
+                                <div class="px-2">
+                                    <span x-text="nut.name" class="font-medium text-slate-700"></span>
+                                    <p class="text-xs font-mono text-slate-500" x-text="formatCurrency(nut.price) + '/gr'"></p>
+                                </div>
+                                <div class="relative">
+                                    <input type="number" min="0" x-model.number.debounce="nut.grams" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800 pr-8">
+                                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">gr</span>
+                                </div>
+                                <span class="text-right font-mono text-slate-800 px-2" x-text="calculateNutPercentage(nut.grams) + '%'"></span>
                             </div>
-                            <span class="md:text-right font-mono text-slate-800 px-2" x-text="calculateNutGrams(nut.percentage) + ' g'"></span>
+                        </template>
+                    </div>
+                </div>
+                <!-- Modo Porcentaje -->
+                <div x-show="mode === 'percentage'" x-transition>
+                    <p class="mb-6 text-center font-elegant text-slate-700 text-lg">Aquí tú tienes el control total. Elige la cantidad total para tu mezcla y luego diseña el balance perfecto de sabores asignando porcentajes a tus frutos favoritos.</p>
+                    <div class="text-center text-sm text-slate-600 mb-6 bg-emerald-50 p-3 rounded-md border border-emerald-200">
+                        <p class="font-bold text-emerald-800">Compra de forma inteligente. Ahorra en grande.</p>
+                        <p>Lleva <b>500gr</b> o más en una sola mezcla y obtén un <b>2% de descuento</b>.</p>
+                        <p>Lleva <b>1kg</b> o más en una sola mezcla y disfruta de un <b>5% de descuento</b>.</p>
+                    </div>
+                    <div class="mb-6">
+                        <label for="totalGrams" class="block text-sm font-medium text-slate-700 text-center mb-2">Cantidad total de tu Mezcla (Gramos)</label>
+                        <div class="relative max-w-xs mx-auto"><input id="totalGrams" type="number" min="0" x-model.number="totalGramsForPercentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800"></div>
+                    </div>
+                    <div class="relative grid grid-cols-1 divide-y divide-slate-200">
+                        <div class="grid grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco (Costo Gramo)</span><span class="text-center">Porcentaje</span><span class="text-right">Gramos</span></div>
+                        <template x-for="nut in nuts" :key="nut.name">
+                            <div class="relative group grid grid-cols-3 gap-4 items-center py-3">
+                                <div class="px-2">
+                                    <span x-text="nut.name" class="font-medium text-slate-700"></span>
+                                    <p class="text-xs font-mono text-slate-500" x-text="formatCurrency(nut.price) + '/gr'"></p>
+                                </div>
+                                <div class="relative">
+                                    <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-xs bg-gray-700 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">La sumatoria de todos los porcentajes debe ser 100%</span>
+                                    <input type="number" min="0" max="100" x-model.number.debounce="nut.percentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800 pr-8">
+                                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">%</span>
+                                </div>
+                                <span class="md:text-right font-mono text-slate-800 px-2" x-text="calculateNutGrams(nut.percentage) + ' g'"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-200 bg-slate-100 p-4 rounded-lg">
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Resumen de Mezcla Actual</h3>
+                    <div class="flex justify-between"><span class="text-slate-600">Total Gramos:</span><span class="font-semibold" x-text="currentMix.totalGrams.toFixed(0) + ' g'"></span></div>
+                    <div x-show="mode === 'percentage'" class="flex justify-between items-center">
+                        <span class="text-slate-600">Total Porcentaje:</span>
+                        <span class="font-semibold px-2 py-0.5 rounded" :class="{'text-green-800 bg-green-200': currentMix.totalPercentage === 100, 'text-red-800 bg-red-200': currentMix.totalPercentage !== 100}" x-text="currentMix.totalPercentage + '%'"></span>
+                    </div>
+                    <p x-show="mode === 'percentage' && currentMix.totalPercentage !== 100" class="text-red-600 text-sm text-right">El total debe ser 100% para añadir.</p>
+                    <div class="flex justify-between"><span class="text-slate-600">Subtotal:</span><span class="font-semibold" x-text="formatCurrency(currentMix.subtotal)"></span></div>
+                    <div x-show="currentMix.discount > 0" class="flex justify-between text-green-700">
+                        <span class="text-green-700" x-text="`Descuento por cantidad (${currentMix.discountPercentage}%):`"></span>
+                        <span class="font-semibold" x-text="'-' + formatCurrency(currentMix.discount)"></span>
+                    </div>
+                    <div class="flex justify-between text-xl"><span class="font-bold">Costo Mezcla:</span><span class="font-bold text-emerald-800" x-text="formatCurrency(currentMix.cost)"></span></div>
+                </div>
+                <div class="mt-6">
+                    <button @click="addToCart()" :disabled="!isActionEnabled" class="w-full font-bold py-3 px-4 rounded-lg transition-all" :class="{'bg-green-700 hover:bg-green-800 text-white shadow-lg': isActionEnabled, 'bg-slate-300 cursor-not-allowed text-slate-500': !isActionEnabled}">Añadir Compra</button>
+                    <p class="text-center text-sm text-slate-500 mt-2">Puedes añadir las mezclas que desees.</p>
+                </div>
+            </div>
+            
+            <!-- Vista de Detalle de Producto -->
+            <div x-show="mode === 'productDetail'" x-transition>
+                <div x-if="selectedNut">
+                    <button @click="backToBuilder()" class="mb-4 font-semibold text-emerald-800 hover:text-emerald-600 flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" /></svg>
+                        Volver
+                    </button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                        <img :src="selectedNut.imageUrl" :alt="selectedNut.name" class="w-full h-auto rounded-lg shadow-md">
+                        <div>
+                            <h2 class="text-3xl font-elegant font-bold text-slate-900" x-text="selectedNut.name"></h2>
+                            <p class="font-mono text-lg text-emerald-800 my-2" x-text="formatCurrency(selectedNut.price) + '/gr'"></p>
+                            <p class="text-slate-600 leading-relaxed" x-text="selectedNut.description"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista de Mixes Vitales -->
+            <div x-show="mode === 'predefinedMixes'" x-transition>
+                <h2 class="text-3xl font-elegant font-bold text-slate-900 text-center mb-4">Una Guía para tu Bienestar</h2>
+                <p class="mb-8 text-justify text-slate-600 max-w-2xl mx-auto">
+                    Las mezclas que te presentamos a continuación han sido diseñadas para destacar los beneficios nutricionales de cada ingrediente. Tómalas como una guía inspiradora y no como una recomendación médica. Tu salud es única.<br> Por ello, te animamos a consultar con un profesional de la salud si tienes preguntas sobre tu dieta. Recuerda que la base de un estilo de vida saludable siempre será la moderación en las porciones y la variedad en tus alimentos.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <template x-for="mix in predefinedMixes" :key="mix.id">
+                        <div class="bg-slate-50 border border-emerald-800 rounded-xl overflow-hidden flex flex-col">
+                            <div class="p-4 flex flex-col flex-grow">
+                                <h3 class="text-xl font-bold font-elegant text-emerald-800" x-text="mix.name"></h3>
+                                <p class="text-sm text-slate-500 mb-3" x-text="mix.subtitle"></p>
+                                <p class="text-slate-600 text-base mb-4 flex-grow text-justify" x-text="mix.description"></p>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-700">Ingredientes:</p>
+                                    <ul class="text-sm text-slate-500 list-none mt-1">
+                                        <template x-for="ingredient in mix.ingredients" :key="ingredient">
+                                            <li class="font-bold" x-text="ingredient"></li>
+                                        </template>
+                                    </ul>
+                                </div>
+                                <div class="mt-4 flex flex-col items-center gap-4">
+                                    <div class="relative w-full max-w-xs">
+                                        <input type="number" min="100" step="50" x-model.number="mix.gramsToAdd" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800 pr-8">
+                                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">gr</span>
+                                    </div>
+                                    <button @click="addPredefinedMixToCart(mix)" class="bg-green-700 hover:bg-green-800 text-white font-bold text-lg py-2 px-6 rounded-lg shadow-lg whitespace-nowrap">Añadir</button>
+                                </div>
+                            </div>
                         </div>
                     </template>
                 </div>
             </div>
-            <!-- Modo Precios -->
-            <div x-show="mode === 'prices'" x-transition>
-                 <p class="mb-6 text-center font-elegant text-slate-700 text-lg">"Transparencia y calidad en cada gramo. Conoce los precios de nuestra selección premium para que diseñes tu mezcla con total libertad."</p>
-                 <div class="text-center text-sm text-slate-600 mb-6 bg-emerald-50 p-3 rounded-md border border-emerald-200">
-                    <p class="font-bold text-emerald-800">Compra de forma inteligente. Ahorra en grande.</p>
-                    <p>Lleva <b>500gr</b> o más en una sola mezcla y obtén un <b>2% de descuento</b>.</p>
-                    <p>Lleva <b>1kg</b> o más en una sola mezcla y disfruta de un <b>5% de descuento</b>.</p>
-                 </div>
-                <div class="grid grid-cols-1 divide-y divide-slate-200">
-                    <div class="grid grid-cols-2 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco</span><span class="text-right">Precio por Gramo</span></div>
-                    <template x-for="nut in nuts" :key="nut.name">
-                        <div class="grid grid-cols-2 gap-4 items-center py-3"><span x-text="nut.name" class="font-medium text-slate-700 px-2"></span><div class="text-right font-mono text-slate-800 px-2" x-html="getPriceDisplay(nut)"></div></div>
-                    </template>
-                </div>
-            </div>
-
-            <div x-show="mode !== 'prices'" class="mt-6 pt-4 border-t border-slate-200 bg-slate-100 p-4 rounded-lg">
-                <h3 class="font-bold text-lg mb-2 text-slate-800">Resumen de Mezcla Actual</h3>
-                <div class="flex justify-between"><span class="text-slate-600">Total Gramos:</span><span class="font-semibold" x-text="currentMix.totalGrams.toFixed(0) + ' g'"></span></div>
-                <div x-show="mode === 'percentage'" class="flex justify-between items-center">
-                    <span class="text-slate-600">Total Porcentaje:</span>
-                    <span class="font-semibold px-2 py-0.5 rounded" :class="{'text-green-800 bg-green-200': currentMix.totalPercentage === 100, 'text-red-800 bg-red-200': currentMix.totalPercentage !== 100}" x-text="currentMix.totalPercentage + '%'"></span>
-                </div>
-                <p x-show="mode === 'percentage' && currentMix.totalPercentage !== 100" class="text-red-600 text-sm text-right">El total debe ser 100% para añadir.</p>
-                <div class="flex justify-between"><span class="text-slate-600">Subtotal:</span><span class="font-semibold" x-text="formatCurrency(currentMix.subtotal)"></span></div>
-                <div x-show="currentMix.discount > 0" class="flex justify-between text-green-700">
-                    <span class="text-green-700" x-text="`Descuento por cantidad (${currentMix.discountPercentage}%):`"></span>
-                    <span class="font-semibold" x-text="'-' + formatCurrency(currentMix.discount)"></span>
-                </div>
-                <div class="flex justify-between text-xl"><span class="font-bold">Costo Mezcla:</span><span class="font-bold text-emerald-800" x-text="formatCurrency(currentMix.cost)"></span></div>
-            </div>
-            <div x-show="mode !== 'prices'" class="mt-6">
-                <button @click="addToCart()" :disabled="!isActionEnabled" class="w-full font-bold py-3 px-4 rounded-lg transition-all" :class="{'bg-green-700 hover:bg-green-800 text-white shadow-lg': isActionEnabled, 'bg-slate-300 cursor-not-allowed text-slate-500': !isActionEnabled}">Añadir Compra</button>
-                <p class="text-center text-sm text-slate-500 mt-2">Puedes añadir las mezclas que desees.</p>
-            </div>
+            
         </section>
 
         <!-- Carrito de Compras -->
-        <section id="cart" class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200" x-show="mode !== 'prices'">
+        <section id="cart" class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200" x-show="mode !== 'productDetail'">
             <h2 class="text-2xl font-bold text-slate-800 mb-4">Paso 2: Revisa tu Carrito</h2>
             
-            <!-- Mensaje de carrito vacío -->
             <div x-show="cart.length === 0" class="text-center text-slate-500 py-8 border-2 border-dashed border-slate-300 rounded-lg">
                 <p class="font-medium">Tu carrito está vacío.</p>
                 <p class="text-sm">Añade tus mezclas perfectas para verlas aquí.</p>
             </div>
 
-            <!-- Contenido del carrito -->
             <div x-show="cart.length > 0" class="space-y-4" x-transition>
                 <template x-for="(item, index) in cart" :key="index">
-                    <div class="flex items-center justify-between bg-slate-100 p-3 rounded-md"><div class="flex-1"><p class="font-bold" x-text="`Mezcla #${index + 1}`"></p><ul class="text-sm text-slate-600 list-disc list-inside"><template x-for="nut in item.nuts.filter(n => n.grams > 0)" :key="nut.name"><li><span x-text="`${nut.name}: ${nut.grams.toFixed(0)}g`"></span></li></template></ul><p x-show="item.discount > 0" class="text-xs text-green-700 font-bold mt-1" x-text="`(Incluye ${item.discountPercentage}% de descuento por cantidad)`"></p></div><div class="text-right mx-4"><p class="font-semibold" x-text="formatCurrency(item.cost)"></p><p class="text-sm text-slate-500" x-text="`${item.totalGrams.toFixed(0)} g`"></p></div><button @click="removeFromCart(index)" class="text-red-500 hover:text-red-700 font-bold text-2xl p-2">×</button></div>
+                    <div class="flex items-center justify-between bg-slate-100 p-3 rounded-md">
+                        <div class="flex-1">
+                            <p class="font-bold" x-text="item.name"></p>
+                            <ul class="text-sm text-slate-600 list-disc list-inside">
+                                <template x-for="nut in item.nuts.filter(n => n.grams > 0)" :key="nut.name">
+                                    <li><span x-text="`${nut.name}: ${nut.grams.toFixed(0)}g`"></span></li>
+                                </template>
+                            </ul>
+                            <p x-show="item.discount > 0" class="text-xs text-green-700 font-bold mt-1" x-text="`(Incluye ${item.discountPercentage}% de descuento por cantidad)`"></p>
+                        </div>
+                        <div class="text-right mx-4">
+                            <p class="font-semibold" x-text="formatCurrency(item.cost)"></p>
+                            <p class="text-sm text-slate-500" x-text="`${item.totalGrams.toFixed(0)} g`"></p>
+                        </div>
+                        <button @click="removeFromCart(index)" class="text-red-500 hover:text-red-700 font-bold text-2xl p-2">×</button>
+                    </div>
                 </template>
                 <div x-show="cart.length > 0" class="flex justify-end items-center gap-4 mt-4">
                     <button @click="scrollToElement('#builder')" type="button" class="font-bold py-2 px-4 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700">Continuar Seleccionando</button>
@@ -164,50 +266,37 @@
         </section>
         
         <!-- Sección de Pedido Final -->
-        <div id="order-section" class="overflow-hidden transition-height" :style="cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0'" x-show="mode !== 'prices'">
+        <div id="order-section" class="overflow-hidden transition-height" :style="cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0'" x-show="mode !== 'productDetail'">
             <section class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200">
                 <form id="order-form" @submit.prevent="placeOrder">
                     <h2 class="text-2xl font-bold text-slate-800 mb-4">Paso 3: Completa tu Pedido</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                        <div><label for="contact-name" class="block font-medium">Nombre de Contacto <span class="text-red-500">*</span></label><input id="contact-name" type="text" x-model="contactInfo.name" required class="w-full border-slate-300 rounded-md shadow-sm"></div>
-                        <div><label for="contact-phone" class="block font-medium">Celular de Contacto <span class="text-red-500">*</span></label><input id="contact-phone" type="tel" x-model="contactInfo.phone" required class="w-full border-slate-300 rounded-md shadow-sm"></div>
-                    </div>
-                    
-                    <!-- Botones de modo de entrega -->
-                    <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-slate-700 mb-3 text-center sm:text-left">Método de Entrega <span class="text-red-500">*</span></h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <button 
-                                type="button" 
-                                @click="delivery.mode = 'domicilio'" 
-                                :class="{ 
-                                    'bg-emerald-700 text-white border-emerald-700 shadow-lg': delivery.mode === 'domicilio', 
-                                    'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300': delivery.mode !== 'domicilio' 
-                                }" 
-                                class="w-full py-3 rounded-lg font-bold border-2 transition-all">
-                                Domicilio
-                            </button>
-                            <button 
-                                type="button" 
-                                @click="delivery.mode = 'recoger'" 
-                                :class="{ 
-                                    'bg-emerald-700 text-white border-emerald-700 shadow-lg': delivery.mode === 'recoger', 
-                                    'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300': delivery.mode !== 'recoger'
-                                }" 
-                                class="w-full py-3 rounded-lg font-bold border-2 transition-all">
-                                Recoger
-                            </button>
+                        <div>
+                            <label for="contact-name" class="block font-medium">Nombre de Contacto <span class="text-red-500">*</span></label>
+                            <input id="contact-name" type="text" x-model="contactInfo.name" required class="w-full border-slate-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                            <label for="contact-phone" class="block font-medium">Celular de Contacto <span class="text-red-500">*</span></label>
+                            <input id="contact-phone" type="text" x-model="contactInfo.phone" @input="validatePhone()" maxlength="10" pattern="[0-9]*" inputmode="numeric" required class="w-full border-slate-300 rounded-md shadow-sm">
+                            <p x-show="contactInfo.phoneError" x-text="contactInfo.phoneError" class="text-red-500 text-sm mt-1" x-transition></p>
                         </div>
                     </div>
                     
-                    <!-- Sección de Domicilio -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-slate-700 mb-3 text-center sm:text-left">Método de Entrega <span class="text-red-500">*</span></h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <button type="button" @click="delivery.mode = 'domicilio'" :class="{ 'bg-emerald-700 text-white border-emerald-700 shadow-lg': delivery.mode === 'domicilio', 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300': delivery.mode !== 'domicilio' }" class="w-full py-3 rounded-lg font-bold border-2 transition-all">Domicilio</button>
+                            <button type="button" @click="delivery.mode = 'recoger'" :class="{ 'bg-emerald-700 text-white border-emerald-700 shadow-lg': delivery.mode === 'recoger', 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300': delivery.mode !== 'recoger' }" class="w-full py-3 rounded-lg font-bold border-2 transition-all">Recoger</button>
+                        </div>
+                    </div>
+                    
                     <div x-show="delivery.mode === 'domicilio'" class="space-y-4 mb-6" x-transition>
                         <h3 class="text-lg font-semibold text-slate-700">Información de Domicilio</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div><label for="address-input" class="block font-medium">Dirección <span class="text-red-500">*</span></label><input id="address-input" type="text" placeholder="Ej: Carrera 7 # 72-50" x-model="delivery.address" @input.debounce.750ms="getCoordinates()" class="w-full border-slate-300 rounded-md shadow-sm"></div>
+                            <div><label for="address-input" class="block font-medium">Dirección <span class="text-red-500">*</span></label><input id="address-input" type="text" placeholder="Ej: Carrera 7 # 72-50" x-model="delivery.address" @change="updateDeliveryCost()" class="w-full border-slate-300 rounded-md shadow-sm"></div>
                             <div>
                                 <label for="locality-input" class="block font-medium">Localidad <span class="text-red-500">*</span></label>
-                                <select id="locality-input" x-model="delivery.locality" @change="getCoordinates()" class="w-full border-slate-300 rounded-md shadow-sm">
+                                <select id="locality-input" x-model="delivery.locality" @change="updateDeliveryCost()" class="w-full border-slate-300 rounded-md shadow-sm">
                                     <option value="">Selecciona una localidad</option>
                                     <template x-for="locality in localities" :key="locality">
                                         <option :value="locality" x-text="locality"></option>
@@ -215,14 +304,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <div x-show="delivery.isLoading" class="loader"></div>
-                            <div x-show="delivery.status" x-text="delivery.status" :class="{'text-red-600': delivery.error, 'text-green-700': !delivery.error}" class="text-sm"></div>
-                        </div>
-                        <div x-show="delivery.distance !== null" class="text-sm text-slate-600">Distancia en línea recta: <span class="font-semibold" x-text="delivery.distance.toFixed(2) + ' km'"></span></div>
                     </div>
 
-                    <!-- Sección de Recogida -->
                     <div x-show="delivery.mode === 'recoger'" class="space-y-4 mb-6 bg-slate-100 p-4 rounded-lg text-center" x-transition>
                          <h3 class="text-lg font-semibold text-slate-700">Información de Recogida</h3>
                          <p class="text-slate-800">Puedes recoger tu pedido en la siguiente dirección:</p>
@@ -230,7 +313,7 @@
                     </div>
                     
                     <footer class="mt-8 pt-6 border-t"><h3 class="text-xl font-bold text-slate-800 mb-4">Resumen Final</h3><div class="bg-slate-100 p-4 rounded-lg space-y-2"><div class="flex justify-between"><span class="text-slate-600">Subtotal Compra</span><span class="font-semibold" x-text="formatCurrency(finalSummary.subtotal)"></span></div><div class="flex justify-between"><span class="text-slate-600">Costo Domicilio</span><span class="font-semibold" x-text="formatCurrency(finalSummary.deliveryCostRaw)"></span></div><div x-show="finalSummary.discount > 0" class="flex justify-between text-green-700"><span class="text-green-700">Descuento Domicilio</span><span class="font-semibold" x-text="'- ' + formatCurrency(finalSummary.discount)"></span></div><hr class="my-1 border-slate-300"><div class="flex justify-between text-xl font-bold"><span class="">Total a Pagar</span><span x-text="formatCurrency(finalSummary.total)"></span></div></div>
-                    <div class="mt-4 text-center text-sm text-slate-500 space-y-1"><p>✨ Domicilio <span class="font-bold">GRATIS</span> por compras superiores a <span class="font-bold">$200.000</span>.</p><p>✨ <span class="font-bold">50% de descuento</span> en domicilio para compras entre <span class="font-bold">$100.000</span> y <span class="font-bold">$199.999</span>.</p></div>
+                    <div class="mt-4 text-center text-sm text-slate-500 space-y-1"><p>✨ Domicilio <span class="font-bold">GRATIS</span> por compras superiores a <span class="font-bold">$200.000</span>.</p><p>✨ <span class="font-bold">50% de descuento</span> en domicilio para compras entre <span class="font-bold">$100.000</span> y <span class="font-bold">$199.999</span>.</p></p>✨ <span class="font-bold">ENVIO GRATIS LOCALIDAD USAQUEN</span>.</p></div>
                     <div class="mt-6"><button type="submit" :disabled="!isOrderButtonEnabled" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-all" :class="{'bg-emerald-800 hover:bg-emerald-900 shadow-lg': isOrderButtonEnabled, 'bg-slate-300 cursor-not-allowed': !isOrderButtonEnabled}"><span x-text="formStatus"></span></button></div>
                     </footer>
                 </form>
@@ -278,6 +361,7 @@
                 mode: 'quantity',
                 totalGramsForPercentage: 500,
                 nuts: [],
+                predefinedMixes: [],
                 localities: [
                     'Usaquén', 'Chapinero', 'Santa Fe', 'San Cristóbal', 'Usme', 'Tunjuelito', 'Bosa', 'Kennedy',
                     'Fontibón', 'Engativá', 'Suba', 'Barrios Unidos', 'Teusaquillo', 'Los Mártires', 'Antonio Nariño',
@@ -285,58 +369,46 @@
                 ],
                 cart: [],
                 showOrderSection: false,
-                contactInfo: { name: '', phone: '' },
+                contactInfo: { name: '', phone: '', phoneError: '' },
                 delivery: { mode: 'domicilio', address: '', locality: '', distance: null, cost: 0, status: '', error: false, isLoading: false },
                 formStatus: 'Confirmar Pedido',
                 showConfirmationModal: false,
                 showPreConfirmationModal: false,
+                productDropdownOpen: false,
+                selectedNut: null,
+                previousMode: 'quantity',
                 confirmationDetails: { title: '', message: '', summary: '' },
+                orderCounter: 1,
 
                 init() {
                     this.resetBuilder();
-                },
-
-                async getCoordinates() {
-                    if (this.delivery.address.trim().length < 5 || !this.delivery.locality) { this.delivery.status = 'Por favor, completa la dirección y selecciona una localidad.'; this.delivery.error = true; return; }
-                    this.delivery.isLoading = true; this.delivery.status = ''; this.delivery.error = false; this.delivery.distance = null;
-                    const query = `${this.delivery.address}, ${this.delivery.locality}, Bogotá, Colombia`;
-                    const formattedAddress = encodeURIComponent(query);
-                    const url = `https://nominatim.openstreetmap.org/search?q=${formattedAddress}&format=jsonv2&limit=1&countrycodes=co`;
-                    try {
-                        const response = await fetch(url);
-                        if (!response.ok) throw new Error(`Error en la respuesta de la red: ${response.statusText}`);
-                        const data = await response.json();
-                        if (data && data.length > 0) {
-                            const location = data[0];
-                            const displayName = location.display_name.toLowerCase();
-                            if (displayName.includes('bogotá')) {
-                                const userLat = parseFloat(location.lat);
-                                const userLon = parseFloat(location.lon);
-                                const fixedLat = 4.76756; const fixedLon = -74.0526;
-                                this.delivery.distance = this.haversineDistance(userLat, userLon, fixedLat, fixedLon);
-                                this.updateDeliveryCost();
-                                this.delivery.status = `Distancia calculada.`;
-                            } else {
-                                this.delivery.status = 'La dirección no parece estar en Bogotá.';
-                                this.delivery.error = true;
-                            }
-                        } else { this.delivery.status = 'Dirección no encontrada. Revisa los datos.'; this.delivery.error = true; }
-                    } catch (error) { this.delivery.status = `No se pudo contactar el servicio de geocodificación.`; this.delivery.error = true; } 
-                    finally { this.delivery.isLoading = false; }
+                    this.orderCounter = parseInt(localStorage.getItem('nutMixOrderCounter_v2')) || 1; 
                 },
                 
-                haversineDistance(lat1, lon1, lat2, lon2) {
-                    const R = 6371; const toRad = (v) => v * Math.PI / 180;
-                    const dLat = toRad(lat2 - lat1); const dLon = toRad(lon2 - lon1);
-                    const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-                    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                validatePhone() {
+                    this.contactInfo.phone = this.contactInfo.phone.replace(/[^0-9]/g, '');
+                    if (this.contactInfo.phone.length > 0 && this.contactInfo.phone.length !== 10) {
+                        this.contactInfo.phoneError = 'El celular debe tener exactamente 10 dígitos.';
+                    } else {
+                        this.contactInfo.phoneError = '';
+                    }
                 },
 
                 updateDeliveryCost() {
-                    if (this.delivery.distance === null) { this.delivery.cost = 0; return; }
-                    if (this.delivery.distance < 5) this.delivery.cost = 5000;
-                    else if (this.delivery.distance <= 10) this.delivery.cost = 9000;
-                    else this.delivery.cost = 14000;
+                    if (!this.delivery.locality) {
+                        this.delivery.cost = 0;
+                        return;
+                    }
+                    const locality = this.delivery.locality;
+                    if (['Usaquén'].includes(locality)) {
+                        this.delivery.cost = 0;
+                    } else if (['Suba'].includes(locality)) {
+                        this.delivery.cost = 4000;
+	            } else if (['Barrios Unidos', 'Chapinero', 'Teusaquillo'].includes(locality)) {
+                        this.delivery.cost = 8000;
+                    } else {
+                        this.delivery.cost = 13000;
+                    }
                 },
                 
                 getPriceDisplay(nut) {
@@ -365,7 +437,7 @@
                 get isActionEnabled() {
                     if (this.mode === 'quantity') return this.currentMix.totalGrams > 0;
                     if (this.mode === 'percentage') return this.currentMix.totalPercentage === 100 && this.currentMix.totalGrams > 0;
-                    return false; // Disable for 'prices' tab
+                    return false;
                 },
                 
                 scrollToElement(selector) {
@@ -374,17 +446,99 @@
                 
                 addToCart() { 
                     if (!this.isActionEnabled) return; 
-                    this.cart.push(this.currentMix); 
+                    const newMix = { ...this.currentMix, name: `Mezcla Personalizada #${this.cart.filter(item => item.name.startsWith('Mezcla Personalizada')).length + 1}` };
+                    this.cart.push(newMix); 
                     this.resetBuilder();
                     this.$nextTick(() => this.scrollToElement('#cart'));
                 },
-                buyNow() { if (!this.isActionEnabled) return; this.cart = [this.currentMix]; this.$nextTick(() => { this.showOrderSection = true; this.$nextTick(() => this.scrollToElement('#order-section')); }); },
+                addPredefinedMixToCart(mix) {
+                    const totalGrams = mix.gramsToAdd;
+                    let subtotal = 0;
+                    const nutsInMix = mix.proportions.map(p => {
+                        const nutData = this.nuts.find(n => n.name === p.name);
+                        const grams = totalGrams * (p.percentage / 100);
+                        subtotal += grams * nutData.price;
+                        return { name: p.name, grams: grams };
+                    });
+
+                    let discountPercentage = 0;
+                    if (totalGrams >= 1000) discountPercentage = 5;
+                    else if (totalGrams >= 500) discountPercentage = 2;
+                    
+                    const discount = subtotal * (discountPercentage / 100);
+                    const cost = subtotal - discount;
+
+                    this.cart.push({
+                        name: mix.name,
+                        nuts: nutsInMix,
+                        totalGrams: totalGrams,
+                        cost: Math.round(cost),
+                        discount: Math.round(discount),
+                        discountPercentage: discountPercentage
+                    });
+                    this.$nextTick(() => this.scrollToElement('#cart'));
+                },
                 resetBuilder() { 
                     this.nuts = [
-                        { name: 'Almendra laminada', price: 50, grams: 0, percentage: 0 }, { name: 'Almendra', price: 55, grams: 0, percentage: 0 }, { name: 'Avellana', price: 60, grams: 0, percentage: 0 }, { name: 'Macadamia', price: 65, grams: 0, percentage: 0 }, { name: 'Maní con sal', price: 70, grams: 0, percentage: 0 }, { name: 'Maní sin sal', price: 75, grams: 0, percentage: 0 }, { name: 'Marañón con sal', price: 80, grams: 0, percentage: 0 }, { name: 'Marañón sin sal', price: 85, grams: 0, percentage: 0 }, { name: 'Nuez del Brasil', price: 90, grams: 0, percentage: 0 }, { name: 'Nuez del Nogal', price: 95, grams: 0, percentage: 0 }, { name: 'Pistacho', price: 100, grams: 0, percentage: 0 }, { name: 'Nuez Pecan', price: 105, grams: 0, percentage: 0 }, { name: 'Arándano deshidratado', price: 110, grams: 0, percentage: 0 }, { name: 'Dátiles', price: 115, grams: 0, percentage: 0 }
+                        { name: 'Almendra Americana NPX laminada natural sin cutícula', price: 98, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/6rC31y6/almendra-laminada.jpg', description: 'Finas y crujientes láminas de almendra, perfectas para repostería, ensaladas o para añadir una textura delicada a cualquier plato.' },
+                        { name: 'Almendra Americana NPX natural', price: 87, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/d2zQPWd/almendra.jpg', description: 'Enteras y llenas de sabor, nuestras almendras son una fuente fantástica de energía y nutrientes. Ideales como snack o para tus recetas.' },
+                        { name: 'Avellana Turca natural con piel', price: 130, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/wJgqz6C/avellana.jpg', description: 'Con un sabor dulce y mantecoso distintivo, las avellanas son un lujo para el paladar. Excelentes para postres, chocolates o simplemente para disfrutar solas.' },
+                        { name: 'Macadamia Nicaragüense natural', price: 158, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/sK4PSz1/macadamia.jpg', description: 'La reina de los frutos secos. Su textura cremosa y su sabor rico y sutil la convierten en un ingrediente gourmet indispensable.' },
+                        { name: 'Maní Brasileño tostado ligeramente salado bola entera (Bajo en sodio) ', price: 30, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/51JbV1D/mani-con-sal.jpg', description: 'El snack clásico por excelencia. Tostado a la perfección con un toque justo de sal para realzar su sabor.' },
+                        { name: 'Maní Brasileño tostado sin sal bola entera ', price: 30, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/hLkTpns/mani-sin-sal.jpg', description: 'Todo el sabor natural del maní tostado, sin sal añadida. Una opción saludable y versátil para tus mezclas y recetas.' },
+                        { name: 'Marañón Brasileño entero tostado W1 320 sin sal', price: 118, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/hXG24bJ/maranon-sin-sal.jpg', description: 'La pureza del marañón tostado. Disfruta de su textura suave y su sabor naturalmente dulce, perfecto para dietas bajas en sodio.' },
+                        { name: 'Nuez del Brasil natural partida', price: 88, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/RSC5sWf/nuez-brasil.jpg', description: 'Grande, crujiente y una de las mayores fuentes naturales de selenio. Un superalimento con un sabor terroso y satisfactorio.' },
+                        { name: 'Nuez del Nogal Americana natural', price: 115, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/2v2z2Bq/nuez-nogal.jpg', description: 'Con su forma característica de cerebro, esta nuez es famosa por su alto contenido de Omega-3 y su sabor robusto y ligeramente amargo.' },
+                        { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Con cáscara)', price: 130, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/yQd5F6c/pistacho.jpg', description: 'Un tesoro verde con un sabor único, ligeramente dulce y salado. Perfecto para un snack sofisticado o para dar color y sabor a tus platos.' },
+                        { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', price: 250, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/yQd5F6c/pistacho.jpg', description: 'La misma delicia del pistacho tostado y salado, pero listo para consumir. Perfectos para mezclas rápidas y recetas gourmet.' },
+                        { name: 'Nuez Pecan Americana natural', price: 175, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/K51y2nd/pecan.jpg', description: 'Más dulce y suave que la nuez del nogal, la pacana es ideal para repostería, especialmente en tartas y postres, gracias a su rico sabor a mantequilla.' },
+                        { name: 'Baya Tibetana de Goji', price: 129, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/K51y2nd/pecan.jpg', description: 'por analizas y escribir mondaaaaaaaaaaaaaaaaaaaaaaaaaaaa.' },
+                        { name: 'Arándano deshidratado Americano Ocean Spray (Con azúcar añadida)', price: 59, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/3cqCctC/arandano.jpg', description: 'Pequeñas joyas de sabor agridulce. Aportan una textura suave y un estallido de sabor frutal a cualquier mezcla, ensalada o postre.' },
+                        { name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', price: 67, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/x7Y1jL1/datiles.jpg', description: 'Un endulzante natural por excelencia. Su textura pegajosa y su sabor a caramelo los hacen perfectos para batidos o postres.' },
+                        { name: 'Albaricoque Turco seco (Sin azúcar añadida)', price: 130, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/k3tq81B/albaricoque.jpg', description: 'Conocidos como orejones, estos albaricoques son dulces, con un toque ácido y una textura suave. Ricos en fibra y vitaminas.' },
+                        { name: 'Higo Turco seco (Sin azúcar añadida)', price: 100, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/Jq0tqjD/higos.jpg', description: 'Dulces, tiernos y con una textura única gracias a sus pequeñas semillas. Una delicia mediterránea llena de energía y fibra.' },
+                        { name: 'Uva pasa Mexicana flame mediana (Sin azúcar añadida)', price: 33, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/Y0PZ6yW/uvas-pasas.jpg', description: 'El clásico toque de dulzura natural. Jugosas y versátiles, son el complemento perfecto para cualquier mezcla, sea dulce o salada.' }
+                    ];
+                    this.predefinedMixes = [
+                        { id: 1, name: 'Mix Corazón Fuerte', subtitle: 'Salud Cardiovascular', description: 'Esta mezcla es una potencia para la salud de tu corazón. La Nuez del Nogal Americana natural aportan Omega-3, que ayuda a reducir el colesterol "malo" (LDL). La Almendra y Macadamia son ricas en grasas monoinsaturadas saludables, que protegen las arterias. Finalmente, el Marañón Brasileño entero tostado W1 320 sin sal son una de las mejores fuentes naturales de Magnesio. El magnesio es un mineral crucial para la salud del corazón porque ayuda a relajar las paredes de los vasos sanguíneos y las arterias, lo que mejora el flujo sanguíneo y ayuda a reducir la presión arterial.', ingredients: ['40% Nuez del Nogal Americana natural', '30% Almendra Americana NPX natural', '15% Macadamia Nicaragüense natural', '15% Marañón Brasileño entero tostado W1 320 sin sal'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Almendra Americana NPX natural', percentage: 30 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 15 }, { name: 'Macadamia Nicaragüense natural', percentage: 15 }], gramsToAdd: 0 },
+                       { id: 2, name: 'Mix Escudo', subtitle: 'Antioxidante', description: 'Diseñada para combatir el daño de los radicales libres que aceleran el envejecimiento. La Baya de Goji es de las fuentes mas ricas de antioxidantes del planeta, rica en Zeaxantina y polisacáridos (LBP) que combaten el estrés oxidativo. La Nuez del Nogal Americana natural y la Nuez Pecan Americana natural lideran el ranking de frutos secos con mayor capacidad antioxidante. La piel de las Avellana contiene una alta concentración de estos compuestos protectores.', ingredients: ['30% Nuez del Nogal Americana natural', '25% Nuez Pecan Americana natural', '30% Baya Tibetana de Goji', '15% Avellana Turca natural con piel'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 30 }, { name: 'Baya Tibetana de Goji', percentage: 30 }, { name: 'Nuez Pecan Americana natural', percentage: 25 }, { name: 'Avellana Turca natural con piel', percentage: 15 }], gramsToAdd: 0 },
+                        { id: 3, name: 'Mix Digestión Activa', subtitle: 'Alto en Fibra', description: 'Un aliado natural para tu sistema digestivo. El Higo Turco y el Dátil son excepcionalmente ricos en fibra soluble e insoluble, que promueve la regularidad intestinal. El Albaricoque también aporta una dosis significativa de fibra, mientras que la Almendra Americana NPX natural añade un crujido satisfactorio y fibra adicional para una digestión óptima.', ingredients: ['30% Higo Turco seco (Sin azúcar añadida)', '30% Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', '25% Almendra Americana NPX natural', '15% Albaricoque Turco seco (Sin azúcar añadida)'], proportions: [{ name: 'Higo Turco seco (Sin azúcar añadida)', percentage: 30 }, { name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', percentage: 30 }, { name: 'Almendra Americana NPX natural', percentage: 25 }, { name: 'Albaricoque Turco seco (Sin azúcar añadida)', percentage: 15 }], gramsToAdd: 0 },
+                        { id: 4, name: 'Mix Multinutrientes', subtitle: 'Vitaminas y Minerales', description: 'Una verdadera bomba de micronutrientes esenciales. Con solo una o dos Nueces del Brasil obtienes tu dosis diaria de Selenio. La Baya de Goji aporta Vitamina A y C. El Pistacho ofrecen Vitamina B6 y potasio. El Marañón es rico en cobre y zinc, y la Almendra en Vitamina E y magnesio.', ingredients: ['5% Nuez del Brasil natural partida', '15% Baya Tibetana de Goji', '20% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', '25% Marañón Brasileño entero tostado W1 320 sin sal', '35% Almendra Americana NPX natural'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 35 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 25 }, { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 20 }, { name: 'Baya Tibetana de Goji', percentage: 15 }, { name: 'Nuez del Brasil natural partida', percentage: 5 }], gramsToAdd: 0 },
+                        { id: 5, name: 'Mix Poder Proteico', subtitle: 'Proteínas', description: 'La opción ideal para deportistas, vegetarianos o cualquiera que busque un impulso de proteína vegetal. El maní y la Almendra son los frutos secos con mayor contenido proteico, esencial para la reparación y construcción de músculos. El Pistacho complementa la mezcla con un perfil completo de aminoácidos.', ingredients: ['40% Maní Brasileño tostado sin sal bola entera ', '40% Almendra Americana NPX natural', '20% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)'], proportions: [{ name: 'Maní Brasileño tostado sin sal bola entera ', percentage: 40 }, { name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 20 }], gramsToAdd: 0 },
+                        { id: 6, name: 'Mix Figura Ideal', subtitle: 'Ayuda con la Pérdida de Peso', description: 'Un snack inteligente para controlar el apetito y mantenerte en tu peso ideal. La combinación de proteína, fibra y grasas saludables de la Almendra y el Marañón genera una gran sensación de saciedad, ayudándote a evitar antojos y ayudan al metabolismo energético. La Nuez del Nogal Americana natural aportan Omega-3, que ayuda a regular el metabolismo.', ingredients: ['50% Almendra Americana NPX natural', '30% Nuez del Nogal Americana natural', '20% Marañón Brasileño entero tostado W1 320 sin sal'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 50 }, { name: 'Nuez del Nogal Americana natural', percentage: 30 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 20 }], gramsToAdd: 0 },
+                        { id: 7, name: 'Mix Mente Brillante', subtitle: 'Salud Cerebral', description: 'Nutrición específica para tu cerebro. La Nuez del Nogal Americana natural es la reina de la salud cerebral gracias a su altísimo contenido de Omega-3 (ALA), vital para las neuronas. La Uva pasa Mexicana flame mediana (Sin azúcar añadida) es rica en Boro, un mineral que ha demostrado mejorar la función cognitiva, la coordinación y la memoria a corto plazo. La Avellana Turca natural con piel, es rica en Vitamina E que ayuda a prevenir el deterioro cognitivo.', ingredients: ['40% Nuez del Nogal Americana natural', '30% Uva pasa Mexicana flame mediana (Sin azúcar añadida)', '30% Avellana Turca natural con piel'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Uva pasa Mexicana flame mediana (Sin azúcar añadida)', percentage: 30 }, { name: 'Avellana Turca natural con piel', percentage: 30 }], gramsToAdd: 0 },
+                        { id: 8, name: 'Mix Huesos de Acero', subtitle: 'Salud Ósea', description: 'Fortalece tu estructura ósea desde adentro. El Higo Turco y la Almendra son excelentes fuentes vegetales de Calcio. El Marañón Brasileño entero tostado W1 320 sin sal y la Almendra aportan Magnesio, un mineral crucial para la absorción del calcio. La Uva pasa Mexicana flame mediana (Sin azúcar añadida) contiene Boro, un mineral traza que juega un papel importante en la prevención de la osteoporosis.', ingredients: ['30% Higo Turco seco (Sin azúcar añadida)', '40% Almendra Americana NPX natural', '20% Marañón Brasileño entero tostado W1 320 sin sal', '10% Uva pasa Mexicana flame mediana (Sin azúcar añadida)'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Higo Turco seco (Sin azúcar añadida)', percentage: 30 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 20 }, { name: 'Uva pasa Mexicana flame mediana (Sin azúcar añadida)', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 9, name: 'Mix Zen', subtitle: 'Efecto Antiinflamatorio', description: 'Ayuda a tu cuerpo a combatir la inflamación crónica de forma natural. La Nuez del Nogal Americana natural es la fuente principal de ácidos grasos Omega-3 antiinflamatorios. La Nuez Pecan Americana natural y la Almendra contienen antioxidantes y grasas saludables que también ayudan a reducir los marcadores inflamatorios. La Baya de Goji añade su potente polisacárido antiinflamantorio para un efecto sinérgico.', ingredients: ['40% Nuez del Nogal Americana natural', '20% Nuez Pecan Americana natural', '30% Almendra Americana NPX natural', '10% Baya Tibetana de Goji'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Almendra Americana NPX natural', percentage: 30 }, { name: 'Nuez Pecan Americana natural', percentage: 20 }, { name: 'Baya Tibetana de Goji', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 10, name: 'Mix Alma Feliz', subtitle: 'Mejora del Estado de Ánimo', description: 'Un impulso para tu bienestar emocional. La Nuez del Nogal Americana natural contiene triptófano, un precursor de la serotonina (la "hormona de la felicidad"). El Marañón es rico en magnesio, conocido como el "mineral antiestrés". El Dátil provee energía rápida para combatir la fatiga, y el Pistacho contienen Vitamina B6, necesaria para la producción de neurotransmisores del bienestar.', ingredients: ['35% Nuez del Nogal Americana natural', '35% Marañón Brasileño entero tostado W1 320 sin sal', '20% Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', '10% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)'], proportions: [{ name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 35 }, { name: 'Nuez del Nogal Americana natural', percentage: 35 }, { name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', percentage: 20 }, { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 11, name: 'Mix Inmunidad Total', subtitle: 'Aumento de Defensas', description: 'Refuerza tu sistema inmune para protegerte de enfermedades. Una sola Nuez del Brasil natural partida aporta todo el selenio que necesitas, un mineral vital para la función inmunológica. La Nuez Pecan Americana natural y el Marañón son ricos en zinc, esencial para el desarrollo y función de las células inmunitarias. La Almendra proveen Vitamina E, un antioxidante que protege las membranas de estas células. La Baya de Goji potencia la mezcla con vitamina C y polisacárido que estimulan la respuesta inmunitaria.', ingredients: ['10% Nuez del Brasil natural partida','20% Baya Tibetana de Goji', '10% Nuez Pecan Americana natural', '30% Marañón Brasileño entero tostado W1 320 sin sal', '30% Almendra Americana NPX natural'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 30 },{ name: 'Baya Tibetana de Goji', percentage: 20 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 30 }, { name: 'Nuez Pecan Americana natural', percentage: 10 }, { name: 'Nuez del Brasil natural partida', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 12, name: 'Mix Flujo Ligero', subtitle: 'Combate el Estreñimiento', description: 'La solución natural para la regularidad. Esta mezcla es una bomba de fibra. El Higo, el Dátil y el Albaricoque son famosos por su capacidad para ablandar las heces y estimular el tránsito intestinal. La Nuez Pecan Americana natural añaden un extra de fibra y grasas saludables, lubricando el sistema digestivo.', ingredients: ['35% Higo Turco seco (Sin azúcar añadida)', '30% Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', '20% Albaricoque Turco seco (Sin azúcar añadida)', '15% Nuez Pecan Americana natural'], proportions: [{ name: 'Higo Turco seco (Sin azúcar añadida)', percentage: 35 }, { name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', percentage: 30 }, { name: 'Albaricoque Turco seco (Sin azúcar añadida)', percentage: 20 }, { name: 'Nuez Pecan Americana natural', percentage: 15 }], gramsToAdd: 0 },
+                        { id: 13, name: 'Mix Eterna Juventud', subtitle: 'Propiedades Anti-envejecimiento', description: 'Protege tus células desde adentro hacia afuera. La Baya de Goji y sus antioxidantes unicos lideran la defensa contra el envejecimiento, la Nuez de Nogal y la Nuez Pecan Americana natural combaten el estrés oxidativo, una de las principales causas del envejecimiento celular. La Vitamina E de la Avellana es clave para mantener una piel elástica y saludable.', ingredients: ['25% Baya Tibetana de Goji', '40% Nuez del Nogal Americana natural', '15% Avellana Turca natural con piel', '20% Nuez Pecan Americana natural'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Baya Tibetana de Goji', percentage: 25 }, { name: 'Nuez Pecan Americana natural', percentage: 20 }, { name: 'Avellana Turca natural con piel', percentage: 15 }], gramsToAdd: 0 },
+                        { id: 14, name: 'Mix Sangre de Hierro', subtitle: 'Combate la Anemia', description: 'Un apoyo natural para aumentar tus niveles de hemoglobina. El Albaricoque y la Baya de Goji son excelentes fuentes vegetales de hierro. El Marañón es rico en cobre, un mineral indispensable para que el cuerpo pueda absorber y utilizar el hierro de manera eficiente. El Pistacho también complementa el aporte de hierro.', ingredients: ['35% Albaricoque Turco seco (Sin azúcar añadida)', '20% Baya Tibetana de Goji', '35% Marañón Brasileño entero tostado W1 320 sin sal', '10% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)'], proportions: [{ name: 'Albaricoque Turco seco (Sin azúcar añadida)', percentage: 35 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 35 }, { name: 'Baya Tibetana de Goji', percentage: 20 }, { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 15, name: 'Mix Calma Natural', subtitle: 'Combate Ansiedad y Depresión', description: 'Un refugio de tranquilidad en cada bocado. La Nuez del Nogal Americana natural, es rica en Omega-3, ha demostrado mejorar los síntomas de la depresión. El Marañón y la Almendra son dos de las mejores fuentes de magnesio, un mineral que relaja el sistema nervioso y ayuda a reducir la ansiedad y el estrés.', ingredients: ['40% Nuez del Nogal Americana natural', '25% Marañón Brasileño entero tostado W1 320 sin sal', '35% Almendra Americana NPX natural'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Almendra Americana NPX natural', percentage: 35 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 25 }], gramsToAdd: 0 },
+                        { id: 16, name: 'Mix Descanso y Claridad', subtitle: 'Mejora Memoria y Sueño', description: 'Para un cerebro enfocado de día y un descanso reparador de noche. La Nuez del Nogal Americana natural y el Arándano mejoran la función cognitiva y la memoria. Por otro lado, la Almendra y el Pistacho son fuentes naturales de melatonina, la hormona que regula el ciclo del sueño, ayudándote a conciliarlo y mejorar su calidad.', ingredients: ['35% Nuez del Nogal Americana natural', '35% Almendra Americana NPX natural', '15% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', '15% Arándano deshidratado Americano Ocean Spray (Con azúcar añadida)'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 35 }, { name: 'Almendra Americana NPX natural', percentage: 35 }, { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 15 }, { name: 'Arándano deshidratado Americano Ocean Spray (Con azúcar añadida)', percentage: 15 }], gramsToAdd: 0 },
+                        { id: 17, name: 'Mix Equilibrio Vital', subtitle: 'Control Diabetes y Tensión Arterial', description: 'Ideal para mantener a raya los niveles de azúcar y presión arterial. Esta mezcla tiene un bajo índice glucémico. La Almendra ayuda a regular el azúcar en sangre después de las comidas. La Nuez del Nogal Americana natural mejoran la sensibilidad a la insulina. El Marañón con su magnesio, potencia el control de la glucosa y la relajación de las arterias. El Maní Brasileño tostado sin sal bola entera  aporta proteína y fibra con un bajo índice glucémico.', ingredients: ['40% Almendra Americana NPX natural', '30% Nuez del Nogal Americana natural', '10% Marañón Brasileño entero tostado W1 320 sin sal', '20% Maní Brasileño tostado sin sal bola entera '], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Nuez del Nogal Americana natural', percentage: 30 }, { name: 'Maní Brasileño tostado sin sal bola entera ', percentage: 20 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 18, name: 'Mix Energía Sostenida', subtitle: 'Para el día a día', description: 'Combatir el cansancio de la tarde y proporcionar un flujo de energía constante, sin los picos y caídas del azúcar refinado. La Almendra gracias a su combinación de proteína, fibra y grasas saludables asegura una liberación de energía lenta y sostenida. El Dátil Sayer iraní sin semilla (Sin Azúcar añadida) aporta carbohidratos naturales de rápida absorción para un impulso de energía inmediato, pero sin ser procesados. La Macadamia Nicaragüense natural es densa en calorías de grasas saludables, lo que las convierte en una fuente de energía de muy larga duración. El Marañón tostado es rico en magnesio, que es crucial para convertir los alimentos en energía a nivel celular.', ingredients: ['40% Almendra Americana NPX natural', '30% Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', '20% Macadamia Nicaragüense natural', '10% Marañón Brasileño entero tostado W1 320 sin sal'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', percentage: 30 }, { name: 'Macadamia Nicaragüense natural', percentage: 20 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 19, name: 'Mix Piel Radiante', subtitle: 'Belleza desde Adentro', description: 'Nutrir la piel para mejorar su elasticidad, hidratación y protegerla del daño ambiental. La Almendra Americana NPX natural es una de las mejores fuentes de Vitamina E, un poderoso antioxidante que protege las células de la piel del daño solar y el envejecimiento. La Avellana Aporta más Vitamina E y antioxidantes concentrados en su piel, que combaten la inflamación cutánea. La Baya de Goji es rica en Vitamina A (betacaroteno), esencial para la reparación de los tejidos de la piel y para mantenerla suave. La Nuez de Nogal su Omega-3 fortalece las membranas celulares de la piel, ayudando a mantenerla hidratada y flexible.', ingredients: ['40% Almendra Americana NPX natural', '25% Avellana Turca natural con piel', '20% Baya Tibetana de Goji', '15% Nuez del Nogal Americana natural'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Avellana Turca natural con piel', percentage: 25 }, { name: 'Baya Tibetana de Goji', percentage: 20 }, { name: 'Nuez del Nogal Americana natural', percentage: 15 }], gramsToAdd: 0 },
+                        { id: 20, name: 'Mix Impulso Pre-Entreno', subtitle: 'Energía para el Ejercicio', description: 'Ofrecer el combustible rápido y eficiente que el cuerpo necesita antes de una sesión de ejercicio, mejorando el rendimiento y la resistencia. El Dátil es la fuente perfecta de carbohidratos de digestión rápida para tener energía disponible al instante. El Maní Brasileño tostado sin sal bola entera  aporta proteína y un poco de grasa para dar sostenimiento al pico de energía inicial. La Uva pasa Mexicana flame mediana (Sin azúcar añadida) Complementa a los Dátiles con más azúcares naturales para un combustible inmediato. La Almendra laminada añade una textura ligera y fácil de digerir antes del esfuerzo físico.', ingredients: ['40% Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', '30% Maní Brasileño tostado sin sal bola entera ', '20% Uva pasa Mexicana flame mediana (Sin azúcar añadida)', '10% Almendra Americana NPX laminada natural sin cutícula'], proportions: [{ name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', percentage: 40 }, { name: 'Maní Brasileño tostado sin sal bola entera ', percentage: 30 }, { name: 'Uva pasa Mexicana flame mediana (Sin azúcar añadida)', percentage: 20 }, { name: 'Almendra Americana NPX laminada natural sin cutícula', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 21, name: 'Mix Recuperación Post-Entreno', subtitle: 'Reparación Muscular', description: 'Reponer las reservas de energía (glucógeno) y proporcionar las proteínas necesarias para reparar las fibras musculares después del ejercicio, acelerando la recuperación. El Marañón tienen una proporción ideal de carbohidratos y proteínas, perfecta para la recuperación muscular. El Maní Brasileño tostado sin sal bola entera  es el rey de la proteína vegetal para una reparación muscular efectiva. El Arándano aporta los carbohidratos necesarios para rellenar las reservas de glucógeno y sus antioxidantes ayudan a reducir el dolor muscular post-ejercicio.', ingredients: ['40% Marañón Brasileño entero tostado W1 320 sin sal', '30% Maní Brasileño tostado sin sal bola entera ', '30% Arándano deshidratado Americano Ocean Spray (Con azúcar añadida)'], proportions: [{ name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 40 }, { name: 'Maní Brasileño tostado sin sal bola entera ', percentage: 30 }, { name: 'Arándano deshidratado Americano Ocean Spray (Con azúcar añadida)', percentage: 30 }], gramsToAdd: 0 },
+                        { id: 22, name: 'Mix Balance Femenino', subtitle: 'Salud Hormonal', description: 'Apoyar el equilibrio hormonal y aliviar síntomas comunes del ciclo menstrual, gracias a su perfil de minerales específicos. La Almendra Americana NPX natural es rica en Magnesio y Calcio, que han demostrado ayudar a reducir los cólicos y los síntomas del síndrome premenstrual (SPM). El Marañón es otra fuente potentísima de Magnesio, conocido por su efecto relajante y por mejorar el estado de ánimo. El Albaricoque es una buena fuente de hierro, importante para reponer las pérdidas durante la menstruación. La Nuez de Nogal con su Omega-3 ayuda a regular la inflamación, que puede ser una causa de dolor menstrual.', ingredients: ['40% Almendra Americana NPX natural', '30% Marañón Brasileño entero tostado W1 320 sin sal', '20% Albaricoque Turco seco (Sin azúcar añadida)', '10% Nuez del Nogal Americana natural'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 30 }, { name: 'Albaricoque Turco seco (Sin azúcar añadida)', percentage: 20 }, { name: 'Nuez del Nogal Americana natural', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 23, name: 'Mix Vigor Masculino', subtitle: 'Salud del Hombre', description: 'Enfocado en nutrientes clave para la salud masculina, como la función prostática, la producción de testosterona y la salud cardiovascular. El Pistacho es rico en Zinc, un mineral esencial para la salud de la próstata y la producción de testosterona. También contienen arginina, que mejora el flujo sanguíneo. La Nuez Pecan Americana natural aporta antioxidantes y también es una buena fuente de Zinc. La Nuez del Nogal Americana natural con su Omega-3 es fundamental para la salud cardiovascular general. La Nuez del Brasil natural partida es rico en Selenio que aporta es un antioxidante muy potente, también ligado a la producción de testosterona y la salud prostática.', ingredients: ['40% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', '30% Nuez Pecan Americana natural', '20% Nuez del Nogal Americana natural', '10% Nuez del Brasil natural partida'], proportions: [{ name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 40 }, { name: 'Nuez Pecan Americana natural', percentage: 30 }, { name: 'Nuez del Nogal Americana natural', percentage: 20 }, { name: 'Nuez del Brasil natural partida', percentage: 10 }], gramsToAdd: 0 }
                     ];
                 },
-                changeMode(newMode) { this.mode = newMode; if (newMode !== 'prices') this.resetBuilder(); },
+                changeMode(newMode) {
+                    this.selectedNut = null;
+                    this.mode = newMode;
+                },
+                viewProduct(nut) {
+                    this.previousMode = this.mode;
+                    this.selectedNut = nut;
+                    this.mode = 'productDetail';
+                    this.productDropdownOpen = false;
+                },
+                backToBuilder() {
+                    this.mode = this.previousMode;
+                    this.selectedNut = null;
+                },
                 removeFromCart(index) { this.cart.splice(index, 1); if (this.cart.length === 0) { this.showOrderSection = false; } },
 
                 get finalSummary() {
@@ -401,8 +555,8 @@
                 
                 get isOrderButtonEnabled() {
                     if (this.cart.length === 0) return false;
-                    if (!this.contactInfo.name || !this.contactInfo.phone ) return false;
-                    if (this.delivery.mode === 'domicilio' && (this.delivery.distance === null || this.delivery.isLoading || !this.delivery.address || !this.delivery.locality)) return false;
+                    if (!this.contactInfo.name || !this.contactInfo.phone || this.contactInfo.phone.length !== 10) return false;
+                    if (this.delivery.mode === 'domicilio' && (!this.delivery.address || !this.delivery.locality)) return false;
                     return true;
                 },
 
@@ -415,11 +569,11 @@
                     this.showPreConfirmationModal = false;
                     this.formStatus = 'Enviando...';
 
-                    let orderSummary = `Nuevo Pedido de Frutos Secos\n=================================\n\n`;
+                    let orderSummary = `Pedido #${this.orderCounter} Nut&Mix\n=================================\n\n`;
                     orderSummary += `**Información de Contacto:**\nNombre: ${this.contactInfo.name}\nCelular: ${this.contactInfo.phone}\n\n`;
                     orderSummary += `**Detalle del Pedido:**\n`;
                     this.cart.forEach((item, index) => {
-                        orderSummary += `--- Mezcla #${index + 1} (${item.totalGrams.toFixed(0)}g) - ${this.formatCurrency(item.cost)} ---\n`;
+                        orderSummary += `--- ${item.name} (${item.totalGrams.toFixed(0)}g) - ${this.formatCurrency(item.cost)} ---\n`;
                         if (item.discount > 0) {
                             orderSummary += `  (Descuento por cantidad del ${item.discountPercentage}% aplicado)\n`;
                         }
@@ -429,7 +583,7 @@
                     orderSummary += `**Resumen de Costos:**\nSubtotal: ${this.formatCurrency(this.finalSummary.subtotal)}\n`;
                     
                     if(this.delivery.mode === 'domicilio') {
-                        orderSummary += `Método: Domicilio\nDirección: ${this.delivery.address}, ${this.delivery.locality}, Bogotá\nDistancia: ${this.delivery.distance.toFixed(2)} km\nCosto Domicilio: ${this.formatCurrency(this.finalSummary.deliveryCostRaw)}\n`;
+                        orderSummary += `Método: Domicilio\nDirección: ${this.delivery.address}, ${this.delivery.locality}, Bogotá\nCosto Domicilio: ${this.formatCurrency(this.finalSummary.deliveryCostRaw)}\n`;
                         if (this.finalSummary.discount > 0) orderSummary += `Descuento Domicilio: -${this.formatCurrency(this.finalSummary.discount)}\n`;
                     } else {
                         orderSummary += `Método: Recoger en Tienda\nDirección de Recogida: Carrera 19 # 183-30 (Usaquén, Bogotá)\nCosto Domicilio: ${this.formatCurrency(0)}\n`;
@@ -444,15 +598,17 @@
                     formData.append('Resumen_Completo', orderSummary);
 
                     try {
-                        const response = await fetch('https://formspree.io/f/xldldajp', {
+                        const response = await fetch('https://submit-form.com/v3f49r8Fd', {
                             method: 'POST', body: formData, headers: { 'Accept': 'application/json' }
                         });
                         if (response.ok) {
                             this.showConfirmation(orderSummary);
+                            this.orderCounter++;
+                            localStorage.setItem('nutMixOrderCounter_v2', this.orderCounter);
                             this.cart = []; this.resetBuilder();
                             this.delivery = { mode: 'domicilio', address: '', locality: '', distance: null, cost: 0, status: '', error: false, isLoading: false };
-                            this.contactInfo = { name: '', phone: '' }; this.showOrderSection = false;
-                        } else { throw new Error('Error en el servidor de Formspree.'); }
+                            this.contactInfo = { name: '', phone: '', phoneError: '' }; this.showOrderSection = false;
+                        } else { throw new Error('Error en el servidor de Formspark.'); }
                     } catch (error) {
                         alert('Hubo un problema al enviar tu pedido. Por favor, intenta de nuevo.');
                     } finally {
@@ -461,17 +617,29 @@
                 },
                 
                 showConfirmation(summary) {
-                    this.confirmationDetails.title = '¡Solicitud enviada con éxito!';
+                    this.confirmationDetails.title = '¡Tu solicitud ha sido recibida con éxito!';
                     let messageBody = '';
                     const imageHtml = `<div class='flex justify-center mt-4'><img src='https://i.ibb.co/jkmzGCDZ/Airbrush-Image-Enhancer-1752901262222.jpg' alt='Logo de Agradecimiento' class='h-32 w-auto' /></div>`;
 
                     if (this.delivery.mode === 'recoger') {
-                        messageBody = `<p>¡Gracias por elegirnos! Estamos seleccionando los frutos para tu mezcla. En breve, uno de nuestros expertos te contactará para coordinar el metodo de pago y agendar el momento perfecto para que vengas por tu mezcla.<br><br>Agradecemos tu confianza.</p>`;
+                        messageBody = `<p>¡Tu creación está en marcha! Ya estamos seleccionando los ingredientes más frescos para tu mezcla. En breve, uno de nuestros expertos te contactará para confirmar los detalles del pago y avisarte en cuanto puedas pasar a recogerla. ¡Gracias por elegirnos!</p>`;
                     } else { // 'domicilio'
                         messageBody = `<p>¡Gracias por elegirnos! Estamos seleccionando los frutos para tu mezcla. En breve, uno de nuestros expertos te contactará para coordinar el metodo de pago y programar la entrega en tu dirección.<br><br>Agradecemos tu confianza.</p>`;
                     }
 
-                    this.confirmationDetails.message = messageBody + imageHtml;
+                    const whatsappText = encodeURIComponent(`Hola, me podrías ayudar con el siguiente pedido:\n\n${summary}`);
+                    const whatsappLink = `https://wa.me/573102416762?text=${whatsappText}`;
+
+                    const additionalContent = `
+                        <div class='mt-6 text-center'>
+                            <p class='text-slate-600'>¿Tienes prisa o alguna duda?<br>Haz clic para hablar directamente con nosotros.</p>
+                            <a href="${whatsappLink}" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                                WhatsApp
+                            </a>
+                        </div>
+                    `;
+
+                    this.confirmationDetails.message = messageBody + imageHtml + additionalContent;
                     this.confirmationDetails.summary = summary;
                     this.showConfirmationModal = true;
                 },
