@@ -1,35 +1,67 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personalizada Tu propia Mezcla</title>
-    
+
     <!-- Google Fonts for elegant style -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Alpine.js CDN -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"></script>
-    
+
     <style>
-        [x-cloak] { display: none !important; }
-        .font-elegant { font-family: 'Playfair Display', serif; }
-        .font-body { font-family: 'Roboto', sans-serif; }
-        .transition-height { transition: max-height 0.5s ease-in-out; }
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .font-elegant {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .transition-height {
+            transition: max-height 0.5s ease-in-out;
+        }
+
+
+
         .loader {
             border: 4px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 4px solid #5a6e5a; /* Olive color */
+            border-top: 4px solid #5a6e5a;
+            /* Olive color */
             width: 20px;
             height: 20px;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        html { scroll-behavior: smooth; } /* For smooth scrolling */
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* For smooth scrolling */
 
         /* Estilos para el tooltip de ayuda en la sección de porcentajes */
         .group:hover .group-hover\:opacity-100,
@@ -38,211 +70,259 @@
         }
     </style>
 </head>
+
 <body class="bg-slate-50 text-slate-800 font-body">
 
-    <div 
-        class="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8"
-        x-data="mixBuilder()" 
-        x-cloak
-    >
+    <div class="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8" x-data="mixBuilder()" x-cloak>
         <!-- Título y Encabezado -->
         <header id="header" class="text-center mb-8">
             <div class="flex justify-center items-center space-x-4">
-                <img src="https://i.ibb.co/svMK2wRn/Airbrush-Image-Enhancer-1752901262222.jpg" alt="Logo Izquierda" class="h-28 w-auto">
+                <img src="https://i.ibb.co/svMK2wRn/Airbrush-Image-Enhancer-1752901262222.jpg" alt="Logo Izquierda"
+                    class="h-28 w-auto">
                 <h1 class="text-5xl sm:text-6xl font-elegant font-bold text-slate-900">Tu Mezcla ideal</h1>
-                <img src="https://i.ibb.co/4ngcjxY4/imagen-frutos-secos.jpg" alt="Frutos Secos" class="h-28 w-auto rounded-lg shadow-md">
+                <img src="https://i.ibb.co/4ngcjxY4/imagen-frutos-secos.jpg" alt="Frutos Secos"
+                    class="h-28 w-auto rounded-lg shadow-md hidden sm:block">
             </div>
             <p class="mt-4 max-w-3xl mx-auto text-slate-600 leading-relaxed">
-                ¿Por qué conformarse con una mezcla estándar cuando puedes diseñar la tuya? Te damos el control para componer una sinfonía de sabores y nutrientes con nuestra selección premium de frutos secos. El resultado será un bocado saludable, energético y hecho perfectamente a tu medida. ¡Porque la perfección está en la mezcla!
+                ¿Por qué conformarse con una mezcla estándar cuando puedes diseñar la tuya? Te damos el control para
+                componer una sinfonía de sabores y nutrientes con nuestra selección premium de frutos secos. El
+                resultado será un bocado saludable, energético y hecho perfectamente a tu medida. ¡Porque la perfección
+                está en la mezcla!
             </p>
         </header>
 
         <!-- Pestañas de Modo -->
-        <div id="builder" class="relative mb-8 flex justify-center border border-slate-300 rounded-lg p-1 bg-slate-200 w-full sm:w-auto mx-auto">
-            <button @click="changeMode('quantity')" :class="{ 'bg-white text-emerald-800 shadow-md': mode === 'quantity', 'text-slate-600': mode !== 'quantity' }" class="px-4 py-2 w-auto rounded-md font-semibold transition-colors">
-                Por Cantidad
-            </button>
-            <button @click="changeMode('percentage')" :class="{ 'bg-white text-emerald-800 shadow-md': mode === 'percentage', 'text-slate-600': mode !== 'percentage' }" class="px-4 py-2 w-auto rounded-md font-semibold transition-colors">
-                Por Porcentaje
-            </button>
-            <!-- Botón de Productos -->
-            <div class="w-auto" @click.away="productDropdownOpen = false">
-                <button @click="productDropdownOpen = !productDropdownOpen" type="button" :class="{ 'bg-white text-emerald-800 shadow-md': mode === 'productDetail' || productDropdownOpen, 'text-slate-600': mode !== 'productDetail' }" class="px-4 py-2 w-full rounded-md font-semibold transition-colors flex items-center justify-center gap-1">
-                    Productos
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition-transform" :class="{'rotate-180': productDropdownOpen}"><path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 011.06 0L10 11.94l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 9.28a.75.75 0 010-1.06z" clip-rule="evenodd" /></svg>
-                </button>
+        <div class="mb-8">
+            <!-- Main Tabs -->
+            <div class="relative mb-8 flex justify-center border border-slate-300 rounded-lg p-1 bg-slate-200 w-full sm:w-auto mx-auto">
+                <ul class="-mb-px flex items-center gap-4 text-sm sm:text-base font-medium">
+                    <li>
+                        <a @click="activeTab = 0"
+                           class="inline-flex cursor-pointer items-center gap-2 px-1 py-3 text-gray-500 hover:text-emerald-700 whitespace-nowrap"
+                           :class="{ 'relative text-emerald-700 after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full after:bg-emerald-700': activeTab === 0 }">
+                            Crea tu Mezcla
+                        </a>
+                    </li>
+                    <li>
+                        <a  @click="activeTab = 1"
+                            class="inline-flex cursor-pointer items-center gap-2 px-1 py-3 text-gray-500 hover:text-emerald-700 whitespace-nowrap"
+                            :class="{ 'relative text-emerald-700 after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full after:bg-emerald-700': activeTab === 1 }">
+                            Productos
+                        </a>
+                    </li>
+                    <li>
+                        <a @click="activeTab = 2"
+                           class="inline-flex cursor-pointer items-center gap-2 px-1 py-3 text-gray-500 hover:text-emerald-700 whitespace-nowrap"
+                           :class="{ 'relative text-emerald-700 after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full after:bg-emerald-700': activeTab === 2 }">
+                            Mixes Vitales
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <!-- Botón de Mixes Vitales -->
-            <button @click="changeMode('predefinedMixes')" :class="{ 'bg-white text-emerald-800 shadow-md': mode === 'predefinedMixes', 'text-slate-600': mode !== 'predefinedMixes' }" class="px-4 py-2 w-auto rounded-md font-semibold transition-colors">
-                Mixes Vitales
-            </button>
-            <!-- Panel Desplegable de Productos -->
-            <div x-show="productDropdownOpen" x-transition 
-                 class="absolute top-full left-0 right-0 mt-2 bg-white rounded-md shadow-lg z-10 border border-slate-200">
-                <div class="p-4 flex flex-wrap gap-x-2 gap-y-1 justify-center">
-                    <template x-for="nut in nuts" :key="nut.name">
-                        <a href="#" @click.prevent="viewProduct(nut)" 
-                           class="px-3 py-1 text-sm rounded-md transition-colors"
-                           :class="{
-                               'bg-[#5a6e5a] text-white': selectedNut && selectedNut.name === nut.name,
-                               'text-slate-700 hover:bg-slate-100': !selectedNut || selectedNut.name !== nut.name
-                           }"
-                           x-text="nut.name"></a>
-                    </template>
-                </div>
-            </div>
-        </div>
 
+            <!-- Sub-tabs Content -->
+            <div class="pt-8 pb-4">
+                <!-- Crea tu Mezcla Tab -->
+                <div :class="{ '!block': activeTab === 0 }" x-show.transition.in.opacity.duration.600="activeTab === 0" class="hidden">
+                                         <!-- Sub-tabs for Crea tu Mezcla -->
+                     <div class="mb-6 flex justify-center text-sm">
+                         <div class="inline-flex border border-slate-300 rounded-lg p-1 bg-slate-200">
+                             <button @click="activeSubTab = 0; changeMode('quantity')"
+                                 :class="{ 'bg-white text-emerald-800 shadow-md': activeSubTab === 0, 'text-slate-600': activeSubTab !== 0 }"
+                                 class="px-4 py-2 w-full sm:w-auto rounded-md font-medium transition-colors whitespace-nowrap">
+                                 Por Cantidad
+                             </button>
+                             <button @click="activeSubTab = 1; changeMode('percentage')"
+                                 :class="{ 'bg-white text-emerald-800 shadow-md': activeSubTab === 1, 'text-slate-600': activeSubTab !== 1 }"
+                                 class="px-4 py-2 w-full sm:w-auto rounded-md font-medium transition-colors whitespace-nowrap">
+                                 Por Porcentaje
+                             </button>
+                         </div>
+                     </div>
 
-        <!-- Contenido Principal -->
-        <section class="bg-white p-6 rounded-xl shadow-lg border border-slate-200">
-            
-            <!-- Vista del Constructor -->
-            <div x-show="mode === 'quantity' || mode === 'percentage'">
-                <!-- Modo Cantidad -->
-                <div x-show="mode === 'quantity'" x-transition>
-                    <p class="mb-6 text-center font-elegant text-slate-700 text-lg">Crea tu mezcla perfecta gramo a gramo. ¿O prefieres algo más simple? Elige la cantidad exacta de tu fruto seco favorito. Tú elijes.</p>
-                    <div class="text-center text-sm text-slate-600 mb-6 bg-emerald-50 p-3 rounded-md border border-emerald-200">
-                        <p class="font-bold text-emerald-800">Compra de forma inteligente. Ahorra en grande.</p>
-                        <p>Lleva <b>500gr</b> o más en una sola mezcla y obtén un <b>2% de descuento</b>.</p>
-                        <p>Lleva <b>1kg</b> o más en una sola mezcla y disfruta de un <b>5% de descuento</b>.</p>
-                    </div>
-                    <div class="grid grid-cols-1 divide-y divide-slate-200">
-                        <div class="grid grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco (Costo Gramo)</span><span class="text-center">Cantidad</span><span class="text-right">Porcentaje</span></div>
-                        <template x-for="nut in nuts" :key="nut.name">
-                            <div class="grid grid-cols-3 gap-4 items-center py-3">
-                                <div class="px-2">
-                                    <span x-text="nut.name" class="font-medium text-slate-700"></span>
-                                    <p class="text-xs font-mono text-slate-500" x-text="formatCurrency(nut.price) + '/gr'"></p>
-                                </div>
-                                <div class="relative">
-                                    <input type="number" min="0" x-model.number.debounce="nut.grams" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800 pr-8">
-                                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">gr</span>
-                                </div>
-                                <span class="text-right font-mono text-slate-800 px-2" x-text="calculateNutPercentage(nut.grams) + '%'"></span>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-                <!-- Modo Porcentaje -->
-                <div x-show="mode === 'percentage'" x-transition>
-                    <p class="mb-6 text-center font-elegant text-slate-700 text-lg">Aquí tú tienes el control total. Define la cantidad total para tu mezcla y luego diseña el balance perfecto de sabores asignando porcentajes a tus frutos favoritos.</p>
-                    <div class="text-center text-sm text-slate-600 mb-6 bg-emerald-50 p-3 rounded-md border border-emerald-200">
-                        <p class="font-bold text-emerald-800">Compra de forma inteligente. Ahorra en grande.</p>
-                        <p>Lleva <b>500gr</b> o más en una sola mezcla y obtén un <b>2% de descuento</b>.</p>
-                        <p>Lleva <b>1kg</b> o más en una sola mezcla y disfruta de un <b>5% de descuento</b>.</p>
-                    </div>
-                    <div class="mb-6">
-                        <label for="totalGrams" class="block text-sm font-medium text-slate-700 text-center mb-2">Ingresa la cantidad total de tu Mezcla (Gramos)</label>
-                        <div class="relative max-w-xs mx-auto"><input id="totalGrams" type="number" min="0" x-model.number="totalGramsForPercentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800"></div>
-                    </div>
-                    <div class="relative grid grid-cols-1 divide-y divide-slate-200">
-                        <div class="grid grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco (Costo Gramo)</span><span class="text-center">Porcentaje</span><span class="text-right">Gramos</span></div>
-                        <template x-for="nut in nuts" :key="nut.name">
-                            <div class="relative group grid grid-cols-3 gap-4 items-center py-3">
-                                <div class="px-2">
-                                    <span x-text="nut.name" class="font-medium text-slate-700"></span>
-                                    <p class="text-xs font-mono text-slate-500" x-text="formatCurrency(nut.price) + '/gr'"></p>
-                                </div>
-                                <div class="relative">
-                                    <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-xs bg-gray-700 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">La sumatoria de todos los porcentajes debe ser 100%</span>
-                                    <input type="number" min="0" max="100" x-model.number.debounce="nut.percentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800 pr-8">
-                                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">%</span>
-                                </div>
-                                <span class="md:text-right font-mono text-slate-800 px-2" x-text="calculateNutGrams(nut.percentage) + ' g'"></span>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-
-                <div class="mt-6 pt-4 border-t border-slate-200 bg-slate-100 p-4 rounded-lg">
-                    <h3 class="font-bold text-lg mb-2 text-slate-800">Resumen de Mezcla Actual</h3>
-                    <div class="flex justify-between"><span class="text-slate-600">Total Gramos:</span><span class="font-semibold" x-text="currentMix.totalGrams.toFixed(0) + ' g'"></span></div>
-                    <div x-show="mode === 'percentage'" class="flex justify-between items-center">
-                        <span class="text-slate-600">Total Porcentaje:</span>
-                        <span class="font-semibold px-2 py-0.5 rounded" :class="{'text-green-800 bg-green-200': currentMix.totalPercentage === 100, 'text-red-800 bg-red-200': currentMix.totalPercentage !== 100}" x-text="currentMix.totalPercentage + '%'"></span>
-                    </div>
-                    <p x-show="mode === 'percentage' && currentMix.totalPercentage !== 100" class="text-red-600 text-sm text-right">El total debe ser 100% para añadir.</p>
-                    <div class="flex justify-between"><span class="text-slate-600">Subtotal:</span><span class="font-semibold" x-text="formatCurrency(currentMix.subtotal)"></span></div>
-                    <div x-show="currentMix.discount > 0" class="flex justify-between text-green-700">
-                        <span class="text-green-700" x-text="`Descuento por cantidad (${currentMix.discountPercentage}%):`"></span>
-                        <span class="font-semibold" x-text="'-' + formatCurrency(currentMix.discount)"></span>
-                    </div>
-                    <div class="flex justify-between text-xl"><span class="font-bold">Costo Mezcla:</span><span class="font-bold text-emerald-800" x-text="formatCurrency(currentMix.cost)"></span></div>
-                </div>
-                <div class="mt-6">
-                    <button @click="addToCart()" :disabled="!isActionEnabled" class="w-full font-bold py-3 px-4 rounded-lg transition-all" :class="{'bg-green-700 hover:bg-green-800 text-white shadow-lg': isActionEnabled, 'bg-slate-300 cursor-not-allowed text-slate-500': !isActionEnabled}">Añadir Compra</button>
-                    <p class="text-center text-sm text-slate-500 mt-2">Puedes añadir las mezclas que desees.</p>
-                </div>
-            </div>
-            
-            <!-- Vista de Detalle de Producto -->
-<div x-show="mode === 'productDetail'" x-transition>
-    <div x-if="selectedNut">
-        
-        <!-- Contenedor principal para la descripción del producto -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-            <!-- Columna Izquierda: Imagen y Tabla Nutricional -->
-            <div>
-                <img :src="selectedNut.imageUrl" :alt="selectedNut.name" class="w-full h-auto rounded-lg shadow-md">
-                <div class="mt-4" x-html="selectedNut.nutritionInfo"></div>
-            </div>
-            
-            <!-- Columna Derecha: Nombre, Descripción y Botón de Subir -->
-            <div class="flex flex-col h-full">
-                <div>
-                    <h2 class="text-3xl font-elegant font-bold text-slate-900 text-justify" x-text="selectedNut.name"></h2>
-                    <div class="text-slate-600 leading-relaxed space-y-4 text-justify" x-html="selectedNut.description"></div>
-                </div>
-
-                <!-- Contenedor del Botón de Subir (se alinea abajo a la derecha) -->
-                <div class="mt-8 flex justify-end">
-                    <button 
-                        @click="scrollToElement('#header')" 
-                        class="font-bold py-2 px-6 rounded-lg bg-emerald-800 hover:bg-emerald-900 text-white shadow-lg transition-colors flex items-center gap-2">
-                        Subir
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                          <path fill-rule="evenodd" d="M10 17a.75.75 0 0 1-.75-.75V5.612L7.03 7.83a.75.75 0 1 1-1.06-1.06l3.25-3.25a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 1 1-1.06 1.06L10.75 5.612V16.25A.75.75 0 0 1 10 17Z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-            <!-- Vista de Mixes Vitales -->
-            <div x-show="mode === 'predefinedMixes'" x-transition>
-                <h2 class="text-3xl font-elegant font-bold text-slate-900 text-center mb-4">Una Guía para tu Bienestar</h2>
-                <p class="mb-8 text-justify text-slate-600 max-w-2xl mx-auto">
-                    Las mezclas que te presentamos a continuación han sido diseñadas para destacar los beneficios nutricionales de cada ingrediente. Tómalas como una guía inspiradora y no como una recomendación médica. Tu salud es única.<br> Por ello, te animamos a consultar con un profesional de la salud si tienes preguntas sobre tu dieta. Recuerda que la base de un estilo de vida saludable siempre será la moderación en las porciones y la variedad en tus alimentos.
-                </p>
-		 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <template x-for="mix in predefinedMixes" :key="mix.id">
-                        <div class="bg-slate-50 border border-emerald-800 rounded-xl overflow-hidden flex flex-col">
-                            <div class="p-4 flex flex-col flex-grow">
-                                <h3 class="text-xl font-bold font-elegant text-emerald-800" x-text="mix.name"></h3>
-                                <p class="text-sm text-slate-500 mb-3" x-text="mix.subtitle"></p>
-                                <p class="text-slate-600 text-base mb-4 flex-grow text-justify" x-text="mix.description"></p>
-                                <div>
-                                    <p class="text-sm font-bold text-slate-700">Ingredientes:</p>
-                                    <ul class="text-sm text-slate-500 list-none mt-1">
-                                        <template x-for="ingredient in mix.ingredients" :key="ingredient">
-                                            <li class="font-bold" x-text="ingredient"></li>
-                                        </template>
- 			     </ul>			             
-                                </div>
-                                <div class="mt-4 flex flex-col items-center gap-4">
-                                    <div class="relative w-full max-w-xs">
-                                        <input type="number" min="100" step="50" x-model.number="mix.gramsToAdd" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800 pr-8">
-                                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">gr</span>
+                    <!-- Sub-tab Content -->
+                    <div x-show="activeSubTab === 0" x-transition>
+                        <p class="mb-6 text-center font-elegant text-slate-700 text-lg">Crea tu mezcla perfecta gramo a
+                            gramo. ¿O prefieres algo más simple? Elige la cantidad exacta de tu fruto seco favorito. Tú
+                            elijes.</p>
+                        <div
+                            class="text-center text-sm text-slate-600 mb-6 bg-emerald-50 p-3 rounded-md border border-emerald-200">
+                            <p class="font-bold text-emerald-800">Compra de forma inteligente. Ahorra en grande.</p>
+                            <p>Lleva <b>500gr</b> o más en una sola mezcla y obtén un <b>2% de descuento</b>.</p>
+                            <p>Lleva <b>1kg</b> o más en una sola mezcla y disfruta de un <b>5% de descuento</b>.</p>
+                        </div>
+                        <div class="grid grid-cols-1 divide-y divide-slate-200">
+                            <div class="grid grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco
+                                    (Costo Gramo)</span><span class="text-center">Cantidad</span><span
+                                    class="text-right">Porcentaje</span></div>
+                            <template x-for="nut in nuts" :key="nut.name">
+                                <div class="grid grid-cols-3 gap-4 items-center py-3">
+                                    <div class="px-2">
+                                        <span x-text="nut.name" class="font-medium text-slate-700"></span>
+                                        <p class="text-xs font-mono text-slate-500"
+                                            x-text="formatCurrency(nut.price) + '/gr'"></p>
                                     </div>
-                                    <button @click="addPredefinedMixToCart(mix)" class="bg-green-700 hover:bg-green-800 text-white font-bold text-lg py-2 px-6 rounded-lg shadow-lg whitespace-nowrap">Añadir</button>
-                                </div> 
+                                    <div class="relative">
+                                        <input type="number" min="0" x-model.number.debounce="nut.grams"
+                                            class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800 pr-8">
+                                        <span
+                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">gr</span>
+                                    </div>
+                                    <span class="text-right font-mono text-slate-800 px-2"
+                                        x-text="calculateNutPercentage(nut.grams) + '%'"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div x-show="activeSubTab === 1" x-transition>
+                        <p class="mb-6 text-center font-elegant text-slate-700 text-lg">Aquí tú tienes el control total.
+                            Define la cantidad total para tu mezcla y luego diseña el balance perfecto de sabores asignando
+                            porcentajes a tus frutos favoritos.</p>
+                        <div
+                            class="text-center text-sm text-slate-600 mb-6 bg-emerald-50 p-3 rounded-md border border-emerald-200">
+                            <p class="font-bold text-emerald-800">Compra de forma inteligente. Ahorra en grande.</p>
+                            <p>Lleva <b>500gr</b> o más en una sola mezcla y obtén un <b>2% de descuento</b>.</p>
+                            <p>Lleva <b>1kg</b> o más en una sola mezcla y disfruta de un <b>5% de descuento</b>.</p>
+                        </div>
+                        <div class="mb-6">
+                            <label for="totalGrams"
+                                class="block text-sm font-medium text-slate-700 text-center mb-2">Ingresa la cantidad total
+                                de tu Mezcla (Gramos)</label>
+                            <div class="relative max-w-xs mx-auto"><input id="totalGrams" type="number" min="0"
+                                    x-model.number="totalGramsForPercentage"
+                                    class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800">
                             </div>
                         </div>
-                    </template>
+                        <div class="relative grid grid-cols-1 divide-y divide-slate-200">
+                            <div class="grid grid-cols-3 gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>Fruto Seco
+                                    (Costo Gramo)</span><span class="text-center">Porcentaje</span><span
+                                    class="text-right">Gramos</span></div>
+                            <template x-for="nut in nuts" :key="nut.name">
+                                <div class="relative group grid grid-cols-3 gap-4 items-center py-3">
+                                    <div class="px-2">
+                                        <span x-text="nut.name" class="font-medium text-slate-700"></span>
+                                        <p class="text-xs font-mono text-slate-500"
+                                            x-text="formatCurrency(nut.price) + '/gr'"></p>
+                                    </div>
+                                    <div class="relative">
+                                        <span
+                                            class="absolute -top-7 left-1/2 -translate-x-1/2 text-xs bg-gray-700 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">La
+                                            sumatoria de todos los porcentajes debe ser 100%</span>
+                                        <input type="number" min="0" max="100" x-model.number.debounce="nut.percentage"
+                                            class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800 pr-8">
+                                        <span
+                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">%</span>
+                                    </div>
+                                    <span class="md:text-right font-mono text-slate-800 px-2"
+                                        x-text="calculateNutGrams(nut.percentage) + ' g'"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-200 bg-slate-100 p-4 rounded-lg">
+                        <h3 class="font-bold text-lg mb-2 text-slate-800">Resumen de Mezcla Actual</h3>
+                        <div class="flex justify-between"><span class="text-slate-600">Total Gramos:</span><span
+                                class="font-semibold" x-text="currentMix.totalGrams.toFixed(0) + ' g'"></span></div>
+                        <div x-show="activeSubTab === 1" class="flex justify-between items-center">
+                            <span class="text-slate-600">Total Porcentaje:</span>
+                            <span class="font-semibold px-2 py-0.5 rounded"
+                                :class="{'text-green-800 bg-green-200': currentMix.totalPercentage === 100, 'text-red-800 bg-red-200': currentMix.totalPercentage !== 100}"
+                                x-text="currentMix.totalPercentage + '%'"></span>
+                        </div>
+                        <p x-show="activeSubTab === 1 && currentMix.totalPercentage !== 100"
+                            class="text-red-600 text-sm text-right">El total debe ser 100% para añadir.</p>
+                        <div class="flex justify-between"><span class="text-slate-600">Subtotal:</span><span
+                                class="font-semibold" x-text="formatCurrency(currentMix.subtotal)"></span></div>
+                        <div x-show="currentMix.discount > 0" class="flex justify-between text-green-700">
+                            <span class="text-green-700"
+                                x-text="`Descuento por cantidad (${currentMix.discountPercentage}%):`"></span>
+                            <span class="font-semibold" x-text="'-' + formatCurrency(currentMix.discount)"></span>
+                        </div>
+                        <div class="flex justify-between text-xl"><span class="font-bold">Costo Mezcla:</span><span
+                                class="font-bold text-emerald-800" x-text="formatCurrency(currentMix.cost)"></span></div>
+                    </div>
+                    <div class="mt-6">
+                        <button @click="addToCart()" :disabled="!isActionEnabled"
+                            class="w-full font-bold py-3 px-4 rounded-lg transition-all"
+                            :class="{'bg-green-700 hover:bg-green-800 text-white shadow-lg': isActionEnabled, 'bg-slate-300 cursor-not-allowed text-slate-500': !isActionEnabled}">Añadir
+                            Compra</button>
+                        <p class="text-center text-sm text-slate-500 mt-2">Puedes añadir las mezclas que desees.</p>
+                    </div>
                 </div>
+
+                <!-- Productos Tab -->
+                <div :class="{ '!block': activeTab === 1 }" x-show.transition.in.opacity.duration.600="activeTab === 1" class="hidden">
+                    <div class="mb-6">
+                        <h2 class="text-3xl font-elegant font-bold text-slate-900 text-center mb-4">Nuestros Productos</h2>
+                        <p class="text-center text-slate-600 mb-8">Explora nuestra selección premium de frutos secos y frutas deshidratadas</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <template x-for="nut in nuts" :key="nut.name">
+                            <div class="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                                <img :src="nut.imageUrl" :alt="nut.name" class="w-full h-48 object-cover">
+                                <div class="p-4 flex flex-col justify-between min-h-[188px]">
+                                    <div>
+                                        <h3 class="font-bold text-slate-800 mb-2" x-text="nut.name"></h3>
+                                        <p class="text-emerald-700 font-semibold mb-3" x-text="formatCurrency(nut.price) + '/gr'"></p>
+                                    </div>
+                                    <button @click="viewProduct(nut)"
+                                            class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2 px-4 rounded transition-colors">
+                                        Ver Detalles
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Mixes Vitales Tab -->
+                <div :class="{ '!block': activeTab === 2 }" x-show.transition.in.opacity.duration.600="activeTab === 2" class="hidden">
+                    <h2 class="text-3xl font-elegant font-bold text-slate-900 text-center mb-4">Una Guía para tu Bienestar
+                    </h2>
+                    <p class="mb-8 text-justify text-slate-600 max-w-2xl mx-auto">
+                        Las mezclas que te presentamos a continuación han sido diseñadas para destacar los beneficios
+                        nutricionales de cada ingrediente. Tómalas como una guía inspiradora y no como una recomendación
+                        médica. Tu salud es única.<br> Por ello, te animamos a consultar con un profesional de la salud si
+                        tienes preguntas sobre tu dieta. Recuerda que la base de un estilo de vida saludable siempre será la
+                        moderación en las porciones y la variedad en tus alimentos.
+                             <p class="text-base font-semibold text-emerald-800 text-center mb-6">¿Cómo Disfrutar de Nuestros Mixes?</h2>
+               		     <p class="mb-8 text-justify text-slate-600 max-w-2xl mx-auto">
+                                     Junto a cada Mix Vital, encontrarás un espacio para indicar los gramos que deseas. Decide la cantidad perfecta para ti, indícala en el espacio de gramos y presiona "Añadir". Tu Mix Vital, con su balance único de ingredientes y beneficios, estará listo en tu carrito para que completes tu compra.
+                             </p>
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <template x-for="mix in predefinedMixes" :key="mix.id">
+                            <div class="bg-slate-50 border border-emerald-800 rounded-xl overflow-hidden flex flex-col">
+                                <div class="p-4 flex flex-col flex-grow">
+                                    <h3 class="text-xl font-bold font-elegant text-emerald-800" x-text="mix.name"></h3>
+                                    <p class="text-sm text-slate-500 mb-3" x-text="mix.subtitle"></p>
+                                    <p class="text-slate-600 text-base mb-4 flex-grow text-justify"
+                                        x-text="mix.description"></p>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-700">Ingredientes:</p>
+                                        <ul class="text-sm text-slate-500 list-none mt-1">
+                                            <template x-for="ingredient in mix.ingredients" :key="ingredient">
+                                                <li class="font-bold" x-text="ingredient"></li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                    <div class="mt-4 flex flex-col items-center gap-4">
+                                        <div class="relative w-full max-w-xs">
+                                            <input type="number" min="100" step="50" x-model.number="mix.gramsToAdd"
+                                                class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-emerald-800 focus:ring-emerald-800 pr-8">
+                                            <span
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">gr</span>
+                                        </div>
+                                        <button @click="addPredefinedMixToCart(mix)"
+                                            class="bg-green-700 hover:bg-green-800 text-white font-bold text-lg py-2 px-6 rounded-lg shadow-lg whitespace-nowrap">Añadir</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
  <div class="mt-8 flex justify-end">
                    <button 
                       @click="scrollToElement('#header')" 
@@ -253,14 +333,66 @@
                       </svg>
                    </button>
               	</div>
+                </div>
             </div>
-        </section>
+                 </div>
+
+         <!-- Product Detail Modal -->
+         <div x-show="mode === 'productDetail' && selectedNut"
+              @keydown.escape.window="backToBuilder()"
+              class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4 overflow-hidden">
+             <div @click.away="backToBuilder()"
+                  class="bg-white rounded-lg shadow-xl w-full max-w-4xl h-[90vh] flex flex-col">
+                 <div class="flex flex-col h-full">
+                     <!-- Modal Header -->
+                     <div class="flex-shrink-0 flex justify-between items-center p-4 border-b border-gray-200">
+                         <h2 class="text-xl font-bold text-slate-900" x-text="selectedNut?.name || ''"></h2>
+                         <button @click="backToBuilder()"
+                                 class="text-gray-400 hover:text-gray-600 transition-colors">
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                             </svg>
+                         </button>
+                     </div>
+
+                     <!-- Modal Content - Scrollable -->
+                     <div class="flex-1 overflow-y-auto p-4 min-h-0">
+                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                             <!-- Columna Izquierda: Imagen y Tabla Nutricional -->
+                             <div>
+                                 <img :src="selectedNut?.imageUrl" :alt="selectedNut?.name"
+                                     class="w-full h-auto rounded-lg shadow-md">
+                                 <div class="mt-4" x-html="selectedNut?.nutritionInfo || ''"></div>
+                             </div>
+
+                             <!-- Columna Derecha: Nombre, Descripción -->
+                             <div>
+                                 <h3 class="text-2xl font-elegant font-bold text-slate-900 mb-4"
+                                     x-text="selectedNut?.name || ''"></h3>
+                                 <div class="text-slate-600 leading-relaxed space-y-4 text-justify"
+                                     x-html="selectedNut?.description || ''"></div>
+                             </div>
+                         </div>
+                     </div>
+
+                     <!-- Modal Footer -->
+                     <div class="flex-shrink-0 p-4 border-t border-gray-200 flex justify-end">
+                         <button @click="backToBuilder()"
+                             class="font-bold py-2 px-6 rounded-lg bg-emerald-800 hover:bg-emerald-900 text-white shadow-lg transition-colors">
+                             Cerrar
+                         </button>
+                     </div>
+                 </div>
+             </div>
+         </div>
 
         <!-- Carrito de Compras -->
-        <section id="cart" class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200" x-show="mode !== 'productDetail'">
+        <section id="cart" class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200"
+            x-show="mode !== 'productDetail'">
             <h2 class="text-2xl font-bold text-slate-800 mb-4">Paso 2: Revisa tu Carrito</h2>
-            
-            <div x-show="cart.length === 0" class="text-center text-slate-500 py-8 border-2 border-dashed border-slate-300 rounded-lg">
+
+            <div x-show="cart.length === 0"
+                class="text-center text-slate-500 py-8 border-2 border-dashed border-slate-300 rounded-lg">
                 <p class="font-medium">Tu carrito está vacío.</p>
                 <p class="text-sm">Añade tus mezclas perfectas para verlas aquí.</p>
             </div>
@@ -275,54 +407,78 @@
                                     <li><span x-text="`${nut.name}: ${nut.grams.toFixed(0)}g`"></span></li>
                                 </template>
                             </ul>
-                            <p x-show="item.discount > 0" class="text-xs text-green-700 font-bold mt-1" x-text="`(Incluye ${item.discountPercentage}% de descuento por cantidad)`"></p>
+                            <p x-show="item.discount > 0" class="text-xs text-green-700 font-bold mt-1"
+                                x-text="`(Incluye ${item.discountPercentage}% de descuento por cantidad)`"></p>
                         </div>
                         <div class="text-right mx-4">
                             <p class="font-semibold" x-text="formatCurrency(item.cost)"></p>
                             <p class="text-sm text-slate-500" x-text="`${item.totalGrams.toFixed(0)} g`"></p>
                         </div>
-                        <button @click="removeFromCart(index)" class="text-red-500 hover:text-red-700 font-bold text-2xl p-2">×</button>
+                        <button @click="removeFromCart(index)"
+                            class="text-red-500 hover:text-red-700 font-bold text-2xl p-2">×</button>
                     </div>
                 </template>
                 <div x-show="cart.length > 0" class="flex justify-end items-center gap-4 mt-4">
-                    <button @click="scrollToElement('#builder')" type="button" class="font-bold py-2 px-4 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700">Continuar Seleccionando</button>
-                    <button @click="scrollToElement('#order-section')" type="button" class="font-bold py-2 px-4 rounded-lg bg-emerald-800 hover:bg-emerald-900 text-white shadow-lg">Proceder a la Compra</button>
+                    <button @click="scrollToElement('#builder')" type="button"
+                        class="font-bold py-2 px-4 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700">Continuar
+                        Seleccionando</button>
+                    <button @click="scrollToElement('#order-section')" type="button"
+                        class="font-bold py-2 px-4 rounded-lg bg-emerald-800 hover:bg-emerald-900 text-white shadow-lg">Proceder
+                        a la Compra</button>
                 </div>
             </div>
         </section>
-        
+
         <!-- Sección de Pedido Final -->
-        <div id="order-section" class="overflow-hidden transition-height" :style="cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0'" x-show="mode !== 'productDetail'">
+        <div id="order-section" class="overflow-hidden transition-height"
+            :style="cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0'" x-show="mode !== 'productDetail'">
             <section class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200">
                 <form id="order-form" @submit.prevent="placeOrder">
                     <h2 class="text-2xl font-bold text-slate-800 mb-4">Paso 3: Completa tu Pedido</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                         <div>
-                            <label for="contact-name" class="block font-medium">Nombre de Contacto <span class="text-red-500">*</span></label>
-                            <input id="contact-name" type="text" x-model="contactInfo.name" required class="w-full border-slate-300 rounded-md shadow-sm">
+                            <label for="contact-name" class="block font-medium">Nombre de Contacto <span
+                                    class="text-red-500">*</span></label>
+                            <input id="contact-name" type="text" x-model="contactInfo.name" required
+                                class="w-full border-slate-300 rounded-md shadow-sm">
                         </div>
                         <div>
-                            <label for="contact-phone" class="block font-medium">Celular de Contacto <span class="text-red-500">*</span></label>
-                            <input id="contact-phone" type="text" x-model="contactInfo.phone" @input="validatePhone()" maxlength="10" pattern="[0-9]*" inputmode="numeric" required class="w-full border-slate-300 rounded-md shadow-sm">
-                            <p x-show="contactInfo.phoneError" x-text="contactInfo.phoneError" class="text-red-500 text-sm mt-1" x-transition></p>
+                            <label for="contact-phone" class="block font-medium">Celular de Contacto <span
+                                    class="text-red-500">*</span></label>
+                            <input id="contact-phone" type="text" x-model="contactInfo.phone" @input="validatePhone()"
+                                maxlength="10" pattern="[0-9]*" inputmode="numeric" required
+                                class="w-full border-slate-300 rounded-md shadow-sm">
+                            <p x-show="contactInfo.phoneError" x-text="contactInfo.phoneError"
+                                class="text-red-500 text-sm mt-1" x-transition></p>
                         </div>
                     </div>
-                    
+
                     <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-slate-700 mb-3 text-center sm:text-left">Método de Entrega <span class="text-red-500">*</span></h3>
+                        <h3 class="text-lg font-semibold text-slate-700 mb-3 text-center sm:text-left">Método de Entrega
+                            <span class="text-red-500">*</span></h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <button type="button" @click="delivery.mode = 'domicilio'" :class="{ 'bg-emerald-700 text-white border-emerald-700 shadow-lg': delivery.mode === 'domicilio', 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300': delivery.mode !== 'domicilio' }" class="w-full py-3 rounded-lg font-bold border-2 transition-all">Domicilio</button>
-                            <button type="button" @click="delivery.mode = 'recoger'" :class="{ 'bg-emerald-700 text-white border-emerald-700 shadow-lg': delivery.mode === 'recoger', 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300': delivery.mode !== 'recoger' }" class="w-full py-3 rounded-lg font-bold border-2 transition-all">Recoger</button>
+                            <button type="button" @click="delivery.mode = 'domicilio'"
+                                :class="{ 'bg-emerald-700 text-white border-emerald-700 shadow-lg': delivery.mode === 'domicilio', 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300': delivery.mode !== 'domicilio' }"
+                                class="w-full py-3 rounded-lg font-bold border-2 transition-all">Domicilio</button>
+                            <button type="button" @click="delivery.mode = 'recoger'"
+                                :class="{ 'bg-emerald-700 text-white border-emerald-700 shadow-lg': delivery.mode === 'recoger', 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300': delivery.mode !== 'recoger' }"
+                                class="w-full py-3 rounded-lg font-bold border-2 transition-all">Recoger</button>
                         </div>
                     </div>
-                    
+
                     <div x-show="delivery.mode === 'domicilio'" class="space-y-4 mb-6" x-transition>
                         <h3 class="text-lg font-semibold text-slate-700">Información de Domicilio</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div><label for="address-input" class="block font-medium">Dirección <span class="text-red-500">*</span></label><input id="address-input" type="text" placeholder="Ej: Carrera 7 # 72-50" x-model="delivery.address" @change="updateDeliveryCost()" class="w-full border-slate-300 rounded-md shadow-sm"></div>
+                            <div><label for="address-input" class="block font-medium">Dirección <span
+                                        class="text-red-500">*</span></label><input id="address-input" type="text"
+                                    placeholder="Ej: Carrera 7 # 72-50" x-model="delivery.address"
+                                    @change="updateDeliveryCost()" class="w-full border-slate-300 rounded-md shadow-sm">
+                            </div>
                             <div>
-                                <label for="locality-input" class="block font-medium">Localidad <span class="text-red-500">*</span></label>
-                                <select id="locality-input" x-model="delivery.locality" @change="updateDeliveryCost()" class="w-full border-slate-300 rounded-md shadow-sm">
+                                <label for="locality-input" class="block font-medium">Localidad <span
+                                        class="text-red-500">*</span></label>
+                                <select id="locality-input" x-model="delivery.locality" @change="updateDeliveryCost()"
+                                    class="w-full border-slate-300 rounded-md shadow-sm">
                                     <option value="">Selecciona una localidad</option>
                                     <template x-for="locality in localities" :key="locality">
                                         <option :value="locality" x-text="locality"></option>
@@ -332,52 +488,87 @@
                         </div>
                     </div>
 
-                    <div x-show="delivery.mode === 'recoger'" class="space-y-4 mb-6 bg-slate-100 p-4 rounded-lg text-center" x-transition>
-                         <h3 class="text-lg font-semibold text-slate-700">Información de Recogida</h3>
-                         <p class="text-slate-800">Puedes recoger tu pedido en la siguiente dirección:</p>
-                         <p class="font-bold text-emerald-800 text-lg">Carrera 19 # 183-30 (Usaquén, Bogotá)</p>
+                    <div x-show="delivery.mode === 'recoger'"
+                        class="space-y-4 mb-6 bg-slate-100 p-4 rounded-lg text-center" x-transition>
+                        <h3 class="text-lg font-semibold text-slate-700">Información de Recogida</h3>
+                        <p class="text-slate-800">Puedes recoger tu pedido en la siguiente dirección:</p>
+                        <p class="font-bold text-emerald-800 text-lg">Carrera 19 # 183-30 (Usaquén, Bogotá)</p>
                     </div>
-                    
-                    <footer class="mt-8 pt-6 border-t"><h3 class="text-xl font-bold text-slate-800 mb-4">Resumen Final</h3><div class="bg-slate-100 p-4 rounded-lg space-y-2"><div class="flex justify-between"><span class="text-slate-600">Subtotal Compra</span><span class="font-semibold" x-text="formatCurrency(finalSummary.subtotal)"></span></div><div class="flex justify-between"><span class="text-slate-600">Costo Domicilio</span><span class="font-semibold" x-text="formatCurrency(finalSummary.deliveryCostRaw)"></span></div><div x-show="finalSummary.discount > 0" class="flex justify-between text-green-700"><span class="text-green-700">Descuento Domicilio</span><span class="font-semibold" x-text="'- ' + formatCurrency(finalSummary.discount)"></span></div><hr class="my-1 border-slate-300"><div class="flex justify-between text-xl font-bold"><span class="">Total a Pagar</span><span x-text="formatCurrency(finalSummary.total)"></span></div></div>
-                    <div class="mt-4 text-center text-sm text-slate-500 space-y-1"><p>✨ Domicilio <span class="font-bold">GRATIS</span> por compras superiores a <span class="font-bold">$200.000</span>.</p><p>✨ <span class="font-bold">50% de descuento</span> en domicilio para compras entre <span class="font-bold">$100.000</span> y <span class="font-bold">$199.999</span>.</p></p>✨ <span class="font-bold">ENVIO GRATIS LOCALIDAD USAQUEN</span>.</p></div>
-                    <div class="mt-6"><button type="submit" :disabled="!isOrderButtonEnabled" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-all" :class="{'bg-emerald-800 hover:bg-emerald-900 shadow-lg': isOrderButtonEnabled, 'bg-slate-300 cursor-not-allowed': !isOrderButtonEnabled}"><span x-text="formStatus"></span></button></div>
+
+                    <footer class="mt-8 pt-6 border-t">
+                        <h3 class="text-xl font-bold text-slate-800 mb-4">Resumen Final</h3>
+                        <div class="bg-slate-100 p-4 rounded-lg space-y-2">
+                            <div class="flex justify-between"><span class="text-slate-600">Subtotal Compra</span><span
+                                    class="font-semibold" x-text="formatCurrency(finalSummary.subtotal)"></span></div>
+                            <div class="flex justify-between"><span class="text-slate-600">Costo Domicilio</span><span
+                                    class="font-semibold" x-text="formatCurrency(finalSummary.deliveryCostRaw)"></span>
+                            </div>
+                            <div x-show="finalSummary.discount > 0" class="flex justify-between text-green-700"><span
+                                    class="text-green-700">Descuento Domicilio</span><span class="font-semibold"
+                                    x-text="'- ' + formatCurrency(finalSummary.discount)"></span></div>
+                            <hr class="my-1 border-slate-300">
+                            <div class="flex justify-between text-xl font-bold"><span class="">Total a Pagar</span><span
+                                    x-text="formatCurrency(finalSummary.total)"></span></div>
+                        </div>
+                        <div class="mt-4 text-center text-sm text-slate-500 space-y-1">
+                            <p>✨ Domicilio <span class="font-bold">GRATIS</span> por compras superiores a <span
+                                    class="font-bold">$200.000</span>.</p>
+                            <p>✨ <span class="font-bold">50% de descuento</span> en domicilio para compras entre <span
+                                    class="font-bold">$100.000</span> y <span class="font-bold">$199.999</span>.</p>
+                            </p>✨ <span class="font-bold">ENVIO GRATIS LOCALIDAD USAQUEN</span>.</p>
+                        </div>
+                        <div class="mt-6"><button type="submit" :disabled="!isOrderButtonEnabled"
+                                class="w-full text-white font-bold py-3 px-4 rounded-lg transition-all"
+                                :class="{'bg-emerald-800 hover:bg-emerald-900 shadow-lg': isOrderButtonEnabled, 'bg-slate-300 cursor-not-allowed': !isOrderButtonEnabled}"><span
+                                    x-text="formStatus"></span></button></div>
                     </footer>
                 </form>
             </section>
         </div>
 
         <!-- Pre-Confirmation Modal -->
-        <div x-show="showPreConfirmationModal" @keydown.escape.window="showPreConfirmationModal = false" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
-            <div @click.away="showPreConfirmationModal = false" class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md text-center">
-                <p class="text-slate-700 mb-6 text-lg">Estás a un paso de finalizar. Una vez confirmado, tu pedido será enviado para ser procesado. ¿Deseas continuar?</p>
+        <div x-show="showPreConfirmationModal" @keydown.escape.window="showPreConfirmationModal = false"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
+            <div @click.away="showPreConfirmationModal = false"
+                class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md text-center">
+                <p class="text-slate-700 mb-6 text-lg">Estás a un paso de finalizar. Una vez confirmado, tu pedido será
+                    enviado para ser procesado. ¿Deseas continuar?</p>
                 <div class="flex justify-center gap-4">
-                    <button @click="showPreConfirmationModal = false" type="button" class="font-bold py-2 px-6 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700">Volver y revisar</button>
-                    <button @click="executeOrder()" type="button" class="font-bold py-2 px-6 rounded-lg bg-green-700 hover:bg-green-800 text-white shadow-lg">Confirmar Pedido</button>
+                    <button @click="showPreConfirmationModal = false" type="button"
+                        class="font-bold py-2 px-6 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700">Volver y
+                        revisar</button>
+                    <button @click="executeOrder()" type="button"
+                        class="font-bold py-2 px-6 rounded-lg bg-green-700 hover:bg-green-800 text-white shadow-lg">Confirmar
+                        Pedido</button>
                 </div>
             </div>
         </div>
 
         <!-- Confirmation Modal -->
-        <div x-show="showConfirmationModal" @keydown.escape.window="closeConfirmationModal()" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
-            <div @click.away="closeConfirmationModal()" class="bg-white rounded-lg shadow-xl p-8 w-full max-w-2xl max-h-screen overflow-y-auto text-center">
+        <div x-show="showConfirmationModal" @keydown.escape.window="closeConfirmationModal()"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4">
+            <div @click.away="closeConfirmationModal()"
+                class="bg-white rounded-lg shadow-xl p-8 w-full max-w-2xl max-h-screen overflow-y-auto text-center">
                 <h2 class="text-3xl font-elegant font-bold text-green-700 mb-4" x-text="confirmationDetails.title"></h2>
                 <p class="text-slate-700 mb-6" x-html="confirmationDetails.message"></p>
-                <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-left text-sm whitespace-pre-wrap font-mono" x-text="confirmationDetails.summary"></div>
-                <button @click="closeConfirmationModal()" class="mt-8 w-full sm:w-auto px-8 py-2 bg-emerald-800 text-white font-bold rounded-lg shadow-md hover:bg-emerald-900">Entendido</button>
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-left text-sm whitespace-pre-wrap font-mono"
+                    x-text="confirmationDetails.summary"></div>
+                <button @click="closeConfirmationModal()"
+                    class="mt-8 w-full sm:w-auto px-8 py-2 bg-emerald-800 text-white font-bold rounded-lg shadow-md hover:bg-emerald-900">Entendido</button>
             </div>
         </div>
     </div>
-    
+
     <!-- WhatsApp Floating Button with Visible Text -->
     <a href="https://wa.me/573102416762?text=Hola%2C%20necesito%20ayuda%20con%20mi%20mezcla%20de%20frutos%20secos."
-       target="_blank" 
-       rel="noopener noreferrer"
-       class="fixed bottom-6 right-6 flex items-center gap-3 bg-white p-3 rounded-full shadow-lg z-50 transition-transform transform hover:scale-105 border border-slate-200">
-        
+        target="_blank" rel="noopener noreferrer"
+        class="fixed bottom-6 right-6 flex items-center gap-3 bg-white p-3 rounded-full shadow-lg z-50 transition-transform transform hover:scale-105 border border-slate-200">
+
         <span class="font-semibold text-slate-800">¿Necesitas Ayuda?</span>
-        
+
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-8 h-8 text-green-500">
-            <path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zM223.9 439.6c-38.2 0-73.7-11.8-103.6-32.5L100 419.5l-2.3-1.4-86.8 22.7L32.6 351.6c-19.8-31.5-31.5-68.4-31.5-107.6 0-110.3 89.7-200 200-200 55.1 0 105.9 21.6 143.4 59.1 37.5 37.5 59.1 88.3 59.1 143.4-.1 110.4-89.8 200-200.1 200zM324.9 288c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+            <path fill="currentColor"
+                d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zM223.9 439.6c-38.2 0-73.7-11.8-103.6-32.5L100 419.5l-2.3-1.4-86.8 22.7L32.6 351.6c-19.8-31.5-31.5-68.4-31.5-107.6 0-110.3 89.7-200 200-200 55.1 0 105.9 21.6 143.4 59.1 37.5 37.5 59.1 88.3 59.1 143.4-.1 110.4-89.8 200-200.1 200zM324.9 288c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
         </svg>
     </a>
 
@@ -385,6 +576,8 @@
         function mixBuilder() {
             return {
                 mode: 'quantity',
+                activeTab: 0,
+                activeSubTab: 0,
                 totalGramsForPercentage: 0,
                 nuts: [],
                 predefinedMixes: [],
@@ -400,7 +593,6 @@
                 formStatus: 'Confirmar Pedido',
                 showConfirmationModal: false,
                 showPreConfirmationModal: false,
-                productDropdownOpen: false,
                 selectedNut: null,
                 previousMode: 'quantity',
                 confirmationDetails: { title: '', message: '', summary: '' },
@@ -408,9 +600,9 @@
 
                 init() {
                     this.resetBuilder();
-                    this.orderCounter = parseInt(localStorage.getItem('nutMixOrderCounter_v2')) || 1; 
+                    this.orderCounter = parseInt(localStorage.getItem('nutMixOrderCounter_v2')) || 1;
                 },
-                
+
                 validatePhone() {
                     this.contactInfo.phone = this.contactInfo.phone.replace(/[^0-9]/g, '');
                     if (this.contactInfo.phone.length > 0 && this.contactInfo.phone.length !== 10) {
@@ -430,20 +622,20 @@
                         this.delivery.cost = 0;
                     } else if (['Suba'].includes(locality)) {
                         this.delivery.cost = 4000;
-	            } else if (['Barrios Unidos', 'Chapinero', 'Teusaquillo'].includes(locality)) {
+                    } else if (['Barrios Unidos', 'Chapinero', 'Teusaquillo'].includes(locality)) {
                         this.delivery.cost = 8000;
                     } else {
                         this.delivery.cost = 13000;
                     }
                 },
-                
+
                 getPriceDisplay(nut) {
                     return `${this.formatCurrency(nut.price)}/gr`;
                 },
-                
+
                 get currentMix() {
                     let totalGrams = 0, subtotal = 0, cost = 0, discount = 0, discountPercentage = 0, totalPercentage = 0; let nutsInMix = [];
-                    if (this.mode === 'quantity') { totalGrams = this.nuts.reduce((acc, nut) => acc + (Number(nut.grams) || 0), 0); } 
+                    if (this.mode === 'quantity') { totalGrams = this.nuts.reduce((acc, nut) => acc + (Number(nut.grams) || 0), 0); }
                     else { totalGrams = Number(this.totalGramsForPercentage) || 0; totalPercentage = this.nuts.reduce((acc, nut) => acc + (Number(nut.percentage) || 0), 0); }
 
                     this.nuts.forEach(nut => {
@@ -454,9 +646,9 @@
 
                     if (totalGrams >= 1000) { discountPercentage = 5; discount = subtotal * 0.05; }
                     else if (totalGrams >= 500) { discountPercentage = 2; discount = subtotal * 0.02; }
-                    
+
                     cost = subtotal - discount;
-                    
+
                     return { totalGrams, subtotal: Math.round(subtotal), discount: Math.round(discount), discountPercentage, cost: Math.round(cost), totalPercentage, nuts: nutsInMix };
                 },
 
@@ -465,15 +657,15 @@
                     if (this.mode === 'percentage') return this.currentMix.totalPercentage === 100 && this.currentMix.totalGrams > 0;
                     return false;
                 },
-                
+
                 scrollToElement(selector) {
                     document.querySelector(selector).scrollIntoView({ behavior: 'smooth' });
                 },
-                
-                addToCart() { 
-                    if (!this.isActionEnabled) return; 
+
+                addToCart() {
+                    if (!this.isActionEnabled) return;
                     const newMix = { ...this.currentMix, name: `Mezcla Personalizada #${this.cart.filter(item => item.name.startsWith('Mezcla Personalizada')).length + 1}` };
-                    this.cart.push(newMix); 
+                    this.cart.push(newMix);
                     this.resetBuilder();
                     this.$nextTick(() => this.scrollToElement('#cart'));
                 },
@@ -490,7 +682,7 @@
                     let discountPercentage = 0;
                     if (totalGrams >= 1000) discountPercentage = 5;
                     else if (totalGrams >= 500) discountPercentage = 2;
-                    
+
                     const discount = subtotal * (discountPercentage / 100);
                     const cost = subtotal - discount;
 
@@ -504,83 +696,101 @@
                     });
                     this.$nextTick(() => this.scrollToElement('#cart'));
                 },
-                resetBuilder() { 
+                resetBuilder() {
                     this.nuts = [
-                        { name: 'Almendra Americana NPX laminada natural sin cutícula', price: 98, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/SDp398tf/almendra-laminada.jpg', 
-                          description: `(${this.formatCurrency(98)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br>100% Almendra NPX Laminada sin cutícula<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Premium:</strong> De los fértiles valles de California, el líder mundial en producción de almendras de alta calidad.<br><strong>• La Mejor Variedad:</strong> Seleccionamos la almendra Nonpareil (NPX), famosa por su sabor dulce superior y textura mantecosa.<br><strong>• Sabor Puro:</strong> Al ser laminada sin piel (cutícula), garantizamos una experiencia de sabor limpia, delicada y sin amargor.<br><strong>• Versatilidad Gourmet:</strong> Su laminado fino es perfecto para repostería, ensaladas o para añadir un toque crujiente y elegante a cualquier creación<br><br><strong>BENEFICIOS:</strong><br><strong>• Salud Cardiovascular:</strong> Son ricas en grasas monoinsaturadas (grasas "buenas") que ayudan a reducir el colesterol malo (LDL) y a mantener el bueno (HDL). Su contenido de magnesio y vitamina E también favorece la salud del corazón y la presión arterial.<br><strong>• Control del Azúcar en Sangre:</strong> Tienen un bajo índice glucémico y son una excelente fuente de magnesio, un mineral crucial para regular el azúcar en la sangre. Son un snack ideal para personas con diabetes o resistencia a la insulina.<br><strong>• Energía Sostenida y Salud Cerebral:</strong> Aportan proteínas y grasas saludables que proporcionan energía duradera sin causar picos de azúcar. La vitamina E que contienen es un potente antioxidante que protege las células del cerebro del estrés oxidativo.<br><strong>• Fortalecimiento de los Huesos:</strong> Son una buena fuente de calcio, magnesio y fósforo, minerales esenciales para construir y mantener unos huesos fuertes y sanos.<br><strong>• Facilita la Digestión:</strong> Al no tener cutícula (la piel marrón), son más fáciles de digerir para personas con estómagos sensibles, permitiendo absorber sus nutrientes de manera más suave.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><href="https://ibb.co/twKyPZZ8"><img src="https://i.ibb.co/Cp8xsJJh/TNUTalmedralamina.jpg" alt="TNUTalmedralamina" border="0" width="295" height="291"/></div></div>`
+                        {
+                            name: 'Almendra Americana NPX laminada natural sin cutícula', price: 98, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/SDp398tf/almendra-laminada.jpg',
+                            description: `(${this.formatCurrency(98)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br>100% Almendra NPX Laminada sin cutícula<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Premium:</strong> De los fértiles valles de California, el líder mundial en producción de almendras de alta calidad.<br><strong>• La Mejor Variedad:</strong> Seleccionamos la almendra Nonpareil (NPX), famosa por su sabor dulce superior y textura mantecosa.<br><strong>• Sabor Puro:</strong> Al ser laminada sin piel (cutícula), garantizamos una experiencia de sabor limpia, delicada y sin amargor.<br><strong>• Versatilidad Gourmet:</strong> Su laminado fino es perfecto para repostería, ensaladas o para añadir un toque crujiente y elegante a cualquier creación<br><br><strong>BENEFICIOS:</strong><br><strong>• Salud Cardiovascular:</strong> Son ricas en grasas monoinsaturadas (grasas "buenas") que ayudan a reducir el colesterol malo (LDL) y a mantener el bueno (HDL). Su contenido de magnesio y vitamina E también favorece la salud del corazón y la presión arterial.<br><strong>• Control del Azúcar en Sangre:</strong> Tienen un bajo índice glucémico y son una excelente fuente de magnesio, un mineral crucial para regular el azúcar en la sangre. Son un snack ideal para personas con diabetes o resistencia a la insulina.<br><strong>• Energía Sostenida y Salud Cerebral:</strong> Aportan proteínas y grasas saludables que proporcionan energía duradera sin causar picos de azúcar. La vitamina E que contienen es un potente antioxidante que protege las células del cerebro del estrés oxidativo.<br><strong>• Fortalecimiento de los Huesos:</strong> Son una buena fuente de calcio, magnesio y fósforo, minerales esenciales para construir y mantener unos huesos fuertes y sanos.<br><strong>• Facilita la Digestión:</strong> Al no tener cutícula (la piel marrón), son más fáciles de digerir para personas con estómagos sensibles, permitiendo absorber sus nutrientes de manera más suave.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><href="https://ibb.co/twKyPZZ8"><img src="https://i.ibb.co/Cp8xsJJh/TNUTalmedralamina.jpg" alt="TNUTalmedralamina" border="0" width="295" height="291"/></div></div>`
                         },
-                        { name: 'Almendra Americana NPX natural', price: 87, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/bg4HSCh5/almendra-natural.jpg', 
-		          description: `(${this.formatCurrency(87)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br>100% Almendra NPX<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Élite:</strong> Cultivada en California, EE. UU., el estándar de oro mundial que garantiza la máxima calidad y consistencia.<br><strong>• La Variedad "Reina":</strong> Seleccionamos la variedad Nonpareil (NPX), famosa por su sabor dulce superior y cero amargor.<br><strong>• Textura Perfecta: </strong> Ofrece una mordida crujiente pero suave, ideal tanto para comer como snack directo como para ingrediente en recetas.<br><strong>• Máximo Nutriente: </strong> Al conservar su piel natural, te beneficias de toda su fibra, antioxidantes y Vitamina E.<br><strong>• Calidad Confiable: </strong> Respaldada por la industria más avanzada del mundo, asegurando un producto seguro y de calibre premium en cada almendra.<br><br><strong>BENEFICIOS:</strong><br><strong>• Potente Protector Cardiovascular: </strong> Ricas en grasas saludables y antioxidantes (concentrados en su piel), que ayudan a reducir el colesterol malo (LDL) y a proteger las arterias.<br><strong>• Salud Digestiva y Efecto Prebiótico: </strong> La piel de la almendra es una excelente fuente de fibra prebiótica, que alimenta a las bacterias buenas del intestino, mejorando la digestión y la salud general del microbioma.<br><strong>• Excelente Regulador del Azúcar: </strong> Su alto contenido de fibra, grasas saludables y magnesio ayuda a ralentizar la absorción de azúcar, evitando picos glucémicos y siendo un snack ideal para el control de peso y la diabetes.<br><strong>• Fortaleza para Huesos y Cerebro: </strong> Son una gran fuente de calcio y magnesio para mantener huesos fuertes, y su alta dosis de vitamina E funciona como un potente antioxidante que protege las células cerebrales.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/5WPBZdtf/TNUTalmendranatural.jpg" alt="TNUTalmendranatural" border="0" width="295" height="291"/></div></div> `
-		        },
-                        { name: 'Avellana Turca natural con piel', price: 130, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/SX7M5fDB/avellana.jpg', description: `(${this.formatCurrency(130)}/gr)<br><br><strong>ORIGEN:</strong><br>Turquía<br><br><strong>INGREDIENTES:</strong><br>100% Avellana con piel<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Insuperable:</strong> Proviene de Turquía, la "Capital Mundial de la Avellana". Este origen  garantiza una calidad y tradición inigualables, ya que son los mayores y más expertos productores del mundo.<br><strong>• Sabor Intenso y Aromático: </strong> Famosa por su perfil de sabor rico, mantecoso y profundo, es la avellana preferida por los chocolateros y pasteleros más prestigiosos de Europa.<br><strong>• Nutrición Completa: </strong> Al conservar su piel natural, obtienes un extra de fibra y antioxidantes, además de un sabor más rústico y completo que el de las avellanas peladas.<br><strong>• El Estándar de Oro: </strong> Mientras otras regiones producen avellanas de gran calidad, la turca es el estándar global por su equilibrio perfecto entre sabor, aceite y textura, convirtiéndola en la más versátil y demanda.<br><br><strong>BENEFICIOS:</strong><br><strong>• Potente Protector del Corazón: </strong> Son muy ricas en grasas monoinsaturadas (saludables) que ayudan a reducir el colesterol malo (LDL). Además, su magnesio y potasio contribuyen a regular la presión arterial.<br><strong>• Poderoso Efecto Antioxidante y Antiinflamatorio: </strong> La piel de la avellana está cargada de antioxidantes (compuestos fenólicos) que combaten el daño celular y reducen la inflamación en el cuerpo, ayudando a prevenir enfermedades crónicas.<br><strong>• Apoyo a la Salud Cerebral y Nerviosa: </strong> Su alto contenido de Vitamina E, manganeso y folato (Vitamina B9) contribuye a mejorar la función cognitiva y a proteger las neuronas del envejecimiento.<br><strong>• Fuente de Energía y Fortalecimiento Óseo: </strong> Aportan grasas saludables y proteínas para una energía duradera, y su alto contenido de manganeso es esencial para la salud y densidad de los huesos.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/5hBnK7Dj/TNUTavellana.jpg" alt="TNUTavellana" border="0" width="295" height="291"/></div></div>`
- },
-                        { name: 'Macadamia Nicaragüense natural', price: 158, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/4gR65F6j/macadamia.jpg', description: `(${this.formatCurrency(158)}/gr)<br><br><strong>ORIGEN:</strong><br>Nicaragua<br><br><strong>INGREDIENTES:</strong><br>100% Macadamia<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Volcánico Exótico:</strong> Cultivada en las fértiles tierras volcánicas de Nicaragua, un origen único que le confiere un perfil de sabor distintivo y una calidad excepcional.<br><strong>• Cremosidad Inigualable: </strong> Reconocida por su textura excepcionalmente cremosa y mantecosa que se deshace en la boca, una característica muy apreciada y buscada por los conocedores.<br><strong>• Sabor Rico y Sutil: </strong> Ofrece un sabor delicado, ligeramente dulce y con notas a nuez, sin el perfil a veces demasiado tostado de otras procedencias, lo que la hace perfecta tanto para snacks de lujo como para repostería fina.<br><strong>• Joya Centroamericana:</strong> La macadamia de Nicaragua es una joya emergente y de producción más limitada, ofreciendo una experiencia gourmet, sostenible y diferenciadora.<br><br><strong>BENEFICIOS:</strong><br><strong>• Salud Cardiovascular Superior: </strong> Son excepcionalmente ricas en grasas monoinsaturadas (las "buenas"), como el ácido palmitoleico, ayudando a reducir drásticamente el colesterol malo (LDL) y a mantener las arterias flexibles y saludables.<br><strong>• Soporte para el Cerebro y Sistema Nervioso: </strong> Su perfil único de grasas y antioxidantes (como los tocotrienoles, una forma de Vitamina E) nutre las células cerebrales, protege contra el estrés oxidativo y apoya la función nerviosa.<br><strong>• Control del Apetito y Energía Limpia: </strong> Su alta concentración de grasas saludables y fibra genera una gran sensación de saciedad, ayudando a controlar el apetito y los antojos. Aportan energía densa y limpia, ideal para dietas bajas en carbohidratos.<br><strong>• Propiedades Antiinflamatorias: </strong> Contienen flavonoides y otros antioxidantes que ayudan a reducir la inflamación crónica en el cuerpo, un factor de riesgo para muchas enfermedades.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/d4PmnpLq/TNUTmacadamia.jpg" alt="TNUTmacadamia" border="0" width="295" height="291" /></div></div>`
- },
-                        { name: 'Maní Brasileño tostado ligeramente salado bola entera y mitades (Bajo en sodio)', price: 30, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/XxFSsqmD/mani-con-sal.jpg', description: `(${this.formatCurrency(30)}/gr)<br><br><strong>ORIGEN:</strong><br>Brasil, Tostado: Colombia<br><br><strong>INGREDIENTES:</strong><br>Maní tostado y sal en bajas cantidades<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Prestigio:</strong> Proviene de Brasil, uno de los productores líderes en el mundo, reconocido por sus condiciones de cultivo ideales que resultan en un maní de alta calidad y gran sabor.<br><strong>• Sabor Intenso y Auténtico: </strong> El maní brasileño es famoso por su perfil de sabor más profundo y un dulzor natural más pronunciado, que se intensifica a la perfección con el proceso de tostado.<br><strong>• Calibre Superior: </strong> Seleccionamos granos de "bola entera" de gran tamaño, garantizando una mordida más crujiente y una experiencia de snack mucho más satisfactoria que la de manís más pequeños o partidos.<br><strong>• Toque de Sabor Perfecto:</strong> Tostado a la perfección y ligeramente salado (bajo en sodio) para realzar su sabor natural sin excesos, convirtiéndolo en el snack saludable y delicioso por excelencia.<br><br><strong>BENEFICIOS:</strong><br><strong>• Fuente de Energía y Proteína Vegetal:</strong> Es un snack ideal para recargar energías de forma sostenida gracias a su combinación de grasas saludables y proteínas, que también ayudan a la reparación muscular.<br><strong>• Corazón Protegido y Saludable: </strong> Rico en grasas monoinsaturadas y niacina (Vitamina B3), ayuda a reducir el colesterol malo (LDL). Al ser bajo en sodio, apoya la salud cardiovascular sin el riesgo de la presión alta asociada a los snacks muy salados.<br><strong>• Soporte para el Cerebro y el Ánimo: </strong> Es una buena fuente de folato y biotina, vitaminas del complejo B que son importantes para la función cerebral y pueden contribuir a un estado de ánimo estable.<br><strong>• Control de Azúcar y Saciedad: </strong> La mezcla de fibra, proteína y grasas ayuda a regular los niveles de azúcar en la sangre y a mantenerte satisfecho por más tiempo, controlando los antojos.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/x8qYrQcG/TNUTmaniconsal.jpg" alt="TNUTmaniconsal" border="0" width="295" height="291" /></div></div>`
- },
-		        { name: 'Maní Brasileño tostado sin sal bola entera y mitades', price: 30, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/D6Qn1nV/mani-sin-sal.jpg', description: `(${this.formatCurrency(30)}/gr)<br><br><strong>ORIGEN:</strong><br>Brasil, Tostado: Colombia<br><br><strong>INGREDIENTES:</strong><br>Maní tostado<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Calidad Superior:</strong> Cultivado en Brasil, un origen reconocido mundialmente por producir maní de excelente calidad gracias a sus condiciones climáticas óptimas.<br><strong>• Sabor 100% Puro y Natural:</strong> Al ser tostado sin sal, puedes apreciar el auténtico sabor del grano: un perfil profundo, con un dulzor natural característico de la variedad brasileña, ideal para puristas del sabor.<br><strong>• Textura "Crunch" Insuperable: </strong> Seleccionamos exclusivamente maní de "bola entera" de gran calibre, lo que garantiza una textura extra crujiente y una experiencia de snack mucho más robusta y placentera.<br><strong>• Máxima Versatilidad Saludable:</strong> Perfecto para quienes siguen dietas bajas en sodio o simplemente prefieren un sabor sin aditivos. Es el ingrediente ideal para crear tus propias mezclas, mantequillas de maní caseras o para añadir a recetas dulces y saladas.<br><br><strong>BENEFICIOS:</strong><br><strong>• Fuente Pura de Energía y Proteína Vegetal:</strong> Aporta una excelente combinación de grasas saludables y proteína para una energía duradera y una óptima recuperación muscular, sin aditivos.<br><strong>• Máxima Protección Cardiovascular (Sin Sodio): </strong> Al no tener sal, es la opción ideal para la salud del corazón. Sus grasas monoinsaturadas ayudan a reducir el colesterol malo (LDL) y a mantener una presión arterial saludable.<br><strong>• Control de Azúcar y Saciedad Natural: </strong> El poderoso trío de fibra, proteína y grasas saludables promueve una gran sensación de saciedad y ayuda a mantener estables los niveles de azúcar en la sangre, siendo un aliado en el control de peso.<br><strong>• Soporte para el Cerebro y Estado de Ánimo: </strong> Es una buena fuente de vitaminas del complejo B como el folato y la biotina, que son esenciales para la función cognitiva y el mantenimiento de un sistema nervioso.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/60Yrb2Vs/TNUTmanisinsal.jpg" alt="TNUTmanisinsal" border="0" width="295" height="291" /></div></div>`
- },
-                        { name: 'Marañón Brasileño entero tostado W1 320 sin sal', price: 118, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/bgsYW0KL/mara-on.jpg', description: `(${this.formatCurrency(118)}/gr)<br><br><strong>ORIGEN:</strong><br>Brasil<br><br><strong>INGREDIENTES:</strong><br>99% Marañon y 1% aceite de algodón<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Élite:</strong> Proviene de Brasil, uno de los productores más importantes y prestigiosos del mundo, reconocido por sus marañones de calidad superior y sabor excepcional.<br><strong>• Calibre Premium (W1 320):</strong> Seleccionamos el calibre W1 320, un estándar internacional que garantiza un marañón entero, de color claro ("White") y de gran tamaño (aproximadamente 320 nueces por libra). Esto asegura una calidad visual y una textura consistente que no se encuentra en calibres inferiores o partidos.<br><strong>• Textura y Sabor Inigualables: </strong> Famoso por su textura cremosa y mantecosa que se deshace en la boca, y un sabor naturalmente dulce y delicado, perfecto al ser tostado sin sal para apreciar todas sus notas.<br><strong>• Pureza y Versatilidad:</strong> Al ser entero y sin sal, es el ingrediente gourmet ideal para snacks de lujo, cocina vegana (para hacer quesos o cremas), repostería fina o como el protagonista de cualquier mezcla prémium.<br><br><strong>BENEFICIOS:</strong><br><strong>• Salud Cardiovascular Óptima:</strong> Rico en grasas monoinsaturadas (las "buenas"), ayuda a reducir el colesterol malo (LDL) y, al no tener sal, es ideal para mantener una presión arterial saludable.<br><strong>• Fortalecimiento de Huesos y Nervios: </strong> Es una excelente fuente de magnesio y cobre, minerales esenciales para la densidad ósea, la producción de energía y el funcionamiento saludable del sistema nervioso.<br><strong>• Soporte Cerebral y Cognitivo:</strong> El cobre y las grasas saludables que contiene son vitales para la producción de neurotransmisores y la protección de las células cerebrales, apoyando la memoria y la concentración.<br><strong>• Prevención y Control de la Diabetes: </strong> Gracias a su bajo índice glucémico y su contenido de fibra y grasas saludables, ayuda a regular los niveles de azúcar en la sangre, siendo un snack seguro y beneficioso.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/zpd61RM/TNUTmara-on.jpg" alt="TNUTmara-on" border="0" width="295" height="291" /></div></div>`
- },
-                        { name: 'Nuez del Brasil natural partida', price: 88, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/PsK0yKK6/nuez-brasil.jpg', description: `(${this.formatCurrency(88)}/gr)<br><br><strong>ORIGEN:</strong><br>Brasil<br><br><strong>INGREDIENTES:</strong><br>100% Nuez del Brasil<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Auténtico del Amazonas:</strong> Proviene de Brasil, su lugar de origen en el corazón de la selva amazónica. Este entorno salvaje y natural le confiere una riqueza nutricional inigualable.<br><strong>• La Mayor Fuente Natural de Selenio:</strong> Es el superalimento por excelencia. Con solo una o dos nueces al día puedes cubrir tus necesidades diarias de selenio, un mineral esencial con un potentísimo efecto antioxidante y clave para el sistema inmune.<br><strong>• Sabor Único y Textura Mantecosa: </strong> Ofrece un perfil de sabor suave, terroso y ligeramente dulce, con una textura crujiente pero mantecosa que la distingue de otras nueces.<br><strong>• Versatilidad Práctica:</strong> Al venir partida, es perfecta para añadir directamente a granolas, batidos, ensaladas o para crear tus propias mezclas energéticas, haciendo más fácil disfrutar de sus increíbles beneficios.<br><br><strong>BENEFICIOS:</strong><br><strong>• Superdosis de Selenio para la Tiroides y Defensas:</strong> Es la fuente natural más potente de selenio, un mineral clave para la función de la tiroides, fortalecer el sistema inmune y proteger las células del daño oxidativo con solo una o dos nueces al día.<br><strong>• Salud Cardiovascular y Control del Colesterol: </strong> Gracias a su perfil de grasas saludables (monoinsaturadas y poliinsaturadas), ayuda a reducir el colesterol malo (LDL) y a mantener la salud del corazón y las arterias.<br><strong>• Potente Efecto Antiinflamatorio y Cerebral:</strong> Su alto contenido de antioxidantes como el selenio, la vitamina E y el ácido elágico ayuda a reducir la inflamación en el cuerpo y a proteger las neuronas del envejecimiento prematuro.<br><strong>• Fuente de Energía Completa: </strong> Aporta una mezcla densa de grasas saludables, proteínas y fibra, ofreciendo energía sostenida y una gran sensación de saciedad.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/nNmkVvth/TNUTnuezbrasil.jpg" alt="TNUTnuezbrasil" border="0" width="295" height="291" /></div></div>`
- },
-                        { name: 'Nuez del Nogal Americana natural', price: 115, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/nqXDXJm3/nuez-nogal.jpg', description: `(${this.formatCurrency(115)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br>100% Nuez del Nogal<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Calidad Superior:</strong> Proviene de Estados Unidos (California), líder mundial en producción, donde estrictos controles de calidad garantizan una nuez de calibre grande, color claro y frescura excepcional.<br><strong>• Potencia en Omega-3:</strong> Es reconocida como una de las mejores fuentes vegetales de Omega-3 (ALA), un ácido graso esencial fundamental para la salud del cerebro, el corazón y con potentes propiedades antiinflamatorias.<br><strong>• Sabor Robusto y Equilibrado:</strong> La variedad americana es apreciada por su sabor rico y robusto, con el característico toque amargo perfectamente equilibrado, ideal para repostería, ensaladas o como un snack que sacia.<br><strong>• Textura "Carnosa" y Crujiente:</strong> Ofrece una textura única, más "carnosa" y menos seca que otras variedades, lo que la hace especialmente placentera al morder y muy versátil en la cocina.<br><br><strong>BENEFICIOS:</strong><br><strong>• Salud Cerebral Superior:</strong> Es el fruto seco rey en Omega-3 (ALA), un ácido graso esencial que nutre el cerebro, mejora la memoria, la concentración y protege contra el deterioro cognitivo.<br><strong>• Potente Acción Antioxidante y Antiinflamatoria:</strong> Contiene una combinación única y muy potente de antioxidantes (polifenoles y Vitamina E) que combaten el daño celular y reducen la inflamación crónica, ayudando a prevenir enfermedades.<br><strong>• Corazón Fuerte y Protegido:</strong> Su alto contenido de Omega-3, fibra y otros compuestos bioactivos ayuda a reducir el colesterol malo (LDL), disminuir la presión arterial y mejorar la salud de los vasos sanguíneos.<br><strong>• Mejora de la Salud Intestinal:</strong> Actúa como un prebiótico, alimentando a las bacterias beneficiosas del intestino. Un microbioma sano está vinculado a una mejor digestión, un sistema inmune más fuerte y un mejor estado de ánimo.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/ccqNNpvc/TNUTnueznogal.jpg" alt="TNUTnueznogal" border="0" width="295" height="291" /></div></div>`
- },
-                        { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Con cáscara)', price: 130, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/fzYjVsPB/pistacho.jpg', description: `(${this.formatCurrency(130)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br> Pistacho y sal en bajas cantidades<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Prestigio Mundial:</strong> Cultivado en California, Estados Unidos, reconocido globalmente por producir pistachos de calibre grande, apertura natural y un color verde vibrante, superando a menudo en tamaño a variedades de otras regiones.<br><strong>• Sabor Dulce y Menos Terroso:</strong> El pistacho californiano es famoso por su perfil de sabor limpio, naturalmente dulce y mantecoso, en contraste con el sabor a veces más intenso y terroso de los pistachos de Oriente Medio.<br><strong>• Tostado Perfecto y Sabor Realzado:</strong> Tostado a la perfección para maximizar su "crunch" y ligeramente salado (bajo en sodio), un toque justo que realza su dulzura natural sin opacarla, ideal para un snack saludable.<br><strong>• El Ritual de la Cáscara:</strong> Al venir con cáscara, no solo se conserva mejor su frescura, sino que promueve un consumo más consciente y pausado, convirtiendo el acto de comerlos en un placentero ritual.<br><br><strong>BENEFICIOS:</strong><br><strong>• Proteína Completa y Energía Sostenida:</strong> Es una de las pocas fuentes vegetales de proteína completa (con todos los aminoácidos esenciales), ideal para la recuperación muscular y para mantener la energía estable.<br><strong>• Salud Cardiovascular Inteligente:</strong> Rico en grasas saludables y potasio para reducir el colesterol y regular la presión. Al ser bajo en sodio, ofrece el sabor sin el riesgo para la presión arterial asociado a los snacks muy salados.<br><strong>• Control de Peso y Porciones Conscientes:</strong> El acto de abrir la cáscara ralentiza el consumo (comer "mindful"), lo que promueve la saciedad y ayuda a controlar las porciones de forma natural, apoyando el manejo del peso.<br><strong>• Rico en Antioxidantes para Ojos y Células:</strong> Su color verde y morado proviene de la luteína y la zeaxantina, antioxidantes que protegen la salud ocular. Además, combate el daño celular en todo el cuerpo.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/jk5wJdgk/TNUTpistachoconcascara.jpg" alt="TNUTpistachoconcascara" border="0" width="295" height="291"/></div></div>`
- },
-                        { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', price: 270, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/fzYjVsPB/pistacho.jpg', description: `(${this.formatCurrency(270)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br> Pistacho y sal en bajas cantidades<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Prestigio Mundial:</strong> Cultivado en California, Estados Unidos, reconocido globalmente por producir pistachos de calibre grande, apertura natural y un color verde vibrante, superando a menudo en tamaño a variedades de otras regiones.<br><strong>• Sabor Dulce y Menos Terroso:</strong> El pistacho californiano es famoso por su perfil de sabor limpio, naturalmente dulce y mantecoso, en contraste con el sabor a veces más intenso y terroso de los pistachos de Oriente Medio.<br><strong>• Máxima Comodidad, Listo para Usar:</strong> Al venir sin cáscara, está listo para disfrutar al instante como un snack de lujo o para añadir directamente a ensaladas, postres, pestos o cualquier receta gourmet, ahorrándote tiempo y esfuerzo.<br><strong>• Ideal para Mezclas Premium:</strong> Su conveniencia y calidad lo convierten en el ingrediente perfecto para elevar cualquier mezcla de frutos secos, aportando color, un sabor inconfundible y una textura crujiente.<br><br><strong>BENEFICIOS:</strong><br><strong>• Proteína Completa y Energía Sostenida:</strong> Es una de las pocas fuentes vegetales de proteína completa (con todos los aminoácidos esenciales), ideal para la recuperación muscular y para mantener la energía estable.<br><strong>• Salud Cardiovascular Inteligente:</strong> Rico en grasas saludables y potasio para reducir el colesterol y regular la presión. Al ser bajo en sodio, ofrece el sabor sin el riesgo para la presión arterial asociado a los snacks muy salados.<br><strong>• Rico en Antioxidantes para la Salud Visual y Celular:</strong> Su característico color verde y morado proviene de la luteína y zeaxantina, antioxidantes que se consumen directamente para proteger la salud de tus ojos y combatir el daño celular general.<br><strong>• Versatilidad y Nutrición Instantánea:</strong> Son el formato ideal para enriquecer instantáneamente ensaladas, yogures, pastas o batidos, facilitando la incorporación de fibra, vitaminas y minerales a tu dieta diaria.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/jk5wJdgk/TNUTpistachoconcascara.jpg" alt="TNUTpistachoconcascara" border="0" width="295" height="291" /></div></div>`
- },
-                        { name: 'Nuez Pecan Americana natural', price: 175, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/Pvr96z3D/nuez-pecan.jpg', description: `(${this.formatCurrency(175)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br> 100% Nuez Pecan<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Auténtico y Superior:</strong> Proviene de Estados Unidos, la cuna de la Nuez Pecan. Este origen garantiza una calidad insuperable y el perfil de sabor clásico y más demandado a nivel mundial.<br><strong>• Dulzura Natural y Textura Mantecosa:</strong> Famosa por su sabor naturalmente dulce, con notas acarameladas y de mantequilla, mucho más suave y menos amarga que la nuez de nogal.<br><strong>• Rica en Antioxidantes y Grasas Saludables: </strong>  Es una de las nueces con mayor contenido de antioxidantes, que protegen las células del cuerpo. Además, está cargada de grasas monoinsaturadas, beneficiosas para la salud del corazón.<br><strong>• La Reina de la Repostería:</strong> Su sabor dulce y su textura tierna pero crujiente la convierten en la nuez preferida por chefs y pasteleros para tartas ("pecan pie"), brownies, galletas y postres gourmet.<br><br><strong>BENEFICIOS:</strong><br><strong>• Salud del Corazón y Colesterol:</strong> Es una de las pocas fuentes vegetales de proteína completa (con todos los aminoácidos esenciales), ideal para la recuperación muscular y para mantener la energía estable.<br><strong>• Soporte para la Salud Cerebral y Nerviosa:</strong> Las grasas saludables y minerales como el manganeso y el cobre son esenciales para una buena función cognitiva y la salud del sistema nervioso.<br><strong>• Rico en Antioxidantes y Antienvejecimiento:</strong> Es uno de los frutos secos con mayor capacidad antioxidante, gracias a su alto contenido de flavonoides y Vitamina E, que combaten el daño celular y el envejecimiento prematuro.<br><strong>• Ayuda en el Control del Azúcar y Metabolismo:</strong> Su combinación de fibra y grasas saludables ayuda a regular los niveles de azúcar en la sangre, proporcionando energía estable y una mayor sensación de saciedad.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/XfVKSn1B/TNUTnuezpecan.jpg" alt="TNUTnuezpecan" border="0" width="295" height="291" /></div></div>`
- },
-                        { name: 'Baya Tibetana de Goji', price: 129, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/MygrJzjY/baya-goji.jpg', description: `(${this.formatCurrency(129)}/gr)<br><br><strong>ORIGEN:</strong><br>China<br><br><strong>INGREDIENTES:</strong><br> 100% Baya de Goji<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Milenario del Himalaya:</strong> Proviene de las regiones de gran altitud de China (Meseta Tibetana), la cuna de la Medicina Tradicional China. Este origen extremo y puro es clave para su legendaria concentración de nutrientes.<br><strong>• Potencia Antioxidante Superior:</strong> Considerada un tesoro para la longevidad, es excepcionalmente rica en antioxidantes, especialmente en Zeaxantina, un compuesto vital para proteger la salud visual y la retina del daño solar.<br><strong>• Refuerzo Inmunitario y Vitalidad:</strong> Es una de las nueces con mayor contenido de antioxidantes, que protegen las células del cuerpo. Además, está cargada de grasas monoinsaturadas, beneficiosas para la salud del corazón.<br><strong>• Sabor Único y Energizante:</strong> Ofrece un sabor inconfundible, con un balance perfecto entre dulce y un toque ligeramente ácido. Su textura masticable la hace ideal para añadir a yogures, batidos, tés o ensaladas, aportando un impulso de sabor y nutrición que no encontrarás en bayas comunes.<br><br><strong>BENEFICIOS:</strong><br><strong>• Potente Poder Antioxidante y Antienvejecimiento:</strong> Cargadas de antioxidantes únicos (como la zeaxantina) que combaten el daño celular, reducen la inflamación y ayudan a mantener una piel joven y saludable.<br><strong>• Fortalecimiento del Sistema Inmune:</strong> Su altísima concentración de Vitamina C y Vitamina A es clave para estimular las defensas del cuerpo, ayudando a prevenir resfriados y otras infecciones.<br><strong>• Protección de la Salud Visual:</strong> Son una de las fuentes más ricas en zeaxantina y luteína, antioxidantes que se acumulan en la retina, protegiendo los ojos de la luz azul y del deterioro asociado a la edad.<br><strong>• Fuente de Energía Natural y Estado de Ánimo:</strong> Aportan un complejo de vitaminas B, fibra y minerales que ayudan a convertir los alimentos en energía de manera eficiente, combatiendo la fatiga y mejorando el estado de ánimo.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/zWQ9LhCt/TNUTvaydegoji.jpg" alt="TNUTvaydegoji" border="0" width="295" height="291" /></div></div>`
- },
-                        { name: 'Arándano deshidratado Americano Ocean Spray (Con azúcar añadida)', price: 59, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/vCTFSXc7/arandano.jpg', description: `(${this.formatCurrency(59)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br> Arándano, Azúcar y aceite de girasol<br><br><strong>DESCRIPCION:</strong><br><strong>• Calidad de Marca Líder Mundial:</strong> Respaldado por Ocean Spray, los maestros del arándano. Este nombre es sinónimo de confianza y calidad superior, utilizando los mejores frutos cultivados en Estados Unidos, su tierra natal.<br><strong>• Sabor Icónico y Perfectamente Equilibrado:</strong> El arándano es naturalmente muy ácido; el ligero toque de azúcar añadido es la firma de Ocean Spray para equilibrar esa acidez, creando el delicioso y adictivo sabor agridulce que los ha hecho famosos en todo el mundo.<br><strong>• Concentrado en Bienestar:</strong> A pesar de ser un snack delicioso, sigue siendo una fuente concentrada de proantocianidinas (PACs), los antioxidantes únicos del arándano conocidos por ayudar a mantener la salud del tracto urinario.<br><strong>• Textura Tierna y Color Vibrante:</strong> Posee una textura masticable y jugosa inconfundible y un intenso color rojo que lo convierten en el ingrediente ideal para dar vida, sabor y un toque gourmet a ensaladas, granolas, productos horneados y tus propias mezclas.<br><br><strong>BENEFICIOS:</strong><br><strong>• Salud del Tracto Urinario:</strong> Su beneficio más conocido. Contienen proantocianidinas (PACs), compuestos que ayudan a prevenir que bacterias como la E. coli se adhieran a las paredes del tracto urinario, reduciendo el riesgo de infecciones.<br><strong>• Ricos en Antioxidantes:</strong> Aportan polifenoles y flavonoides que combaten el daño de los radicales libres en el cuerpo, contribuyendo a la salud celular y cardiovascular.<br><strong>• Fuente de Fibra Dietética:</strong> A pesar del proceso, conservan fibra que favorece la digestión y la salud intestinal.<br><strong>• Fuente Rápida de Energía:</strong> El azúcar (tanto natural como añadido) los convierte en una fuente de energía rápida, útil antes de una actividad física, por ejemplo.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/hRLRTwxd/TNUTarandano.jpg" alt="TNUTarandano" border="0" width="295" height="291" /></div></div>`
- },
-                        { name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', price: 67, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/nMsfyJb2/datiles.jpg', description: `(${this.formatCurrency(67)}/gr)<br><br><strong>ORIGEN:</strong><br>Irán<br><br><strong>INGREDIENTES:</strong><br> 100% Dátil Sayer<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Persa de Prestigio:</strong> Proviene de Irán, una de las cunas históricas del cultivo de dátiles. Este origen milenario garantiza una calidad y un perfil de sabor auténtico y muy apreciado.<br><strong>• Dulzura Natural a Caramelo:</strong> La variedad Sayer es famosa por su intensa dulzura natural con claras notas a caramelo y toffee, convirtiéndolo en el endulzante saludable perfecto, sin ningún tipo de azúcar añadido.<br><strong>• Textura Suave y Masticable:</strong> Ofrece una textura semi-seca, firme pero tierna y muy agradable de masticar, que no es tan pegajosa como la de otras variedades (como el Medjool), haciéndola ideal para picar o añadir a recetas.<br><strong>• Máxima Conveniencia y Energía:</strong> Al venir sin semilla, está listo para consumir o usar en batidos, postres y barras energéticas. Es una fuente increíble de energía de liberación rápida y fibra, ideal para deportistas o para calmar un antojo de forma saludable.<br><br><strong>BENEFICIOS:</strong><br><strong>• Fuente de Energía Natural e Inmediata:</strong> Gracias a sus azúcares naturales (glucosa y fructosa), son un snack perfecto para combatir la fatiga y obtener un impulso de energía rápido y saludable, ideal para antes de hacer ejercicio.<br><strong>• Excelente para la Salud Digestiva:</strong> Son muy ricos en fibra dietética, lo que ayuda a prevenir el estreñimiento, promueve la regularidad intestinal y alimenta a las bacterias buenas del intestino.<br><strong>• Rico en Minerales para Huesos y Corazón:</strong> Aportan minerales esenciales como el potasio, que ayuda a regular la presión arterial, y el magnesio y fósforo, que son vitales para mantener la salud y fortaleza de los huesos.<br><strong>• Alternativa Saludable al Azúcar Refinado:</strong> Su dulzor natural y su perfil nutricional los convierten en el sustituto perfecto del azúcar en recetas, postres y batidos, añadiendo nutrientes en lugar de calorías vacías.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/dw8N63wV/TNUTdatiles.jpg" alt="TNUTdatiles" border="0" width="295" height="291" /></div></div>`
- },
-                        { name: 'Albaricoque Turco seco (Sin azúcar añadida)', price: 130, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/VpL8JGJN/albaricoque.jpg', description: `(${this.formatCurrency(130)}/gr)<br><br><strong>ORIGEN:</strong><br>Turquía<br><br><strong>INGREDIENTES:</strong><br> 100% Albaricoque <br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Insuperable:</strong> Proviene de Turquía, el productor número uno y de mayor prestigio del mundo. Este origen es garantía de un albaricoque de calidad superior, carnoso y lleno de sabor.<br><strong>• Dulzura Natural y Toque Ácido:</strong> Famoso por su sabor dulce y meloso, perfectamente equilibrado con un ligero toque ácido que lo hace refrescante y delicioso. Todo su dulzor es 100% natural, sin azúcares añadidos.<br><strong>• Rico en Vitamina A y Hierro:</strong> Es una potencia nutricional, especialmente conocido por su alto contenido de Betacaroteno (que el cuerpo convierte en Vitamina A), esencial para la salud de la piel y la vista, además de ser una buena fuente de hierro.<br><strong>• Textura Tierna y Carnosa:</strong> A diferencia de albaricoques de otros orígenes que pueden ser más secos, el turco se caracteriza por su textura suave, carnosa y muy agradable de morder, ideal como snack o para rehidratar en recetas.<br><br><strong>BENEFICIOS:</strong><br><strong>• Excelente para la Salud Digestiva:</strong> Son muy ricos en fibra, lo que los convierte en un remedio natural y eficaz para aliviar el estreñimiento y promover un tránsito intestinal regular.<br><strong>• Combate la Anemia y da Energía:</strong> Aportan una buena cantidad de hierro y cobre, minerales esenciales para la formación de glóbulos rojos. Además, sus carbohidratos naturales proporcionan una fuente de energía saludable y sostenida.<br><strong>• Protector de la Visión y la Piel:</strong> Son una fuente destacada de Vitamina A (en forma de betacaroteno), un antioxidante clave para mantener una buena salud ocular y proteger la piel del daño celular.<br><strong>• Regulador de la Presión Arterial:</strong> Su alto contenido de potasio ayuda a equilibrar los fluidos en el cuerpo y a relajar los vasos sanguíneos, lo que contribuye a mantener la presión arterial bajo control.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/BHgJdR61/TNUTalbaricoque.jpg" alt="TNUTalbaricoque" border="0" width="295" height="291" /></div></div>`
- },
-                        { name: 'Higo Turco seco (Sin azúcar añadida)', price: 100, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/wFbkXPph/higos-turcos.jpg', description: `(${this.formatCurrency(100)}/gr)<br><br><strong>ORIGEN:</strong><br>Turquía<br><br><strong>INGREDIENTES:</strong><br> 100% Higo Turco<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Élite Mundial:</strong> Proviene de Turquía, la cuna de los higos secos de mayor calidad y prestigio. Este origen es sinónimo de un producto grande, tierno y de sabor superior.<br><strong>• Dulzura Natural a Miel:</strong> Famoso por su intenso dulzor natural con notas claras a miel y caramelo, todo sin una gota de azúcar añadido. Es el postre de la naturaleza.<br><strong>• Textura Excepcional:</strong> Su piel es delgada y su interior extremadamente carnoso y tierno, con el característico y agradable crujido de sus pequeñas semillas. Una experiencia de consumo lujosa y satisfactoria.<br><strong>• Potencia en Fibra y Calcio:</strong> Es una de las mejores fuentes vegetales de fibra, ideal para la salud digestiva, y aporta una cantidad significativa de Calcio, esencial para la salud de los huesos.<br><br><strong>BENEFICIOS:</strong><br><strong>• Excelente para la Salud Digestiva:</strong> Son muy ricos en fibra, lo que los convierte en un laxante natural eficaz para combatir el estreñimiento y promover la regularidad intestinal.<br><strong>• Fortalecimiento de los Huesos:</strong> Aportan una buena cantidad de calcio, potasio y magnesio, minerales esenciales para mantener una buena densidad ósea y prevenir enfermedades como la osteoporosis.<br><strong>• Control del Azúcar en Sangre:</strong> A pesar de su dulzura, su alto contenido de fibra ayuda a ralentizar la absorción de azúcar, lo que puede contribuir a mejorar los niveles de glucosa en sangre.<br><strong>• Salud Cardiovascular:</strong> Su fibra ayuda a reducir los niveles de colesterol, mientras que el potasio contribuye a mantener una presión arterial saludable, protegiendo así el corazón.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/kTdp7LW/TNUThigoturco.jpg" alt="TNUThigoturco" border="0" width="295" height="291" /></div></div>`
- },
-                        { name: 'Uva pasa Mexicana flame mediana (Sin azúcar añadida)', price: 33, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/LzCW616v/uva-pasa.jpg', description: `(${this.formatCurrency(33)}/gr)<br><br><strong>ORIGEN:</strong><br>Mexico<br><br><strong>INGREDIENTES:</strong><br> Uvas y aceite vegetal<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Soleado y de Calidad:</strong> Cultivada bajo el intenso sol de México, un origen reconocido por producir uvas de gran calidad que resultan en pasas dulces, carnosas y de color intenso.<br><strong>• Variedad Flame Superior:</strong> Proviene de la uva de mesa "Flame Seedless", una variedad premium famosa por su gran tamaño, su textura suave y su dulzura equilibrada, a diferencia de otras pasas más pequeñas o secas.<br><strong>• Dulzura 100% Natural:</strong> Todo su delicioso sabor es completamente natural, sin azúcares añadidos. Es el toque perfecto para endulzar de forma saludable tus cereales, yogures, ensaladas y postres.<br><strong>• Fuente de Energía Rápida y Hierro:</strong> Es un snack ideal para un impulso de energía natural e inmediata, además de ser una buena fuente vegetal de hierro y potasio, nutrientes importantes para el día a día.<br><br><strong>BENEFICIOS:</strong><br><strong>• Fuente de Energía Rápida y Natural:</strong> Sus azúcares naturales (fructosa y glucosa) proporcionan un impulso de energía inmediato, siendo un snack ideal para antes de la actividad física o para combatir la fatiga.<br><strong>• Ayuda a la Salud Digestiva: </strong> Son ricas en fibra dietética, lo que favorece un buen tránsito intestinal, ayuda a prevenir el estreñimiento y contribuye a una sensación de saciedad.<br><strong>• Combate la Anemia:</strong> Aportan una buena cantidad de hierro, un mineral esencial para la formación de glóbulos rojos y el transporte de oxígeno en la sangre.<br><strong>• Fortalecimiento Óseo:</strong> Contienen boro, un mineral que es importante para la absorción del calcio y el magnesio, contribuyendo así a la salud y densidad de los huesos.<br><strong>• Ricas en Antioxidantes: </strong> A pesar de su tamaño, concentran antioxidantes como los fenoles y polifenoles, que ayudan a proteger las células del cuerpo del daño causado por los radicales libres.`,
-                          nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/KCvjz1b/TNUTUVAS.jpg" alt="TNUTUVAS" border="0" width="295" height="291" /></div></div>`
- }
+                        {
+                            name: 'Almendra Americana NPX natural', price: 87, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/bg4HSCh5/almendra-natural.jpg',
+                            description: `(${this.formatCurrency(87)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br>100% Almendra NPX<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Élite:</strong> Cultivada en California, EE. UU., el estándar de oro mundial que garantiza la máxima calidad y consistencia.<br><strong>• La Variedad "Reina":</strong> Seleccionamos la variedad Nonpareil (NPX), famosa por su sabor dulce superior y cero amargor.<br><strong>• Textura Perfecta: </strong> Ofrece una mordida crujiente pero suave, ideal tanto para comer como snack directo como para ingrediente en recetas.<br><strong>• Máximo Nutriente: </strong> Al conservar su piel natural, te beneficias de toda su fibra, antioxidantes y Vitamina E.<br><strong>• Calidad Confiable: </strong> Respaldada por la industria más avanzada del mundo, asegurando un producto seguro y de calibre premium en cada almendra.<br><br><strong>BENEFICIOS:</strong><br><strong>• Potente Protector Cardiovascular: </strong> Ricas en grasas saludables y antioxidantes (concentrados en su piel), que ayudan a reducir el colesterol malo (LDL) y a proteger las arterias.<br><strong>• Salud Digestiva y Efecto Prebiótico: </strong> La piel de la almendra es una excelente fuente de fibra prebiótica, que alimenta a las bacterias buenas del intestino, mejorando la digestión y la salud general del microbioma.<br><strong>• Excelente Regulador del Azúcar: </strong> Su alto contenido de fibra, grasas saludables y magnesio ayuda a ralentizar la absorción de azúcar, evitando picos glucémicos y siendo un snack ideal para el control de peso y la diabetes.<br><strong>• Fortaleza para Huesos y Cerebro: </strong> Son una gran fuente de calcio y magnesio para mantener huesos fuertes, y su alta dosis de vitamina E funciona como un potente antioxidante que protege las células cerebrales.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/5WPBZdtf/TNUTalmendranatural.jpg" alt="TNUTalmendranatural" border="0" width="295" height="291"/></div></div> `
+                        },
+                        {
+                            name: 'Avellana Turca natural con piel', price: 130, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/SX7M5fDB/avellana.jpg', description: `(${this.formatCurrency(130)}/gr)<br><br><strong>ORIGEN:</strong><br>Turquía<br><br><strong>INGREDIENTES:</strong><br>100% Avellana con piel<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Insuperable:</strong> Proviene de Turquía, la "Capital Mundial de la Avellana". Este origen  garantiza una calidad y tradición inigualables, ya que son los mayores y más expertos productores del mundo.<br><strong>• Sabor Intenso y Aromático: </strong> Famosa por su perfil de sabor rico, mantecoso y profundo, es la avellana preferida por los chocolateros y pasteleros más prestigiosos de Europa.<br><strong>• Nutrición Completa: </strong> Al conservar su piel natural, obtienes un extra de fibra y antioxidantes, además de un sabor más rústico y completo que el de las avellanas peladas.<br><strong>• El Estándar de Oro: </strong> Mientras otras regiones producen avellanas de gran calidad, la turca es el estándar global por su equilibrio perfecto entre sabor, aceite y textura, convirtiéndola en la más versátil y demanda.<br><br><strong>BENEFICIOS:</strong><br><strong>• Potente Protector del Corazón: </strong> Son muy ricas en grasas monoinsaturadas (saludables) que ayudan a reducir el colesterol malo (LDL). Además, su magnesio y potasio contribuyen a regular la presión arterial.<br><strong>• Poderoso Efecto Antioxidante y Antiinflamatorio: </strong> La piel de la avellana está cargada de antioxidantes (compuestos fenólicos) que combaten el daño celular y reducen la inflamación en el cuerpo, ayudando a prevenir enfermedades crónicas.<br><strong>• Apoyo a la Salud Cerebral y Nerviosa: </strong> Su alto contenido de Vitamina E, manganeso y folato (Vitamina B9) contribuye a mejorar la función cognitiva y a proteger las neuronas del envejecimiento.<br><strong>• Fuente de Energía y Fortalecimiento Óseo: </strong> Aportan grasas saludables y proteínas para una energía duradera, y su alto contenido de manganeso es esencial para la salud y densidad de los huesos.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/5hBnK7Dj/TNUTavellana.jpg" alt="TNUTavellana" border="0" width="295" height="291"/></div></div>`
+                        },
+                        {
+                            name: 'Macadamia Nicaragüense natural', price: 158, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/4gR65F6j/macadamia.jpg', description: `(${this.formatCurrency(158)}/gr)<br><br><strong>ORIGEN:</strong><br>Nicaragua<br><br><strong>INGREDIENTES:</strong><br>100% Macadamia<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Volcánico Exótico:</strong> Cultivada en las fértiles tierras volcánicas de Nicaragua, un origen único que le confiere un perfil de sabor distintivo y una calidad excepcional.<br><strong>• Cremosidad Inigualable: </strong> Reconocida por su textura excepcionalmente cremosa y mantecosa que se deshace en la boca, una característica muy apreciada y buscada por los conocedores.<br><strong>• Sabor Rico y Sutil: </strong> Ofrece un sabor delicado, ligeramente dulce y con notas a nuez, sin el perfil a veces demasiado tostado de otras procedencias, lo que la hace perfecta tanto para snacks de lujo como para repostería fina.<br><strong>• Joya Centroamericana:</strong> La macadamia de Nicaragua es una joya emergente y de producción más limitada, ofreciendo una experiencia gourmet, sostenible y diferenciadora.<br><br><strong>BENEFICIOS:</strong><br><strong>• Salud Cardiovascular Superior: </strong> Son excepcionalmente ricas en grasas monoinsaturadas (las "buenas"), como el ácido palmitoleico, ayudando a reducir drásticamente el colesterol malo (LDL) y a mantener las arterias flexibles y saludables.<br><strong>• Soporte para el Cerebro y Sistema Nervioso: </strong> Su perfil único de grasas y antioxidantes (como los tocotrienoles, una forma de Vitamina E) nutre las células cerebrales, protege contra el estrés oxidativo y apoya la función nerviosa.<br><strong>• Control del Apetito y Energía Limpia: </strong> Su alta concentración de grasas saludables y fibra genera una gran sensación de saciedad, ayudando a controlar el apetito y los antojos. Aportan energía densa y limpia, ideal para dietas bajas en carbohidratos.<br><strong>• Propiedades Antiinflamatorias: </strong> Contienen flavonoides y otros antioxidantes que ayudan a reducir la inflamación crónica en el cuerpo, un factor de riesgo para muchas enfermedades.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/d4PmnpLq/TNUTmacadamia.jpg" alt="TNUTmacadamia" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Maní Brasileño tostado ligeramente salado bola entera y mitades (Bajo en sodio)', price: 30, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/XxFSsqmD/mani-con-sal.jpg', description: `(${this.formatCurrency(30)}/gr)<br><br><strong>ORIGEN:</strong><br>Brasil, Tostado: Colombia<br><br><strong>INGREDIENTES:</strong><br>Maní tostado y sal en bajas cantidades<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Prestigio:</strong> Proviene de Brasil, uno de los productores líderes en el mundo, reconocido por sus condiciones de cultivo ideales que resultan en un maní de alta calidad y gran sabor.<br><strong>• Sabor Intenso y Auténtico: </strong> El maní brasileño es famoso por su perfil de sabor más profundo y un dulzor natural más pronunciado, que se intensifica a la perfección con el proceso de tostado.<br><strong>• Calibre Superior: </strong> Seleccionamos granos de "bola entera" de gran tamaño, garantizando una mordida más crujiente y una experiencia de snack mucho más satisfactoria que la de manís más pequeños o partidos.<br><strong>• Toque de Sabor Perfecto:</strong> Tostado a la perfección y ligeramente salado (bajo en sodio) para realzar su sabor natural sin excesos, convirtiéndolo en el snack saludable y delicioso por excelencia.<br><br><strong>BENEFICIOS:</strong><br><strong>• Fuente de Energía y Proteína Vegetal:</strong> Es un snack ideal para recargar energías de forma sostenida gracias a su combinación de grasas saludables y proteínas, que también ayudan a la reparación muscular.<br><strong>• Corazón Protegido y Saludable: </strong> Rico en grasas monoinsaturadas y niacina (Vitamina B3), ayuda a reducir el colesterol malo (LDL). Al ser bajo en sodio, apoya la salud cardiovascular sin el riesgo de la presión alta asociada a los snacks muy salados.<br><strong>• Soporte para el Cerebro y el Ánimo: </strong> Es una buena fuente de folato y biotina, vitaminas del complejo B que son importantes para la función cerebral y pueden contribuir a un estado de ánimo estable.<br><strong>• Control de Azúcar y Saciedad: </strong> La mezcla de fibra, proteína y grasas ayuda a regular los niveles de azúcar en la sangre y a mantenerte satisfecho por más tiempo, controlando los antojos.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/x8qYrQcG/TNUTmaniconsal.jpg" alt="TNUTmaniconsal" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Maní Brasileño tostado sin sal bola entera y mitades', price: 30, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/D6Qn1nV/mani-sin-sal.jpg', description: `(${this.formatCurrency(30)}/gr)<br><br><strong>ORIGEN:</strong><br>Brasil, Tostado: Colombia<br><br><strong>INGREDIENTES:</strong><br>Maní tostado<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Calidad Superior:</strong> Cultivado en Brasil, un origen reconocido mundialmente por producir maní de excelente calidad gracias a sus condiciones climáticas óptimas.<br><strong>• Sabor 100% Puro y Natural:</strong> Al ser tostado sin sal, puedes apreciar el auténtico sabor del grano: un perfil profundo, con un dulzor natural característico de la variedad brasileña, ideal para puristas del sabor.<br><strong>• Textura "Crunch" Insuperable: </strong> Seleccionamos exclusivamente maní de "bola entera" de gran calibre, lo que garantiza una textura extra crujiente y una experiencia de snack mucho más robusta y placentera.<br><strong>• Máxima Versatilidad Saludable:</strong> Perfecto para quienes siguen dietas bajas en sodio o simplemente prefieren un sabor sin aditivos. Es el ingrediente ideal para crear tus propias mezclas, mantequillas de maní caseras o para añadir a recetas dulces y saladas.<br><br><strong>BENEFICIOS:</strong><br><strong>• Fuente Pura de Energía y Proteína Vegetal:</strong> Aporta una excelente combinación de grasas saludables y proteína para una energía duradera y una óptima recuperación muscular, sin aditivos.<br><strong>• Máxima Protección Cardiovascular (Sin Sodio): </strong> Al no tener sal, es la opción ideal para la salud del corazón. Sus grasas monoinsaturadas ayudan a reducir el colesterol malo (LDL) y a mantener una presión arterial saludable.<br><strong>• Control de Azúcar y Saciedad Natural: </strong> El poderoso trío de fibra, proteína y grasas saludables promueve una gran sensación de saciedad y ayuda a mantener estables los niveles de azúcar en la sangre, siendo un aliado en el control de peso.<br><strong>• Soporte para el Cerebro y Estado de Ánimo: </strong> Es una buena fuente de vitaminas del complejo B como el folato y la biotina, que son esenciales para la función cognitiva y el mantenimiento de un sistema nervioso.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/60Yrb2Vs/TNUTmanisinsal.jpg" alt="TNUTmanisinsal" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Marañón Brasileño entero tostado W1 320 sin sal', price: 118, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/bgsYW0KL/mara-on.jpg', description: `(${this.formatCurrency(118)}/gr)<br><br><strong>ORIGEN:</strong><br>Brasil<br><br><strong>INGREDIENTES:</strong><br>99% Marañon y 1% aceite de algodón<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Élite:</strong> Proviene de Brasil, uno de los productores más importantes y prestigiosos del mundo, reconocido por sus marañones de calidad superior y sabor excepcional.<br><strong>• Calibre Premium (W1 320):</strong> Seleccionamos el calibre W1 320, un estándar internacional que garantiza un marañón entero, de color claro ("White") y de gran tamaño (aproximadamente 320 nueces por libra). Esto asegura una calidad visual y una textura consistente que no se encuentra en calibres inferiores o partidos.<br><strong>• Textura y Sabor Inigualables: </strong> Famoso por su textura cremosa y mantecosa que se deshace en la boca, y un sabor naturalmente dulce y delicado, perfecto al ser tostado sin sal para apreciar todas sus notas.<br><strong>• Pureza y Versatilidad:</strong> Al ser entero y sin sal, es el ingrediente gourmet ideal para snacks de lujo, cocina vegana (para hacer quesos o cremas), repostería fina o como el protagonista de cualquier mezcla prémium.<br><br><strong>BENEFICIOS:</strong><br><strong>• Salud Cardiovascular Óptima:</strong> Rico en grasas monoinsaturadas (las "buenas"), ayuda a reducir el colesterol malo (LDL) y, al no tener sal, es ideal para mantener una presión arterial saludable.<br><strong>• Fortalecimiento de Huesos y Nervios: </strong> Es una excelente fuente de magnesio y cobre, minerales esenciales para la densidad ósea, la producción de energía y el funcionamiento saludable del sistema nervioso.<br><strong>• Soporte Cerebral y Cognitivo:</strong> El cobre y las grasas saludables que contiene son vitales para la producción de neurotransmisores y la protección de las células cerebrales, apoyando la memoria y la concentración.<br><strong>• Prevención y Control de la Diabetes: </strong> Gracias a su bajo índice glucémico y su contenido de fibra y grasas saludables, ayuda a regular los niveles de azúcar en la sangre, siendo un snack seguro y beneficioso.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/zpd61RM/TNUTmara-on.jpg" alt="TNUTmara-on" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Nuez del Brasil natural partida', price: 88, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/PsK0yKK6/nuez-brasil.jpg', description: `(${this.formatCurrency(88)}/gr)<br><br><strong>ORIGEN:</strong><br>Brasil<br><br><strong>INGREDIENTES:</strong><br>100% Nuez del Brasil<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Auténtico del Amazonas:</strong> Proviene de Brasil, su lugar de origen en el corazón de la selva amazónica. Este entorno salvaje y natural le confiere una riqueza nutricional inigualable.<br><strong>• La Mayor Fuente Natural de Selenio:</strong> Es el superalimento por excelencia. Con solo una o dos nueces al día puedes cubrir tus necesidades diarias de selenio, un mineral esencial con un potentísimo efecto antioxidante y clave para el sistema inmune.<br><strong>• Sabor Único y Textura Mantecosa: </strong> Ofrece un perfil de sabor suave, terroso y ligeramente dulce, con una textura crujiente pero mantecosa que la distingue de otras nueces.<br><strong>• Versatilidad Práctica:</strong> Al venir partida, es perfecta para añadir directamente a granolas, batidos, ensaladas o para crear tus propias mezclas energéticas, haciendo más fácil disfrutar de sus increíbles beneficios.<br><br><strong>BENEFICIOS:</strong><br><strong>• Superdosis de Selenio para la Tiroides y Defensas:</strong> Es la fuente natural más potente de selenio, un mineral clave para la función de la tiroides, fortalecer el sistema inmune y proteger las células del daño oxidativo con solo una o dos nueces al día.<br><strong>• Salud Cardiovascular y Control del Colesterol: </strong> Gracias a su perfil de grasas saludables (monoinsaturadas y poliinsaturadas), ayuda a reducir el colesterol malo (LDL) y a mantener la salud del corazón y las arterias.<br><strong>• Potente Efecto Antiinflamatorio y Cerebral:</strong> Su alto contenido de antioxidantes como el selenio, la vitamina E y el ácido elágico ayuda a reducir la inflamación en el cuerpo y a proteger las neuronas del envejecimiento prematuro.<br><strong>• Fuente de Energía Completa: </strong> Aporta una mezcla densa de grasas saludables, proteínas y fibra, ofreciendo energía sostenida y una gran sensación de saciedad.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/nNmkVvth/TNUTnuezbrasil.jpg" alt="TNUTnuezbrasil" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Nuez del Nogal Americana natural', price: 115, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/nqXDXJm3/nuez-nogal.jpg', description: `(${this.formatCurrency(115)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br>100% Nuez del Nogal<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Calidad Superior:</strong> Proviene de Estados Unidos (California), líder mundial en producción, donde estrictos controles de calidad garantizan una nuez de calibre grande, color claro y frescura excepcional.<br><strong>• Potencia en Omega-3:</strong> Es reconocida como una de las mejores fuentes vegetales de Omega-3 (ALA), un ácido graso esencial fundamental para la salud del cerebro, el corazón y con potentes propiedades antiinflamatorias.<br><strong>• Sabor Robusto y Equilibrado:</strong> La variedad americana es apreciada por su sabor rico y robusto, con el característico toque amargo perfectamente equilibrado, ideal para repostería, ensaladas o como un snack que sacia.<br><strong>• Textura "Carnosa" y Crujiente:</strong> Ofrece una textura única, más "carnosa" y menos seca que otras variedades, lo que la hace especialmente placentera al morder y muy versátil en la cocina.<br><br><strong>BENEFICIOS:</strong><br><strong>• Salud Cerebral Superior:</strong> Es el fruto seco rey en Omega-3 (ALA), un ácido graso esencial que nutre el cerebro, mejora la memoria, la concentración y protege contra el deterioro cognitivo.<br><strong>• Potente Acción Antioxidante y Antiinflamatoria:</strong> Contiene una combinación única y muy potente de antioxidantes (polifenoles y Vitamina E) que combaten el daño celular y reducen la inflamación crónica, ayudando a prevenir enfermedades.<br><strong>• Corazón Fuerte y Protegido:</strong> Su alto contenido de Omega-3, fibra y otros compuestos bioactivos ayuda a reducir el colesterol malo (LDL), disminuir la presión arterial y mejorar la salud de los vasos sanguíneos.<br><strong>• Mejora de la Salud Intestinal:</strong> Actúa como un prebiótico, alimentando a las bacterias beneficiosas del intestino. Un microbioma sano está vinculado a una mejor digestión, un sistema inmune más fuerte y un mejor estado de ánimo.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/ccqNNpvc/TNUTnueznogal.jpg" alt="TNUTnueznogal" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Con cáscara)', price: 130, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/fzYjVsPB/pistacho.jpg', description: `(${this.formatCurrency(130)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br> Pistacho y sal en bajas cantidades<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Prestigio Mundial:</strong> Cultivado en California, Estados Unidos, reconocido globalmente por producir pistachos de calibre grande, apertura natural y un color verde vibrante, superando a menudo en tamaño a variedades de otras regiones.<br><strong>• Sabor Dulce y Menos Terroso:</strong> El pistacho californiano es famoso por su perfil de sabor limpio, naturalmente dulce y mantecoso, en contraste con el sabor a veces más intenso y terroso de los pistachos de Oriente Medio.<br><strong>• Tostado Perfecto y Sabor Realzado:</strong> Tostado a la perfección para maximizar su "crunch" y ligeramente salado (bajo en sodio), un toque justo que realza su dulzura natural sin opacarla, ideal para un snack saludable.<br><strong>• El Ritual de la Cáscara:</strong> Al venir con cáscara, no solo se conserva mejor su frescura, sino que promueve un consumo más consciente y pausado, convirtiendo el acto de comerlos en un placentero ritual.<br><br><strong>BENEFICIOS:</strong><br><strong>• Proteína Completa y Energía Sostenida:</strong> Es una de las pocas fuentes vegetales de proteína completa (con todos los aminoácidos esenciales), ideal para la recuperación muscular y para mantener la energía estable.<br><strong>• Salud Cardiovascular Inteligente:</strong> Rico en grasas saludables y potasio para reducir el colesterol y regular la presión. Al ser bajo en sodio, ofrece el sabor sin el riesgo para la presión arterial asociado a los snacks muy salados.<br><strong>• Control de Peso y Porciones Conscientes:</strong> El acto de abrir la cáscara ralentiza el consumo (comer "mindful"), lo que promueve la saciedad y ayuda a controlar las porciones de forma natural, apoyando el manejo del peso.<br><strong>• Rico en Antioxidantes para Ojos y Células:</strong> Su color verde y morado proviene de la luteína y la zeaxantina, antioxidantes que protegen la salud ocular. Además, combate el daño celular en todo el cuerpo.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/jk5wJdgk/TNUTpistachoconcascara.jpg" alt="TNUTpistachoconcascara" border="0" width="295" height="291"/></div></div>`
+                        },
+                        {
+                            name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', price: 270, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/fzYjVsPB/pistacho.jpg', description: `(${this.formatCurrency(270)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br> Pistacho y sal en bajas cantidades<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Prestigio Mundial:</strong> Cultivado en California, Estados Unidos, reconocido globalmente por producir pistachos de calibre grande, apertura natural y un color verde vibrante, superando a menudo en tamaño a variedades de otras regiones.<br><strong>• Sabor Dulce y Menos Terroso:</strong> El pistacho californiano es famoso por su perfil de sabor limpio, naturalmente dulce y mantecoso, en contraste con el sabor a veces más intenso y terroso de los pistachos de Oriente Medio.<br><strong>• Máxima Comodidad, Listo para Usar:</strong> Al venir sin cáscara, está listo para disfrutar al instante como un snack de lujo o para añadir directamente a ensaladas, postres, pestos o cualquier receta gourmet, ahorrándote tiempo y esfuerzo.<br><strong>• Ideal para Mezclas Premium:</strong> Su conveniencia y calidad lo convierten en el ingrediente perfecto para elevar cualquier mezcla de frutos secos, aportando color, un sabor inconfundible y una textura crujiente.<br><br><strong>BENEFICIOS:</strong><br><strong>• Proteína Completa y Energía Sostenida:</strong> Es una de las pocas fuentes vegetales de proteína completa (con todos los aminoácidos esenciales), ideal para la recuperación muscular y para mantener la energía estable.<br><strong>• Salud Cardiovascular Inteligente:</strong> Rico en grasas saludables y potasio para reducir el colesterol y regular la presión. Al ser bajo en sodio, ofrece el sabor sin el riesgo para la presión arterial asociado a los snacks muy salados.<br><strong>• Rico en Antioxidantes para la Salud Visual y Celular:</strong> Su característico color verde y morado proviene de la luteína y zeaxantina, antioxidantes que se consumen directamente para proteger la salud de tus ojos y combatir el daño celular general.<br><strong>• Versatilidad y Nutrición Instantánea:</strong> Son el formato ideal para enriquecer instantáneamente ensaladas, yogures, pastas o batidos, facilitando la incorporación de fibra, vitaminas y minerales a tu dieta diaria.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/jk5wJdgk/TNUTpistachoconcascara.jpg" alt="TNUTpistachoconcascara" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Nuez Pecan Americana natural', price: 175, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/Pvr96z3D/nuez-pecan.jpg', description: `(${this.formatCurrency(175)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br> 100% Nuez Pecan<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Auténtico y Superior:</strong> Proviene de Estados Unidos, la cuna de la Nuez Pecan. Este origen garantiza una calidad insuperable y el perfil de sabor clásico y más demandado a nivel mundial.<br><strong>• Dulzura Natural y Textura Mantecosa:</strong> Famosa por su sabor naturalmente dulce, con notas acarameladas y de mantequilla, mucho más suave y menos amarga que la nuez de nogal.<br><strong>• Rica en Antioxidantes y Grasas Saludables: </strong>  Es una de las nueces con mayor contenido de antioxidantes, que protegen las células del cuerpo. Además, está cargada de grasas monoinsaturadas, beneficiosas para la salud del corazón.<br><strong>• La Reina de la Repostería:</strong> Su sabor dulce y su textura tierna pero crujiente la convierten en la nuez preferida por chefs y pasteleros para tartas ("pecan pie"), brownies, galletas y postres gourmet.<br><br><strong>BENEFICIOS:</strong><br><strong>• Salud del Corazón y Colesterol:</strong> Es una de las pocas fuentes vegetales de proteína completa (con todos los aminoácidos esenciales), ideal para la recuperación muscular y para mantener la energía estable.<br><strong>• Soporte para la Salud Cerebral y Nerviosa:</strong> Las grasas saludables y minerales como el manganeso y el cobre son esenciales para una buena función cognitiva y la salud del sistema nervioso.<br><strong>• Rico en Antioxidantes y Antienvejecimiento:</strong> Es uno de los frutos secos con mayor capacidad antioxidante, gracias a su alto contenido de flavonoides y Vitamina E, que combaten el daño celular y el envejecimiento prematuro.<br><strong>• Ayuda en el Control del Azúcar y Metabolismo:</strong> Su combinación de fibra y grasas saludables ayuda a regular los niveles de azúcar en la sangre, proporcionando energía estable y una mayor sensación de saciedad.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/XfVKSn1B/TNUTnuezpecan.jpg" alt="TNUTnuezpecan" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Baya Tibetana de Goji', price: 129, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/MygrJzjY/baya-goji.jpg', description: `(${this.formatCurrency(129)}/gr)<br><br><strong>ORIGEN:</strong><br>China<br><br><strong>INGREDIENTES:</strong><br> 100% Baya de Goji<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Milenario del Himalaya:</strong> Proviene de las regiones de gran altitud de China (Meseta Tibetana), la cuna de la Medicina Tradicional China. Este origen extremo y puro es clave para su legendaria concentración de nutrientes.<br><strong>• Potencia Antioxidante Superior:</strong> Considerada un tesoro para la longevidad, es excepcionalmente rica en antioxidantes, especialmente en Zeaxantina, un compuesto vital para proteger la salud visual y la retina del daño solar.<br><strong>• Refuerzo Inmunitario y Vitalidad:</strong> Es una de las nueces con mayor contenido de antioxidantes, que protegen las células del cuerpo. Además, está cargada de grasas monoinsaturadas, beneficiosas para la salud del corazón.<br><strong>• Sabor Único y Energizante:</strong> Ofrece un sabor inconfundible, con un balance perfecto entre dulce y un toque ligeramente ácido. Su textura masticable la hace ideal para añadir a yogures, batidos, tés o ensaladas, aportando un impulso de sabor y nutrición que no encontrarás en bayas comunes.<br><br><strong>BENEFICIOS:</strong><br><strong>• Potente Poder Antioxidante y Antienvejecimiento:</strong> Cargadas de antioxidantes únicos (como la zeaxantina) que combaten el daño celular, reducen la inflamación y ayudan a mantener una piel joven y saludable.<br><strong>• Fortalecimiento del Sistema Inmune:</strong> Su altísima concentración de Vitamina C y Vitamina A es clave para estimular las defensas del cuerpo, ayudando a prevenir resfriados y otras infecciones.<br><strong>• Protección de la Salud Visual:</strong> Son una de las fuentes más ricas en zeaxantina y luteína, antioxidantes que se acumulan en la retina, protegiendo los ojos de la luz azul y del deterioro asociado a la edad.<br><strong>• Fuente de Energía Natural y Estado de Ánimo:</strong> Aportan un complejo de vitaminas B, fibra y minerales que ayudan a convertir los alimentos en energía de manera eficiente, combatiendo la fatiga y mejorando el estado de ánimo.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/zWQ9LhCt/TNUTvaydegoji.jpg" alt="TNUTvaydegoji" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Arándano deshidratado Americano Ocean Spray (Con azúcar añadida)', price: 59, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/vCTFSXc7/arandano.jpg', description: `(${this.formatCurrency(59)}/gr)<br><br><strong>ORIGEN:</strong><br>Estados Unidos<br><br><strong>INGREDIENTES:</strong><br> Arándano, Azúcar y aceite de girasol<br><br><strong>DESCRIPCION:</strong><br><strong>• Calidad de Marca Líder Mundial:</strong> Respaldado por Ocean Spray, los maestros del arándano. Este nombre es sinónimo de confianza y calidad superior, utilizando los mejores frutos cultivados en Estados Unidos, su tierra natal.<br><strong>• Sabor Icónico y Perfectamente Equilibrado:</strong> El arándano es naturalmente muy ácido; el ligero toque de azúcar añadido es la firma de Ocean Spray para equilibrar esa acidez, creando el delicioso y adictivo sabor agridulce que los ha hecho famosos en todo el mundo.<br><strong>• Concentrado en Bienestar:</strong> A pesar de ser un snack delicioso, sigue siendo una fuente concentrada de proantocianidinas (PACs), los antioxidantes únicos del arándano conocidos por ayudar a mantener la salud del tracto urinario.<br><strong>• Textura Tierna y Color Vibrante:</strong> Posee una textura masticable y jugosa inconfundible y un intenso color rojo que lo convierten en el ingrediente ideal para dar vida, sabor y un toque gourmet a ensaladas, granolas, productos horneados y tus propias mezclas.<br><br><strong>BENEFICIOS:</strong><br><strong>• Salud del Tracto Urinario:</strong> Su beneficio más conocido. Contienen proantocianidinas (PACs), compuestos que ayudan a prevenir que bacterias como la E. coli se adhieran a las paredes del tracto urinario, reduciendo el riesgo de infecciones.<br><strong>• Ricos en Antioxidantes:</strong> Aportan polifenoles y flavonoides que combaten el daño de los radicales libres en el cuerpo, contribuyendo a la salud celular y cardiovascular.<br><strong>• Fuente de Fibra Dietética:</strong> A pesar del proceso, conservan fibra que favorece la digestión y la salud intestinal.<br><strong>• Fuente Rápida de Energía:</strong> El azúcar (tanto natural como añadido) los convierte en una fuente de energía rápida, útil antes de una actividad física, por ejemplo.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/hRLRTwxd/TNUTarandano.jpg" alt="TNUTarandano" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', price: 67, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/nMsfyJb2/datiles.jpg', description: `(${this.formatCurrency(67)}/gr)<br><br><strong>ORIGEN:</strong><br>Irán<br><br><strong>INGREDIENTES:</strong><br> 100% Dátil Sayer<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Persa de Prestigio:</strong> Proviene de Irán, una de las cunas históricas del cultivo de dátiles. Este origen milenario garantiza una calidad y un perfil de sabor auténtico y muy apreciado.<br><strong>• Dulzura Natural a Caramelo:</strong> La variedad Sayer es famosa por su intensa dulzura natural con claras notas a caramelo y toffee, convirtiéndolo en el endulzante saludable perfecto, sin ningún tipo de azúcar añadido.<br><strong>• Textura Suave y Masticable:</strong> Ofrece una textura semi-seca, firme pero tierna y muy agradable de masticar, que no es tan pegajosa como la de otras variedades (como el Medjool), haciéndola ideal para picar o añadir a recetas.<br><strong>• Máxima Conveniencia y Energía:</strong> Al venir sin semilla, está listo para consumir o usar en batidos, postres y barras energéticas. Es una fuente increíble de energía de liberación rápida y fibra, ideal para deportistas o para calmar un antojo de forma saludable.<br><br><strong>BENEFICIOS:</strong><br><strong>• Fuente de Energía Natural e Inmediata:</strong> Gracias a sus azúcares naturales (glucosa y fructosa), son un snack perfecto para combatir la fatiga y obtener un impulso de energía rápido y saludable, ideal para antes de hacer ejercicio.<br><strong>• Excelente para la Salud Digestiva:</strong> Son muy ricos en fibra dietética, lo que ayuda a prevenir el estreñimiento, promueve la regularidad intestinal y alimenta a las bacterias buenas del intestino.<br><strong>• Rico en Minerales para Huesos y Corazón:</strong> Aportan minerales esenciales como el potasio, que ayuda a regular la presión arterial, y el magnesio y fósforo, que son vitales para mantener la salud y fortaleza de los huesos.<br><strong>• Alternativa Saludable al Azúcar Refinado:</strong> Su dulzor natural y su perfil nutricional los convierten en el sustituto perfecto del azúcar en recetas, postres y batidos, añadiendo nutrientes en lugar de calorías vacías.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/dw8N63wV/TNUTdatiles.jpg" alt="TNUTdatiles" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Albaricoque Turco seco (Sin azúcar añadida)', price: 130, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/VpL8JGJN/albaricoque.jpg', description: `(${this.formatCurrency(130)}/gr)<br><br><strong>ORIGEN:</strong><br>Turquía<br><br><strong>INGREDIENTES:</strong><br> 100% Albaricoque <br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Insuperable:</strong> Proviene de Turquía, el productor número uno y de mayor prestigio del mundo. Este origen es garantía de un albaricoque de calidad superior, carnoso y lleno de sabor.<br><strong>• Dulzura Natural y Toque Ácido:</strong> Famoso por su sabor dulce y meloso, perfectamente equilibrado con un ligero toque ácido que lo hace refrescante y delicioso. Todo su dulzor es 100% natural, sin azúcares añadidos.<br><strong>• Rico en Vitamina A y Hierro:</strong> Es una potencia nutricional, especialmente conocido por su alto contenido de Betacaroteno (que el cuerpo convierte en Vitamina A), esencial para la salud de la piel y la vista, además de ser una buena fuente de hierro.<br><strong>• Textura Tierna y Carnosa:</strong> A diferencia de albaricoques de otros orígenes que pueden ser más secos, el turco se caracteriza por su textura suave, carnosa y muy agradable de morder, ideal como snack o para rehidratar en recetas.<br><br><strong>BENEFICIOS:</strong><br><strong>• Excelente para la Salud Digestiva:</strong> Son muy ricos en fibra, lo que los convierte en un remedio natural y eficaz para aliviar el estreñimiento y promover un tránsito intestinal regular.<br><strong>• Combate la Anemia y da Energía:</strong> Aportan una buena cantidad de hierro y cobre, minerales esenciales para la formación de glóbulos rojos. Además, sus carbohidratos naturales proporcionan una fuente de energía saludable y sostenida.<br><strong>• Protector de la Visión y la Piel:</strong> Son una fuente destacada de Vitamina A (en forma de betacaroteno), un antioxidante clave para mantener una buena salud ocular y proteger la piel del daño celular.<br><strong>• Regulador de la Presión Arterial:</strong> Su alto contenido de potasio ayuda a equilibrar los fluidos en el cuerpo y a relajar los vasos sanguíneos, lo que contribuye a mantener la presión arterial bajo control.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/BHgJdR61/TNUTalbaricoque.jpg" alt="TNUTalbaricoque" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Higo Turco seco (Sin azúcar añadida)', price: 100, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/wFbkXPph/higos-turcos.jpg', description: `(${this.formatCurrency(100)}/gr)<br><br><strong>ORIGEN:</strong><br>Turquía<br><br><strong>INGREDIENTES:</strong><br> 100% Higo Turco<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen de Élite Mundial:</strong> Proviene de Turquía, la cuna de los higos secos de mayor calidad y prestigio. Este origen es sinónimo de un producto grande, tierno y de sabor superior.<br><strong>• Dulzura Natural a Miel:</strong> Famoso por su intenso dulzor natural con notas claras a miel y caramelo, todo sin una gota de azúcar añadido. Es el postre de la naturaleza.<br><strong>• Textura Excepcional:</strong> Su piel es delgada y su interior extremadamente carnoso y tierno, con el característico y agradable crujido de sus pequeñas semillas. Una experiencia de consumo lujosa y satisfactoria.<br><strong>• Potencia en Fibra y Calcio:</strong> Es una de las mejores fuentes vegetales de fibra, ideal para la salud digestiva, y aporta una cantidad significativa de Calcio, esencial para la salud de los huesos.<br><br><strong>BENEFICIOS:</strong><br><strong>• Excelente para la Salud Digestiva:</strong> Son muy ricos en fibra, lo que los convierte en un laxante natural eficaz para combatir el estreñimiento y promover la regularidad intestinal.<br><strong>• Fortalecimiento de los Huesos:</strong> Aportan una buena cantidad de calcio, potasio y magnesio, minerales esenciales para mantener una buena densidad ósea y prevenir enfermedades como la osteoporosis.<br><strong>• Control del Azúcar en Sangre:</strong> A pesar de su dulzura, su alto contenido de fibra ayuda a ralentizar la absorción de azúcar, lo que puede contribuir a mejorar los niveles de glucosa en sangre.<br><strong>• Salud Cardiovascular:</strong> Su fibra ayuda a reducir los niveles de colesterol, mientras que el potasio contribuye a mantener una presión arterial saludable, protegiendo así el corazón.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/kTdp7LW/TNUThigoturco.jpg" alt="TNUThigoturco" border="0" width="295" height="291" /></div></div>`
+                        },
+                        {
+                            name: 'Uva pasa Mexicana flame mediana (Sin azúcar añadida)', price: 33, grams: 0, percentage: 0, imageUrl: 'https://i.ibb.co/LzCW616v/uva-pasa.jpg', description: `(${this.formatCurrency(33)}/gr)<br><br><strong>ORIGEN:</strong><br>Mexico<br><br><strong>INGREDIENTES:</strong><br> Uvas y aceite vegetal<br><br><strong>DESCRIPCION:</strong><br><strong>• Origen Soleado y de Calidad:</strong> Cultivada bajo el intenso sol de México, un origen reconocido por producir uvas de gran calidad que resultan en pasas dulces, carnosas y de color intenso.<br><strong>• Variedad Flame Superior:</strong> Proviene de la uva de mesa "Flame Seedless", una variedad premium famosa por su gran tamaño, su textura suave y su dulzura equilibrada, a diferencia de otras pasas más pequeñas o secas.<br><strong>• Dulzura 100% Natural:</strong> Todo su delicioso sabor es completamente natural, sin azúcares añadidos. Es el toque perfecto para endulzar de forma saludable tus cereales, yogures, ensaladas y postres.<br><strong>• Fuente de Energía Rápida y Hierro:</strong> Es un snack ideal para un impulso de energía natural e inmediata, además de ser una buena fuente vegetal de hierro y potasio, nutrientes importantes para el día a día.<br><br><strong>BENEFICIOS:</strong><br><strong>• Fuente de Energía Rápida y Natural:</strong> Sus azúcares naturales (fructosa y glucosa) proporcionan un impulso de energía inmediato, siendo un snack ideal para antes de la actividad física o para combatir la fatiga.<br><strong>• Ayuda a la Salud Digestiva: </strong> Son ricas en fibra dietética, lo que favorece un buen tránsito intestinal, ayuda a prevenir el estreñimiento y contribuye a una sensación de saciedad.<br><strong>• Combate la Anemia:</strong> Aportan una buena cantidad de hierro, un mineral esencial para la formación de glóbulos rojos y el transporte de oxígeno en la sangre.<br><strong>• Fortalecimiento Óseo:</strong> Contienen boro, un mineral que es importante para la absorción del calcio y el magnesio, contribuyendo así a la salud y densidad de los huesos.<br><strong>• Ricas en Antioxidantes: </strong> A pesar de su tamaño, concentran antioxidantes como los fenoles y polifenoles, que ayudan a proteger las células del cuerpo del daño causado por los radicales libres.`,
+                            nutritionInfo: `<div class="text-center"><strong><br>INFORMACION NUTRICIONAL:</strong><br><div class="flex justify-center"><img src="https://i.ibb.co/KCvjz1b/TNUTUVAS.jpg" alt="TNUTUVAS" border="0" width="295" height="291" /></div></div>`
+                        }
                     ];
                     this.predefinedMixes = [
                         { id: 1, name: 'Mix Corazón Fuerte', subtitle: 'Salud Cardiovascular', description: 'Esta mezcla es una potencia para la salud de tu corazón. La Nuez del Nogal Americana natural aportan Omega-3, que ayuda a reducir el colesterol "malo" (LDL). La Almendra y Macadamia son ricas en grasas monoinsaturadas saludables, que protegen las arterias. Finalmente, el Marañón Brasileño entero tostado W1 320 sin sal son una de las mejores fuentes naturales de Magnesio. El magnesio es un mineral crucial para la salud del corazón porque ayuda a relajar las paredes de los vasos sanguíneos y las arterias, lo que mejora el flujo sanguíneo y ayuda a reducir la presión arterial.', ingredients: ['40% Nuez del Nogal Americana natural', '30% Almendra Americana NPX natural', '15% Macadamia Nicaragüense natural', '15% Marañón Brasileño entero tostado W1 320 sin sal'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Almendra Americana NPX natural', percentage: 30 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 15 }, { name: 'Macadamia Nicaragüense natural', percentage: 15 }], gramsToAdd: 0 },
-                       { id: 2, name: 'Mix Escudo', subtitle: 'Antioxidante', description: 'Diseñada para combatir el daño de los radicales libres que aceleran el envejecimiento. La Baya de Goji es de las fuentes mas ricas de antioxidantes del planeta, rica en Zeaxantina y polisacáridos (LBP) que combaten el estrés oxidativo. La Nuez del Nogal Americana natural y la Nuez Pecan Americana natural lideran el ranking de frutos secos con mayor capacidad antioxidante. La piel de las Avellana contiene una alta concentración de estos compuestos protectores.', ingredients: ['30% Nuez del Nogal Americana natural', '25% Nuez Pecan Americana natural', '30% Baya Tibetana de Goji', '15% Avellana Turca natural con piel'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 30 }, { name: 'Baya Tibetana de Goji', percentage: 30 }, { name: 'Nuez Pecan Americana natural', percentage: 25 }, { name: 'Avellana Turca natural con piel', percentage: 15 }], gramsToAdd: 0 },
+                       { id: 2, name: 'Mix Escudo', subtitle: 'Antioxidante', description: 'Diseñada para combatir el daño de los radicales libres que aceleran el envejecimiento. La Baya de Goji es de las fuentes mas ricas de antioxidantes del planeta, rica en Zeaxantina y polisacáridos (LBP) que combaten el estrés oxidativo. La Nuez del Nogal Americana natural y la Nuez Pecan Americana natural lideran el ranking de frutos secos con mayor capacidad antioxidante. La piel de las Avellana contiene una alta concentración de estos compuestos protectores.', ingredients: ['30% Nuez del Nogal Americana natural', '30% Baya Tibetana de Goji', '25% Nuez Pecan Americana natural', '15% Avellana Turca natural con piel'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 30 }, { name: 'Baya Tibetana de Goji', percentage: 30 }, { name: 'Nuez Pecan Americana natural', percentage: 25 }, { name: 'Avellana Turca natural con piel', percentage: 15 }], gramsToAdd: 0 },
                         { id: 3, name: 'Mix Digestión Activa', subtitle: 'Alto en Fibra', description: 'Un aliado natural para tu sistema digestivo. El Higo Turco y el Dátil son excepcionalmente ricos en fibra soluble e insoluble, que promueve la regularidad intestinal. El Albaricoque también aporta una dosis significativa de fibra, mientras que la Almendra Americana NPX natural añade un crujido satisfactorio y fibra adicional para una digestión óptima.', ingredients: ['30% Higo Turco seco (Sin azúcar añadida)', '30% Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', '25% Almendra Americana NPX natural', '15% Albaricoque Turco seco (Sin azúcar añadida)'], proportions: [{ name: 'Higo Turco seco (Sin azúcar añadida)', percentage: 30 }, { name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', percentage: 30 }, { name: 'Almendra Americana NPX natural', percentage: 25 }, { name: 'Albaricoque Turco seco (Sin azúcar añadida)', percentage: 15 }], gramsToAdd: 0 },
-                        { id: 4, name: 'Mix Multinutrientes', subtitle: 'Vitaminas y Minerales', description: 'Una verdadera bomba de micronutrientes esenciales. Con solo una o dos Nueces del Brasil obtienes tu dosis diaria de Selenio. La Baya de Goji aporta Vitamina A y C. El Pistacho ofrecen Vitamina B6 y potasio. El Marañón es rico en cobre y zinc, y la Almendra en Vitamina E y magnesio.', ingredients: ['5% Nuez del Brasil natural partida', '15% Baya Tibetana de Goji', '20% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', '25% Marañón Brasileño entero tostado W1 320 sin sal', '35% Almendra Americana NPX natural'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 35 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 25 }, { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 20 }, { name: 'Baya Tibetana de Goji', percentage: 15 }, { name: 'Nuez del Brasil natural partida', percentage: 5 }], gramsToAdd: 0 },
+                        { id: 4, name: 'Mix Multinutrientes', subtitle: 'Vitaminas y Minerales', description: 'Una verdadera bomba de micronutrientes esenciales. Con solo una o dos Nueces del Brasil obtienes tu dosis diaria de Selenio. La Baya de Goji aporta Vitamina A y C. El Pistacho ofrecen Vitamina B6 y potasio. El Marañón es rico en cobre y zinc, y la Almendra en Vitamina E y magnesio.', ingredients: ['35% Almendra Americana NPX natural', '25% Marañón Brasileño entero tostado W1 320 sin sal', '20% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', '15% Baya Tibetana de Goji', '5% Nuez del Brasil natural partida'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 35 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 25 }, { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 20 }, { name: 'Baya Tibetana de Goji', percentage: 15 }, { name: 'Nuez del Brasil natural partida', percentage: 5 }], gramsToAdd: 0 },
                         { id: 5, name: 'Mix Poder Proteico', subtitle: 'Proteínas', description: 'La opción ideal para deportistas, vegetarianos o cualquiera que busque un impulso de proteína vegetal. El maní y la Almendra son los frutos secos con mayor contenido proteico, esencial para la reparación y construcción de músculos. El Pistacho complementa la mezcla con un perfil completo de aminoácidos.', ingredients: ['40% Maní Brasileño tostado sin sal bola entera y mitades ', '40% Almendra Americana NPX natural', '20% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)'], proportions: [{ name: 'Maní Brasileño tostado sin sal bola entera y mitades', percentage: 40 }, { name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 20 }], gramsToAdd: 0 },
                         { id: 6, name: 'Mix Figura Ideal', subtitle: 'Ayuda con la Pérdida de Peso', description: 'Un snack inteligente para controlar el apetito y mantenerte en tu peso ideal. La combinación de proteína, fibra y grasas saludables de la Almendra y el Marañón genera una gran sensación de saciedad, ayudándote a evitar antojos y ayudan al metabolismo energético. La Nuez del Nogal Americana natural aportan Omega-3, que ayuda a regular el metabolismo.', ingredients: ['50% Almendra Americana NPX natural', '30% Nuez del Nogal Americana natural', '20% Marañón Brasileño entero tostado W1 320 sin sal'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 50 }, { name: 'Nuez del Nogal Americana natural', percentage: 30 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 20 }], gramsToAdd: 0 },
                         { id: 7, name: 'Mix Mente Brillante', subtitle: 'Salud Cerebral', description: 'Nutrición específica para tu cerebro. La Nuez del Nogal Americana natural es la reina de la salud cerebral gracias a su altísimo contenido de Omega-3 (ALA), vital para las neuronas. La Uva pasa Mexicana flame mediana (Sin azúcar añadida) es rica en Boro, un mineral que ha demostrado mejorar la función cognitiva, la coordinación y la memoria a corto plazo. La Avellana Turca natural con piel, es rica en Vitamina E que ayuda a prevenir el deterioro cognitivo.', ingredients: ['40% Nuez del Nogal Americana natural', '30% Uva pasa Mexicana flame mediana (Sin azúcar añadida)', '30% Avellana Turca natural con piel'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Uva pasa Mexicana flame mediana (Sin azúcar añadida)', percentage: 30 }, { name: 'Avellana Turca natural con piel', percentage: 30 }], gramsToAdd: 0 },
-                        { id: 8, name: 'Mix Huesos de Acero', subtitle: 'Salud Ósea', description: 'Fortalece tu estructura ósea desde adentro. El Higo Turco y la Almendra son excelentes fuentes vegetales de Calcio. El Marañón Brasileño entero tostado W1 320 sin sal y la Almendra aportan Magnesio, un mineral crucial para la absorción del calcio. La Uva pasa Mexicana flame mediana (Sin azúcar añadida) contiene Boro, un mineral traza que juega un papel importante en la prevención de la osteoporosis.', ingredients: ['30% Higo Turco seco (Sin azúcar añadida)', '40% Almendra Americana NPX natural', '20% Marañón Brasileño entero tostado W1 320 sin sal', '10% Uva pasa Mexicana flame mediana (Sin azúcar añadida)'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Higo Turco seco (Sin azúcar añadida)', percentage: 30 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 20 }, { name: 'Uva pasa Mexicana flame mediana (Sin azúcar añadida)', percentage: 10 }], gramsToAdd: 0 },
-                        { id: 9, name: 'Mix Zen', subtitle: 'Efecto Antiinflamatorio', description: 'Ayuda a tu cuerpo a combatir la inflamación crónica de forma natural. La Nuez del Nogal Americana natural es la fuente principal de ácidos grasos Omega-3 antiinflamatorios. La Nuez Pecan Americana natural y la Almendra contienen antioxidantes y grasas saludables que también ayudan a reducir los marcadores inflamatorios. La Baya de Goji añade su potente polisacárido antiinflamantorio para un efecto sinérgico.', ingredients: ['40% Nuez del Nogal Americana natural', '20% Nuez Pecan Americana natural', '30% Almendra Americana NPX natural', '10% Baya Tibetana de Goji'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Almendra Americana NPX natural', percentage: 30 }, { name: 'Nuez Pecan Americana natural', percentage: 20 }, { name: 'Baya Tibetana de Goji', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 8, name: 'Mix Huesos de Acero', subtitle: 'Salud Ósea', description: 'Fortalece tu estructura ósea desde adentro. El Higo Turco y la Almendra son excelentes fuentes vegetales de Calcio. El Marañón Brasileño entero tostado W1 320 sin sal y la Almendra aportan Magnesio, un mineral crucial para la absorción del calcio. La Uva pasa Mexicana flame mediana (Sin azúcar añadida) contiene Boro, un mineral traza que juega un papel importante en la prevención de la osteoporosis.', ingredients: ['40% Almendra Americana NPX natural', '30% Higo Turco seco (Sin azúcar añadida)', '20% Marañón Brasileño entero tostado W1 320 sin sal', '10% Uva pasa Mexicana flame mediana (Sin azúcar añadida)'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Higo Turco seco (Sin azúcar añadida)', percentage: 30 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 20 }, { name: 'Uva pasa Mexicana flame mediana (Sin azúcar añadida)', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 9, name: 'Mix Zen', subtitle: 'Efecto Antiinflamatorio', description: 'Ayuda a tu cuerpo a combatir la inflamación crónica de forma natural. La Nuez del Nogal Americana natural es la fuente principal de ácidos grasos Omega-3 antiinflamatorios. La Nuez Pecan Americana natural y la Almendra contienen antioxidantes y grasas saludables que también ayudan a reducir los marcadores inflamatorios. La Baya de Goji añade su potente polisacárido antiinflamantorio para un efecto sinérgico.', ingredients: ['40% Nuez del Nogal Americana natural', '30% Almendra Americana NPX natural', '20% Nuez Pecan Americana natural', '10% Baya Tibetana de Goji'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Almendra Americana NPX natural', percentage: 30 }, { name: 'Nuez Pecan Americana natural', percentage: 20 }, { name: 'Baya Tibetana de Goji', percentage: 10 }], gramsToAdd: 0 },
                         { id: 10, name: 'Mix Alma Feliz', subtitle: 'Mejora del Estado de Ánimo', description: 'Un impulso para tu bienestar emocional. La Nuez del Nogal Americana natural contiene triptófano, un precursor de la serotonina (la "hormona de la felicidad"). El Marañón es rico en magnesio, conocido como el "mineral antiestrés". El Dátil provee energía rápida para combatir la fatiga, y el Pistacho contienen Vitamina B6, necesaria para la producción de neurotransmisores del bienestar.', ingredients: ['35% Nuez del Nogal Americana natural', '35% Marañón Brasileño entero tostado W1 320 sin sal', '20% Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', '10% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)'], proportions: [{ name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 35 }, { name: 'Nuez del Nogal Americana natural', percentage: 35 }, { name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', percentage: 20 }, { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 10 }], gramsToAdd: 0 },
-                        { id: 11, name: 'Mix Inmunidad Total', subtitle: 'Aumento de Defensas', description: 'Refuerza tu sistema inmune para protegerte de enfermedades. Una sola Nuez del Brasil natural partida aporta todo el selenio que necesitas, un mineral vital para la función inmunológica. La Nuez Pecan Americana natural y el Marañón son ricos en zinc, esencial para el desarrollo y función de las células inmunitarias. La Almendra proveen Vitamina E, un antioxidante que protege las membranas de estas células. La Baya de Goji potencia la mezcla con vitamina C y polisacárido que estimulan la respuesta inmunitaria.', ingredients: ['10% Nuez del Brasil natural partida','20% Baya Tibetana de Goji', '10% Nuez Pecan Americana natural', '30% Marañón Brasileño entero tostado W1 320 sin sal', '30% Almendra Americana NPX natural'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 30 },{ name: 'Baya Tibetana de Goji', percentage: 20 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 30 }, { name: 'Nuez Pecan Americana natural', percentage: 10 }, { name: 'Nuez del Brasil natural partida', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 11, name: 'Mix Inmunidad Total', subtitle: 'Aumento de Defensas', description: 'Refuerza tu sistema inmune para protegerte de enfermedades. Una sola Nuez del Brasil natural partida aporta todo el selenio que necesitas, un mineral vital para la función inmunológica. La Nuez Pecan Americana natural y el Marañón son ricos en zinc, esencial para el desarrollo y función de las células inmunitarias. La Almendra proveen Vitamina E, un antioxidante que protege las membranas de estas células. La Baya de Goji potencia la mezcla con vitamina C y polisacárido que estimulan la respuesta inmunitaria.', ingredients: ['30% Almendra Americana NPX natural','30% Marañón Brasileño entero tostado W1 320 sin sal', '20% Baya Tibetana de Goji', '10% Nuez Pecan Americana natural', '10% Nuez del Brasil natural partida'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 30 },{ name: 'Baya Tibetana de Goji', percentage: 20 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 30 }, { name: 'Nuez Pecan Americana natural', percentage: 10 }, { name: 'Nuez del Brasil natural partida', percentage: 10 }], gramsToAdd: 0 },
                         { id: 12, name: 'Mix Flujo Ligero', subtitle: 'Combate el Estreñimiento', description: 'La solución natural para la regularidad. Esta mezcla es una bomba de fibra. El Higo, el Dátil y el Albaricoque son famosos por su capacidad para ablandar las heces y estimular el tránsito intestinal. La Nuez Pecan Americana natural añaden un extra de fibra y grasas saludables, lubricando el sistema digestivo.', ingredients: ['35% Higo Turco seco (Sin azúcar añadida)', '30% Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', '20% Albaricoque Turco seco (Sin azúcar añadida)', '15% Nuez Pecan Americana natural'], proportions: [{ name: 'Higo Turco seco (Sin azúcar añadida)', percentage: 35 }, { name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', percentage: 30 }, { name: 'Albaricoque Turco seco (Sin azúcar añadida)', percentage: 20 }, { name: 'Nuez Pecan Americana natural', percentage: 15 }], gramsToAdd: 0 },
-                        { id: 13, name: 'Mix Eterna Juventud', subtitle: 'Propiedades Anti-envejecimiento', description: 'Protege tus células desde adentro hacia afuera. La Baya de Goji y sus antioxidantes unicos lideran la defensa contra el envejecimiento, la Nuez de Nogal y la Nuez Pecan Americana natural combaten el estrés oxidativo, una de las principales causas del envejecimiento celular. La Vitamina E de la Avellana es clave para mantener una piel elástica y saludable.', ingredients: ['25% Baya Tibetana de Goji', '40% Nuez del Nogal Americana natural', '15% Avellana Turca natural con piel', '20% Nuez Pecan Americana natural'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Baya Tibetana de Goji', percentage: 25 }, { name: 'Nuez Pecan Americana natural', percentage: 20 }, { name: 'Avellana Turca natural con piel', percentage: 15 }], gramsToAdd: 0 },
-                        { id: 14, name: 'Mix Sangre de Hierro', subtitle: 'Combate la Anemia', description: 'Un apoyo natural para aumentar tus niveles de hemoglobina. El Albaricoque y la Baya de Goji son excelentes fuentes vegetales de hierro. El Marañón es rico en cobre, un mineral indispensable para que el cuerpo pueda absorber y utilizar el hierro de manera eficiente. El Pistacho también complementa el aporte de hierro.', ingredients: ['35% Albaricoque Turco seco (Sin azúcar añadida)', '20% Baya Tibetana de Goji', '35% Marañón Brasileño entero tostado W1 320 sin sal', '10% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)'], proportions: [{ name: 'Albaricoque Turco seco (Sin azúcar añadida)', percentage: 35 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 35 }, { name: 'Baya Tibetana de Goji', percentage: 20 }, { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 10 }], gramsToAdd: 0 },
-                        { id: 15, name: 'Mix Calma Natural', subtitle: 'Combate Ansiedad y Depresión', description: 'Un refugio de tranquilidad en cada bocado. La Nuez del Nogal Americana natural, es rica en Omega-3, ha demostrado mejorar los síntomas de la depresión. El Marañón y la Almendra son dos de las mejores fuentes de magnesio, un mineral que relaja el sistema nervioso y ayuda a reducir la ansiedad y el estrés.', ingredients: ['40% Nuez del Nogal Americana natural', '25% Marañón Brasileño entero tostado W1 320 sin sal', '35% Almendra Americana NPX natural'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Almendra Americana NPX natural', percentage: 35 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 25 }], gramsToAdd: 0 },
+                        { id: 13, name: 'Mix Eterna Juventud', subtitle: 'Propiedades Anti-envejecimiento', description: 'Protege tus células desde adentro hacia afuera. La Baya de Goji y sus antioxidantes unicos lideran la defensa contra el envejecimiento, la Nuez de Nogal y la Nuez Pecan Americana natural combaten el estrés oxidativo, una de las principales causas del envejecimiento celular. La Vitamina E de la Avellana es clave para mantener una piel elástica y saludable.', ingredients: ['40% Nuez del Nogal Americana natural', '25% Baya Tibetana de Goji', '20% Nuez Pecan Americana natural', '15% Avellana Turca natural con piel'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Baya Tibetana de Goji', percentage: 25 }, { name: 'Nuez Pecan Americana natural', percentage: 20 }, { name: 'Avellana Turca natural con piel', percentage: 15 }], gramsToAdd: 0 },
+                        { id: 14, name: 'Mix Sangre de Hierro', subtitle: 'Combate la Anemia', description: 'Un apoyo natural para aumentar tus niveles de hemoglobina. El Albaricoque y la Baya de Goji son excelentes fuentes vegetales de hierro. El Marañón es rico en cobre, un mineral indispensable para que el cuerpo pueda absorber y utilizar el hierro de manera eficiente. El Pistacho también complementa el aporte de hierro.', ingredients: ['35% Albaricoque Turco seco (Sin azúcar añadida)', '35% Marañón Brasileño entero tostado W1 320 sin sal', '20% Baya Tibetana de Goji', '10% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)'], proportions: [{ name: 'Albaricoque Turco seco (Sin azúcar añadida)', percentage: 35 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 35 }, { name: 'Baya Tibetana de Goji', percentage: 20 }, { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 15, name: 'Mix Calma Natural', subtitle: 'Combate Ansiedad y Depresión', description: 'Un refugio de tranquilidad en cada bocado. La Nuez del Nogal Americana natural, es rica en Omega-3, ha demostrado mejorar los síntomas de la depresión. El Marañón y la Almendra son dos de las mejores fuentes de magnesio, un mineral que relaja el sistema nervioso y ayuda a reducir la ansiedad y el estrés.', ingredients: ['40% Nuez del Nogal Americana natural', '35% Almendra Americana NPX natural', '25% Marañón Brasileño entero tostado W1 320 sin sal'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 40 }, { name: 'Almendra Americana NPX natural', percentage: 35 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 25 }], gramsToAdd: 0 },
                         { id: 16, name: 'Mix Descanso y Claridad', subtitle: 'Mejora Memoria y Sueño', description: 'Para un cerebro enfocado de día y un descanso reparador de noche. La Nuez del Nogal Americana natural y el Arándano mejoran la función cognitiva y la memoria. Por otro lado, la Almendra y el Pistacho son fuentes naturales de melatonina, la hormona que regula el ciclo del sueño, ayudándote a conciliarlo y mejorar su calidad.', ingredients: ['35% Nuez del Nogal Americana natural', '35% Almendra Americana NPX natural', '15% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', '15% Arándano deshidratado Americano Ocean Spray (Con azúcar añadida)'], proportions: [{ name: 'Nuez del Nogal Americana natural', percentage: 35 }, { name: 'Almendra Americana NPX natural', percentage: 35 }, { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 15 }, { name: 'Arándano deshidratado Americano Ocean Spray (Con azúcar añadida)', percentage: 15 }], gramsToAdd: 0 },
-                        { id: 17, name: 'Mix Equilibrio Vital', subtitle: 'Control Diabetes y Tensión Arterial', description: 'Ideal para mantener a raya los niveles de azúcar y presión arterial. Esta mezcla tiene un bajo índice glucémico. La Almendra ayuda a regular el azúcar en sangre después de las comidas. La Nuez del Nogal Americana natural mejoran la sensibilidad a la insulina. El Marañón con su magnesio, potencia el control de la glucosa y la relajación de las arterias. El Maní Brasileño tostado sin sal bola entera y mitades  aporta proteína y fibra con un bajo índice glucémico.', ingredients: ['40% Almendra Americana NPX natural', '30% Nuez del Nogal Americana natural', '10% Marañón Brasileño entero tostado W1 320 sin sal', '20% Maní Brasileño tostado sin sal bola entera y mitades '], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Nuez del Nogal Americana natural', percentage: 30 }, { name: 'Maní Brasileño tostado sin sal bola entera y mitades', percentage: 20 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 10 }], gramsToAdd: 0 },
+                        { id: 17, name: 'Mix Equilibrio Vital', subtitle: 'Control Diabetes y Tensión Arterial', description: 'Ideal para mantener a raya los niveles de azúcar y presión arterial. Esta mezcla tiene un bajo índice glucémico. La Almendra ayuda a regular el azúcar en sangre después de las comidas. La Nuez del Nogal Americana natural mejoran la sensibilidad a la insulina. El Marañón con su magnesio, potencia el control de la glucosa y la relajación de las arterias. El Maní Brasileño tostado sin sal bola entera y mitades  aporta proteína y fibra con un bajo índice glucémico.', ingredients: ['40% Almendra Americana NPX natural', '30% Nuez del Nogal Americana natural', '20% Maní Brasileño tostado sin sal bola entera y mitades ', '10% Marañón Brasileño entero tostado W1 320 sin sal'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Nuez del Nogal Americana natural', percentage: 30 }, { name: 'Maní Brasileño tostado sin sal bola entera y mitades', percentage: 20 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 10 }], gramsToAdd: 0 },
                         { id: 18, name: 'Mix Energía Sostenida', subtitle: 'Para el día a día', description: 'Combatir el cansancio de la tarde y proporcionar un flujo de energía constante, sin los picos y caídas del azúcar refinado. La Almendra gracias a su combinación de proteína, fibra y grasas saludables asegura una liberación de energía lenta y sostenida. El Dátil Sayer iraní sin semilla (Sin Azúcar añadida) aporta carbohidratos naturales de rápida absorción para un impulso de energía inmediato, pero sin ser procesados. La Macadamia Nicaragüense natural es densa en calorías de grasas saludables, lo que las convierte en una fuente de energía de muy larga duración. El Marañón tostado es rico en magnesio, que es crucial para convertir los alimentos en energía a nivel celular.', ingredients: ['40% Almendra Americana NPX natural', '30% Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', '20% Macadamia Nicaragüense natural', '10% Marañón Brasileño entero tostado W1 320 sin sal'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', percentage: 30 }, { name: 'Macadamia Nicaragüense natural', percentage: 20 }, { name: 'Marañón Brasileño entero tostado W1 320 sin sal', percentage: 10 }], gramsToAdd: 0 },
                         { id: 19, name: 'Mix Piel Radiante', subtitle: 'Belleza desde Adentro', description: 'Nutrir la piel para mejorar su elasticidad, hidratación y protegerla del daño ambiental. La Almendra Americana NPX natural es una de las mejores fuentes de Vitamina E, un poderoso antioxidante que protege las células de la piel del daño solar y el envejecimiento. La Avellana Aporta más Vitamina E y antioxidantes concentrados en su piel, que combaten la inflamación cutánea. La Baya de Goji es rica en Vitamina A (betacaroteno), esencial para la reparación de los tejidos de la piel y para mantenerla suave. La Nuez de Nogal su Omega-3 fortalece las membranas celulares de la piel, ayudando a mantenerla hidratada y flexible.', ingredients: ['40% Almendra Americana NPX natural', '25% Avellana Turca natural con piel', '20% Baya Tibetana de Goji', '15% Nuez del Nogal Americana natural'], proportions: [{ name: 'Almendra Americana NPX natural', percentage: 40 }, { name: 'Avellana Turca natural con piel', percentage: 25 }, { name: 'Baya Tibetana de Goji', percentage: 20 }, { name: 'Nuez del Nogal Americana natural', percentage: 15 }], gramsToAdd: 0 },
                         { id: 20, name: 'Mix Impulso Pre-Entreno', subtitle: 'Energía para el Ejercicio', description: 'Ofrecer el combustible rápido y eficiente que el cuerpo necesita antes de una sesión de ejercicio, mejorando el rendimiento y la resistencia. El Dátil es la fuente perfecta de carbohidratos de digestión rápida para tener energía disponible al instante. El Maní Brasileño tostado sin sal bola entera y mitades  aporta proteína y un poco de grasa para dar sostenimiento al pico de energía inicial. La Uva pasa Mexicana flame mediana (Sin azúcar añadida) Complementa a los Dátiles con más azúcares naturales para un combustible inmediato. La Almendra laminada añade una textura ligera y fácil de digerir antes del esfuerzo físico.', ingredients: ['40% Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', '30% Maní Brasileño tostado sin sal bola entera y mitades ', '20% Uva pasa Mexicana flame mediana (Sin azúcar añadida)', '10% Almendra Americana NPX laminada natural sin cutícula'], proportions: [{ name: 'Dátil Sayer iraní sin semilla (Sin Azúcar añadida)', percentage: 40 }, { name: 'Maní Brasileño tostado sin sal bola entera y mitades', percentage: 30 }, { name: 'Uva pasa Mexicana flame mediana (Sin azúcar añadida)', percentage: 20 }, { name: 'Almendra Americana NPX laminada natural sin cutícula', percentage: 10 }], gramsToAdd: 0 },
@@ -592,16 +802,20 @@
                 changeMode(newMode) {
                     this.selectedNut = null;
                     this.mode = newMode;
+                    if (newMode === 'quantity') {
+                        this.activeSubTab = 0;
+                    } else if (newMode === 'percentage') {
+                        this.activeSubTab = 1;
+                    }
                 },
                 viewProduct(nut) {
-                    this.previousMode = this.mode;
                     this.selectedNut = nut;
                     this.mode = 'productDetail';
-                    this.productDropdownOpen = false;
                 },
                 backToBuilder() {
-                    this.mode = this.previousMode;
+                    this.mode = 'quantity';
                     this.selectedNut = null;
+                    this.activeTab = 1; // Go back to Productos tab
                 },
                 removeFromCart(index) { this.cart.splice(index, 1); if (this.cart.length === 0) { this.showOrderSection = false; } },
 
@@ -616,7 +830,7 @@
                     const total = subtotal + deliveryCostRaw - discount;
                     return { subtotal, deliveryCostRaw, discount, total };
                 },
-                
+
                 get isOrderButtonEnabled() {
                     if (this.cart.length === 0) return false;
                     if (!this.contactInfo.name || !this.contactInfo.phone || this.contactInfo.phone.length !== 10) return false;
@@ -645,8 +859,8 @@
                         orderSummary += `\n`;
                     });
                     orderSummary += `**Resumen de Costos:**\nSubtotal: ${this.formatCurrency(this.finalSummary.subtotal)}\n`;
-                    
-                    if(this.delivery.mode === 'domicilio') {
+
+                    if (this.delivery.mode === 'domicilio') {
                         orderSummary += `Método: Domicilio\nDirección: ${this.delivery.address}, ${this.delivery.locality}, Bogotá\nCosto Domicilio: ${this.formatCurrency(this.finalSummary.deliveryCostRaw)}\n`;
                         if (this.finalSummary.discount > 0) orderSummary += `Descuento Domicilio: -${this.formatCurrency(this.finalSummary.discount)}\n`;
                     } else {
@@ -679,7 +893,7 @@
                         this.formStatus = 'Confirmar Pedido';
                     }
                 },
-                
+
                 showConfirmation(summary) {
                     this.confirmationDetails.title = '¡Tu solicitud ha sido recibida con éxito!';
                     let messageBody = '';
@@ -711,7 +925,7 @@
                 closeConfirmationModal() {
                     this.showConfirmationModal = false;
                 },
-                
+
                 formatCurrency(value) { return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(value); },
                 calculateNutPercentage(grams) {
                     const totalGrams = this.nuts.reduce((acc, nut) => acc + (Number(nut.grams) || 0), 0);
@@ -722,4 +936,5 @@
         }
     </script>
 </body>
+
 </html>
