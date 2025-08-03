@@ -94,7 +94,7 @@
         </header>
 
         <!-- Pestañas de Modo -->
-        <div class="mb-8">
+        <div id="selection-tabs" class="mb-8">
             <!-- Main Tabs -->
             <div class="relative mb-8 flex justify-center border border-slate-300 rounded-lg p-1 bg-slate-200 w-full sm:w-auto mx-auto">
                 <ul class="-mb-px flex items-center gap-4 text-sm sm:text-base font-medium">
@@ -507,7 +507,7 @@
                     </div>
                 </template>
                 <div x-show="cart.length > 0" class="flex justify-end items-center gap-4 mt-4">
-                    <button @click="scrollToElement('#builder')" type="button"
+                    <button @click="scrollToElement('#selection-tabs')" type="button"
                         class="font-bold py-2 px-4 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700">Continuar
                         Seleccionando</button>
                     <button @click="scrollToElement('#order-section')" type="button"
@@ -1126,7 +1126,7 @@
 
                     if (this.delivery.mode === 'recoger') {
                         messageBody = `<p>¡Tu creación está en marcha! Ya estamos seleccionando los ingredientes más frescos para tu mezcla. En breve, uno de nuestros expertos te contactará para confirmar los detalles del pago y avisarte en cuanto puedas pasar a recogerla. ¡Gracias por elegirnos!</p>`;
-                    } else {
+                    } else { // 'domicilio'
                         messageBody = `<p>¡Gracias por elegirnos! Estamos seleccionando los frutos para tu mezcla. En breve, uno de nuestros expertos te contactará para coordinar el metodo de pago y programar la entrega en tu dirección.<br><br>Agradecemos tu confianza.</p>`;
                     }
                     
@@ -1149,7 +1149,7 @@
                     `;
 
                     this.confirmationDetails.message = messageBody + imageHtml + additionalContent;
-                    this.confirmationDetails.summary = summary;
+                    this.confirmationDetails.summary = summary; // Esta línea asegura que el resumen se muestre en el modal
                     this.showConfirmationModal = true;
                 },
 
