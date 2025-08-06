@@ -1130,33 +1130,22 @@
                         messageBody = `<p>¡Gracias por elegirnos! Estamos seleccionando los frutos para tu mezcla. En breve, uno de nuestros expertos te contactará para coordinar el metodo de pago y programar la entrega en tu dirección.<br><br>Agradecemos tu confianza.</p>`;
                     }
                     
-// --- INICIO DE LA MODIFICACIÓN IMPORTANTE ---
+// --- INICIO DE LA MODIFICACIÓN ---
 
-    // URL para que el cliente se envíe la confirmación a sí mismo
-    const customerName = this.contactInfo.name.split(' ')[0];
-    const fullPhoneNumber = '57' + this.contactInfo.phone;
-    const whatsappMessage = `¡Hola ${customerName}! Gracias por tu compra en Nut&Mix. Aquí tienes un resumen de tu pedido:\n\n${summary}`;
-    const selfWhatsappUrl = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+// Prepara el enlace para que el cliente se envíe la confirmación a su propio WhatsApp
+const customerName = this.contactInfo.name.split(' ')[0];
+const fullPhoneNumber = '57' + this.contactInfo.phone;
+const whatsappMessage = `¡Hola ${customerName}! Gracias por tu compra en Nut&Mix. Aquí tienes un resumen de tu pedido:\n\n${summary}`;
+const selfWhatsappUrl = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
-                    // URL para contactar a la tienda (como antes)
-    const storeWhatsappUrl = `https://wa.me/573102416762?text=${encodeURIComponent('Hola, tengo una pregunta sobre mi pedido.')}`;
-
-    const additionalContent = `
-        <div class='mt-6 text-center space-y-4'>
-            <div>
-                <p class='text-slate-600 font-bold'>¿Deseas una copia de tu pedido en tu WhatsApp?</p>
-                <a href="${selfWhatsappUrl}" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">
-                    Enviarme la Confirmación
-                </a>
-            </div>
-            <div class='border-t pt-4'>
-                <p class='text-slate-600'>¿Tienes prisa o alguna duda?<br>Habla directamente con nosotros.</p>
-                <a href="${storeWhatsappUrl}" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">
-                    Contactar a la Tienda
-                </a>
-            </div>
-        </div>
-    `;
+const additionalContent = `
+    <div class='mt-6 text-center border-t pt-4'>
+        <p class='text-xl text-slate-800 font-bold mb-4'>¿Deseas recibir una copia de tu pedido en WhatsApp?</p>
+        <a href="${selfWhatsappUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg shadow-md transition-transform transform hover:scale-105">
+            Enviarme la Confirmación
+        </a>
+    </div>
+`;
 
                     this.confirmationDetails.message = messageBody + imageHtml + additionalContent;
                     this.confirmationDetails.summary = summary; // Esta línea asegura que el resumen se muestre en el modal
