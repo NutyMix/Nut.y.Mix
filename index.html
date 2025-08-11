@@ -1599,52 +1599,42 @@ showConfirmation(summaryForModal, summaryForWhatsapp) {
     let messageBody = '';
     const imageHtml = `<div class='flex justify-center mt-4'><img src='https://i.ibb.co/jkmzGCDZ/Airbrush-Image-Enhancer-1752901262222.jpg' alt='Logo de Agradecimiento' class='h-32 w-auto' /></div>`;
 
-    // --- INICIO DE LA MODIFICACIÓN ---
-
-    // 1. Obtener la hora actual del día (en formato de 24 horas)
     const currentHour = new Date().getHours();
-    
-    // 2. Definir la parte del mensaje que cambia según el horario
     let contactMessagePart = '';
-    if (currentHour >= 8 && currentHour < 19) { // Horario hábil: entre 8:00 a.m. (incluida) y 7:00 p.m. (excluida)
+    if (currentHour >= 8 && currentHour < 19) {
         contactMessagePart = 'En breve, uno de nuestros expertos te contactará';
     } else {
         contactMessagePart = 'En nuestro horario hábil (8:00 a.m. a 7:00 p.m.), uno de nuestros expertos te contactará';
     }
 
-    // 3. Construir el mensaje final dependiendo del método de entrega
     if (this.delivery.mode === 'recoger') {
         messageBody = `<p>¡Tu creación está en marcha! Estamos seleccionando los ingredientes más frescos para tu mezcla. ${contactMessagePart} para confirmar los detalles del pago y avisarte en cuanto puedas pasar a recogerla. ¡Gracias por elegirnos!</p>`;
     } else { 
         messageBody = `<p>¡Gracias por elegirnos! Estamos seleccionando los frutos para tu mezcla. ${contactMessagePart} para coordinar el metodo de pago y programar la entrega en tu dirección.<br><br>Agradecemos tu confianza.</p>`;
     }
     
-    // --- FIN DE LA MODIFICACIÓN ---
+    // --- INICIO DE LA MODIFICACIÓN FUNCIONAL ---
 
-    // El resto del código de esta función permanece igual
-    const customerName = this.contactInfo.name.split(' ')[0];
-    const fullPhoneNumber = '57' + this.contactInfo.phone;
-    const whatsappMessage = `¡Hola ${customerName}! Gracias por tu compra en Nut&Mix. Aquí tienes un resumen de tu pedido:\n\n${summaryForWhatsapp}`;
-    const whatsappUrl = `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+    // 1. Define el número de WhatsApp de TU NEGOCIO.
+    // ¡IMPORTANTE! Reemplaza este número por el tuyo.
+    const businessPhoneNumber = '573123526839'; 
 
-    const additionalContent = `
-        <div class='mt-6 text-center border-t pt-6'>
-            <p class='text-slate-700 font-semibold mb-3'>Haz clic en el botón para enviarte una copia de tu pedido a tu WhatsApp.</p>
-            <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" 
-               class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                </svg>
-                <span>Enviar a mi WhatsApp</span>
-            </a>
-        </div>
-    `;
+    // 2. Prepara el mensaje completo DEL PEDIDO para enviarlo a tu WhatsApp.
+    const orderMessageForBusiness = `Nuevo Pedido Recibido:\n\n${summaryForWhatsapp}`;
+
+    // 3. Construye el enlace universal `wa.me` que funciona en todos los dispositivos.
+    const whatsappUrl = `https://wa.me/${businessPhoneNumber}?text=${encodeURIComponent(orderMessageForBusiness)}`;
+
+    // 4. Abre WhatsApp automáticamente para enviar el pedido a TU NÚMERO.
+    window.open(whatsappUrl, '_blank');
     
-    this.confirmationDetails.message = messageBody + imageHtml + additionalContent;
+    // --- FIN DE LA MODIFICACIÓN FUNCIONAL ---
+
+    // Muestra el modal de confirmación en tu página para el cliente.
+    this.confirmationDetails.message = messageBody + imageHtml;
     this.confirmationDetails.summary = summaryForModal;
     this.showConfirmationModal = true;
-},
-   
+}, 
                 closeConfirmationModal() {
                     this.showConfirmationModal = false;
                 },
