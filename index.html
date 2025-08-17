@@ -35,35 +35,8 @@
             transition: max-height 0.5s ease-in-out;
         }
 
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 4px solid #4A5D23; /* Color primario actualizado */
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
         html {
             scroll-behavior: smooth;
-        }
-
-        /* For smooth scrolling */
-
-        /* Estilos para el tooltip de ayuda en la sección de porcentajes */
-        .group:hover .group-hover\:opacity-100,
-        .group:focus-within .group-hover\:opacity-100 {
-            opacity: 1;
         }
     </style>
 </head>
@@ -198,7 +171,15 @@
                         <div class="mb-6">
                             <label for="totalGrams" class="block text-sm font-medium text-slate-700 text-center mb-2">Ingresa la cantidad total de tu Mezcla (Gramos)</label>
                             <div class="relative max-w-xs mx-auto">
-                                <input id="totalGrams" type="number" min="0" x-model.number="totalGramsForPercentage" autocomplete="off" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-[#4A5D23] focus:ring-[#4A5D23] transition-colors">
+                                <!-- INICIO: CAMBIO - BLINDAJE DE INPUT -->
+                                <input id="totalGrams" 
+                                       type="text" 
+                                       inputmode="numeric" 
+                                       pattern="[0-9]*"
+                                       x-model.number="totalGramsForPercentage" 
+                                       autocomplete="off" 
+                                       class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-[#4A5D23] focus:ring-[#4A5D23] transition-colors">
+                                <!-- FIN: CAMBIO - BLINDAJE DE INPUT -->
                             </div>
                         </div>
 
@@ -249,9 +230,15 @@
                                         <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-gray-700 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
                                               x-text="percentageTooltipMessage">
                                         </span>
-                                        <input type="number" min="0" max="100" x-model.number.debounce="nut.percentage" autocomplete="off" 
+                                        <!-- INICIO: CAMBIO - BLINDAJE DE INPUT -->
+                                        <input type="text" 
+                                               inputmode="numeric" 
+                                               pattern="[0-9]*"
+                                               min="0" max="100" x-model.number.debounce="nut.percentage" 
+                                               autocomplete="off" 
                                                :disabled="nut.name === 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Con cáscara)'"
                                                class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-[#4A5D23] focus:ring-[#4A5D23] pr-8 disabled:bg-slate-200 disabled:cursor-not-allowed">
+                                        <!-- FIN: CAMBIO - BLINDAJE DE INPUT -->
                                         <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">%</span>
                                     </div>
                                 </div>
@@ -297,7 +284,7 @@
                                         <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">gr</span>
                                     </div>
                                     <div class="text-center">
-                                        <!-- === INICIO: CÓDIGO MODIFICADO === -->
+                                        <!-- CORRECCIÓN: Llamada a nueva función `handleIndividualAddToCart` -->
                                         <button @click="handleIndividualAddToCart(nut)"
                                                 class="w-full font-bold py-2 px-4 rounded-lg transition-all text-white"
                                                 :class="{
@@ -313,7 +300,6 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
                                             </span>
                                         </button>
-                                        <!-- === FIN: CÓDIGO MODIFICADO === -->
                                     </div>
                                 </div>
                             </template>
@@ -338,7 +324,7 @@
                                 <div class="flex justify-between text-xl"><span class="font-bold">Costo Mezcla:</span><span class="font-bold text-slate-800" x-text="formatCurrency(currentMix.cost)"></span></div>
                             </div>
                             <div class="mt-6">
-                                <!-- === INICIO: CÓDIGO MODIFICADO === -->
+                                <!-- CORRECCIÓN: Llamada a nueva función `handleAddToCart` -->
                                 <button @click="handleAddToCart()" class="w-full font-bold py-3 px-4 rounded-lg transition-all"
                                         :class="{'bg-[#4A5D23] hover:bg-[#3b4a1c] text-white shadow-lg': !justAdded, 'bg-slate-500 text-white': justAdded}">
                                     <span x-show="!justAdded">Añadir Compra</span>
@@ -347,14 +333,13 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
                                     </span>
                                 </button>
-                                <!-- === FIN: CÓDIGO MODIFICADO === -->
                                 <p class="text-center text-sm text-slate-500 mt-2">Puedes añadir las mezclas que desees.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Productos Tab -->
+<!-- Productos Tab -->
                 <div :class="{ '!block': activeTab === 1 }" x-show.transition.in.opacity.duration.600="activeTab === 1" class="hidden">
                     <div class="mb-6">
                         <h2 class="text-3xl font-elegant font-bold text-slate-900 text-center mb-4">Nuestros Productos</h2>
