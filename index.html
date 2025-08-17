@@ -124,7 +124,7 @@
                             <p><strong>750 g o más</strong> → <span class="font-semibold">5 % de descuento</span></p>
                         </div>
                         <div class="mb-6 px-2">
-                            <input type="text" x-model.debounce.300ms="mixSearchQuery" placeholder="Buscar fruto por nombre..." class="w-full p-3 border-2 border-slate-300 rounded-lg shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23] transition">
+                            <input type="text" x-model.debounce.300ms="mixSearchQuery" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" placeholder="Buscar fruto por nombre..." class="w-full p-3 border-2 border-slate-300 rounded-lg shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23] transition">
                         </div>
                         <div class="grid grid-cols-1 divide-y divide-slate-200">
                             <div class="grid grid-cols-[3fr,2fr] gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2">
@@ -152,7 +152,7 @@
                                         <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-xs bg-gray-700 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
                                               x-text="'Total gramos Mix: ' + currentMix.totalGrams.toFixed(0) + 'g'">
                                         </span>
-                                        <input type="number" min="0" x-model.number.debounce="nut.grams" 
+                                        <input type="number" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false"  min="0" x-model.number.debounce="nut.grams" 
                                                :disabled="nut.name === 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Con cáscara)'"
                                                class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-[#4A5D23] focus:ring-[#4A5D23] pr-8 disabled:bg-slate-200 disabled:cursor-not-allowed">
                                         <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">gr</span>
@@ -178,12 +178,14 @@
                                        pattern="[0-9]*"
                                        x-model.number="totalGramsForPercentage" 
                                        autocomplete="off" 
+@focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" <!-- AÑADIR ESTO -->
                                        class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-[#4A5D23] focus:ring-[#4A5D23] transition-colors">
                                 <!-- FIN: CAMBIO - BLINDAJE DE INPUT -->
                             </div>
                         </div>
 
-                        <div x-show="activeSubTab === 1" x-transition class="sticky top-2 z-30 mb-4">
+                        <div x-show="activeSubTab === 1" x-transition
+                            :class="{ 'sticky top-2 z-30 mb-4': !isKeyboardVisible, 'relative mb-4': isKeyboardVisible }">
                             <div class="bg-white p-3 rounded-lg shadow-lg border border-slate-200 flex items-center justify-center gap-4">
                                 <div class="relative w-20 h-20">
                                     <svg class="w-full h-full" viewBox="0 0 36 36">
@@ -205,7 +207,7 @@
                         </div>
                         
                         <div class="mb-6 px-2">
-                            <input type="text" x-model.debounce.300ms="mixSearchQuery" placeholder="Buscar fruto por nombre..." class="w-full p-3 border-2 border-slate-300 rounded-lg shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23] transition">
+                            <input type="text" x-model.debounce.300ms="mixSearchQuery" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" placeholder="Buscar fruto por nombre..." class="w-full p-3 border-2 border-slate-300 rounded-lg shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23] transition">
                         </div>
                         <div class="relative grid grid-cols-1 divide-y divide-slate-200">
                             <div class="grid grid-cols-[3fr,2fr] gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>FRUTO (COSTO X GRAMO)</span><span class="text-center">PORCENTAJE</span></div>
@@ -236,6 +238,7 @@
                                                pattern="[0-9]*"
                                                min="0" max="100" x-model.number.debounce="nut.percentage" 
                                                autocomplete="off" 
+@focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" <!-- AÑADIR ESTO -->
                                                :disabled="nut.name === 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Con cáscara)'"
                                                class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-[#4A5D23] focus:ring-[#4A5D23] pr-8 disabled:bg-slate-200 disabled:cursor-not-allowed">
                                         <!-- FIN: CAMBIO - BLINDAJE DE INPUT -->
@@ -253,7 +256,7 @@
                             <p><strong>750g o más</strong> → <span class="font-semibold">5 % de descuento</span></p>
                         </div>
                         <div class="mb-6 px-2">
-                            <input type="text" x-model.debounce.300ms="mixSearchQuery" placeholder="Buscar fruto por nombre..." class="w-full p-3 border-2 border-slate-300 rounded-lg shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23] transition">
+                            <input type="text" x-model.debounce.300ms="mixSearchQuery" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" placeholder="Buscar fruto por nombre..." class="w-full p-3 border-2 border-slate-300 rounded-lg shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23] transition">
                         </div>
                         <div class="grid grid-cols-1 divide-y divide-slate-200">
                             <div class="grid grid-cols-[3fr,1.5fr,1.5fr] gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2">
@@ -277,7 +280,7 @@
                                         </div>
                                     </div>
                                     <div class="relative">
-                                        <input type="number" min="0" x-model.number="nut.grams"
+                                        <input type="number" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" min="0" x-model.number="nut.grams"
                                                @input="handleIndividualSelection(nut)"
                                                :disabled="selectedIndividualNutName && selectedIndividualNutName !== nut.name"
                                                class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-[#4A5D23] focus:ring-[#4A5D23] pr-8 disabled:bg-slate-200 disabled:cursor-not-allowed">
@@ -346,7 +349,7 @@
                         <p class="text-center text-slate-600 mb-8">Explora nuestra selección premium de frutos secos y frutas deshidratadas</p>
                     </div>
                     <div class="mb-8 px-4 sm:px-0">
-                        <input type="text" x-model.debounce.300ms="searchQuery" placeholder="Buscar fruto por nombre..." class="w-full p-3 border-2 border-slate-300 rounded-lg shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23] transition">
+                        <input type="text" x-model.debounce.300ms="searchQuery" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" placeholder="Buscar fruto por nombre..." class="w-full p-3 border-2 border-slate-300 rounded-lg shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23] transition">
                     </div>
                     <div class="flex justify-center flex-wrap gap-2 mb-8">
                         <button @click="productFilter = 'Todos'; searchQuery = ''" class="px-4 py-2 text-sm font-medium rounded-full transition-colors" :class="{'bg-[#4A5D23] text-white': productFilter === 'Todos', 'bg-slate-200 text-slate-700 hover:bg-slate-300': productFilter !== 'Todos'}">Todos</button>
@@ -400,7 +403,7 @@
                     <div class="flex justify-center"><img src="https://i.ibb.co/39vRJBFp/Whats-App-Image-2025-08-03-at-7-38-20-AM.jpg" alt="Empaque" class="rounded-lg shadow-md mb-8" width="412" height="286" >
                     </div>
                     <div class="mb-8 px-4 sm:px-0">
-                        <input type="text" x-model.debounce.300ms="vitalMixSearchQuery" placeholder="Buscar mix vital por nombre o beneficio..." class="w-full p-3 border-2 border-slate-300 rounded-lg shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23] transition">
+                        <input type="text" x-model.debounce.300ms="vitalMixSearchQuery" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" placeholder="Buscar mix vital por nombre o beneficio..." class="w-full p-3 border-2 border-slate-300 rounded-lg shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23] transition">
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -419,7 +422,7 @@
                                     </div>
                                     <div class="mt-4 pt-4 border-t border-slate-200 text-center">
                                         <div class="relative w-full max-w-xs mx-auto">
-                                            <input type="number" step="50" x-model.number="mix.gramsToAdd" placeholder="Gramos (mín. 100)"
+                                            <input type="number" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" step="50" x-model.number="mix.gramsToAdd" placeholder="Gramos (mín. 100)"
                                                 class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-[#4A5D23] focus:ring-[#4A5D23] pr-8">
                                             <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">gr</span>
                                         </div>
@@ -629,7 +632,7 @@
                                     </div>
                                     <div class="font-medium text-slate-800" x-text="ingredient.name"></div>
                                     <div class="relative">
-                                        <input type="number" min="0" max="100" x-model.number="ingredient.percentage" class="w-24 text-center border-2 border-slate-300 rounded-md p-1 pr-6">
+                                        <input type="number" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" min="0" max="100" x-model.number="ingredient.percentage" class="w-24 text-center border-2 border-slate-300 rounded-md p-1 pr-6">
                                         <span class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 select-none text-sm">%</span>
                                     </div>
                                     <button @click="removeCustomIngredient(index)" class="text-red-500 hover:text-red-700 p-1">
@@ -735,11 +738,11 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label for="contact-name" class="block font-medium">Nombre de Contacto <span class="text-red-500">*</span></label>
-                                    <input id="contact-name" type="text" x-model="contactInfo.name" required class="w-full border-slate-300 rounded-md shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23]">
+                                    <input id="contact-name" type="text" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" x-model="contactInfo.name" required class="w-full border-slate-300 rounded-md shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23]">
                                 </div>
                                 <div>
                                     <label for="contact-phone" class="block font-medium">Celular de Contacto <span class="text-red-500">*</span></label>
-                                    <input id="contact-phone" type="text" x-model="contactInfo.phone" @input="validatePhone()" maxlength="10" pattern="[0-9]*" inputmode="numeric" required class="w-full border-slate-300 rounded-md shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23]">
+                                    <input id="contact-phone" type="text" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" x-model="contactInfo.phone" @input="validatePhone()" maxlength="10" pattern="[0-9]*" inputmode="numeric" required class="w-full border-slate-300 rounded-md shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23]">
                                     <p x-show="contactInfo.phoneError" x-text="contactInfo.phoneError" class="text-red-500 text-sm mt-1" x-transition></p>
                                 </div>
                             </div>
@@ -823,20 +826,20 @@
                             <div>
                                 <label for="address-part1" class="block font-medium">Dirección <span class="text-red-500">*</span></label>
                                 <div class="mt-1 flex items-center gap-2">
-                                    <input id="address-part1" type="text" placeholder="Carrera 7" x-model="delivery.addressPart1" @input="updateFullAddress()" class="w-full border-slate-300 rounded-md shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23]">
+                                    <input id="address-part1" type="text" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" placeholder="Carrera 7" x-model="delivery.addressPart1" @input="updateFullAddress()" class="w-full border-slate-300 rounded-md shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23]">
                                     <span class="font-bold text-slate-500">#</span>
-                                    <input type="text" placeholder="72" x-model="delivery.addressPart2" @input="updateFullAddress()" class="w-1/4 border-slate-300 rounded-md shadow-sm text-center focus:border-[#4A5D23] focus:ring-[#4A5D23]">
+                                    <input type="text" placeholder="72" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" x-model="delivery.addressPart2" @input="updateFullAddress()" class="w-1/4 border-slate-300 rounded-md shadow-sm text-center focus:border-[#4A5D23] focus:ring-[#4A5D23]">
                                     <span class="font-bold text-slate-500">-</span>
-                                    <input type="text" placeholder="50" x-model="delivery.addressPart3" @input="updateFullAddress()" class="w-1/4 border-slate-300 rounded-md shadow-sm text-center focus:border-[#4A5D23] focus:ring-[#4A5D23]">
+                                    <input type="text" placeholder="50" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" x-model="delivery.addressPart3" @input="updateFullAddress()" class="w-1/4 border-slate-300 rounded-md shadow-sm text-center focus:border-[#4A5D23] focus:ring-[#4A5D23]">
                                 </div>
                                 <div class="mt-2 grid grid-cols-2 gap-4">
                                     <div>
                                         <label for="address-interior" class="block text-sm font-medium">Interior</label>
-                                        <input id="address-interior" type="text" placeholder="Ej: 3" x-model="delivery.interior" @input="updateFullAddress()" class="w-full border-slate-300 rounded-md shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23]">
+                                        <input id="address-interior" type="text" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" placeholder="Ej: 3" x-model="delivery.interior" @input="updateFullAddress()" class="w-full border-slate-300 rounded-md shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23]">
                                     </div>
                                     <div>
                                         <label for="address-apartment" class="block text-sm font-medium">Apartamento / Casa</label>
-                                        <input id="address-apartment" type="text" placeholder="Ej: 101" x-model="delivery.apartment" @input="updateFullAddress()" class="w-full border-slate-300 rounded-md shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23]">
+                                        <input id="address-apartment" type="text" @focus="isKeyboardVisible = true" @blur="isKeyboardVisible = false" placeholder="Ej: 101" x-model="delivery.apartment" @input="updateFullAddress()" class="w-full border-slate-300 rounded-md shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23]">
                                     </div>
                                 </div>
                             </div>
@@ -981,6 +984,7 @@
                 vitalMixSearchQuery: '',
                 justAdded: false,
                 predefinedMixes: [],
+                isKeyboardVisible: false, // <-- AÑADE ESTA LÍNEA
                 radius: 15.9155,
                 circumference: 2 * Math.PI * 15.9155,
                 
