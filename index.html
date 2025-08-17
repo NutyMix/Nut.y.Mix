@@ -250,6 +250,7 @@
                                               x-text="percentageTooltipMessage">
                                         </span>
                                         <input type="number" min="0" max="100" x-model.number.debounce="nut.percentage"
+autocomplete="off" <!-- AÑADE ESTA LÍNEA -->
                                                :disabled="nut.name === 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Con cáscara)'"
                                                class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-[#4A5D23] focus:ring-[#4A5D23] pr-8 disabled:bg-slate-200 disabled:cursor-not-allowed">
                                         <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 select-none">%</span>
