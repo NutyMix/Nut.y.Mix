@@ -198,7 +198,7 @@
                         <div class="mb-6">
                             <label for="totalGrams" class="block text-sm font-medium text-slate-700 text-center mb-2">Ingresa la cantidad total de tu Mezcla (Gramos)</label>
                             <div class="relative max-w-xs mx-auto">
-                                <input id="totalGrams" type="number" min="0" x-model.number="totalGramsForPercentage" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-[#4A5D23] focus:ring-[#4A5D23] transition-colors">
+                                <input id="totalGrams" type="number" min="0" x-model.number="totalGramsForPercentage" autocomplete="off" class="w-full text-center border-2 border-slate-300 rounded-md shadow-sm p-2 focus:border-[#4A5D23] focus:ring-[#4A5D23] transition-colors">
                             </div>
                         </div>
 
@@ -887,8 +887,8 @@
                                     x-text="formatCurrency(finalSummary.total)"></span></div>
                         </div>
 
-                       <div x-show="shippingWarningMessage" class="mt-4 text-center text-sm font-semibold text-black bg-red-200 p-3 rounded-lg border border-red-900" x-transition>
-                            <p class="font-bold">AVISO IMPORTANTE/p>
+                       <div x-show="shippingWarningMessage" class="mt-4 text-center text-sm font-semibold text-black-700 bg-red-200 p-3 rounded-lg border border-red-900" x-transition>
+                            <p class="font-bold text-red-900">AVISO IMPORTANTE</p>
                             <p x-text="shippingWarningMessage"></p>
                         </div>
 
