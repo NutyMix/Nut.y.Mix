@@ -1086,10 +1086,18 @@
         </div>
 
     <!-- === INICIO: MODAL DE OPCIONES FINALES (PARA AÑADIR Y EDITAR) === -->
-     <div x-show="showPackagingModal"
+      <div x-show="showPackagingModal"
+     @keydown.escape.window="closeOptionsEditor()"
      class="fixed inset-0 z-[140] flex items-center justify-center bg-black bg-opacity-60 p-4" x-cloak>
+        <!-- CAMBIO: Se elimina @click.away de este div -->
         <div class="bg-white rounded-lg shadow-xl w-full max-w-lg">
-            <div class="p-6">
+            <!-- CAMBIO: Se añade 'relative' para posicionar el botón 'X' -->
+            <div class="relative p-6">
+                <!-- CAMBIO: Se añade el botón 'X' para cerrar -->
+                <button @click="closeOptionsEditor()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+
                 <div class="text-center">
                     <h3 class="text-2xl font-elegant font-bold text-slate-800 mb-2" x-text="editingItem ? 'Editar Opciones' : 'FINALIZA LOS DETALLES'"></h3>
                     <p class="text-slate-600 mb-4">Configura las opciones para tu <strong x-text="activeItemForModal?.name"></strong> de <strong x-text="activeItemForModal?.totalGrams.toFixed(0) + 'g'"></strong>.</p>
@@ -2087,20 +2095,28 @@
                         this.triggerAlert('Debes ingresar una cantidad en gramos para añadir este fruto.');
                         return;
                     }
-                    
+
                     const totalGrams = nut.grams;
                     const subtotal = totalGrams * nut.price;
                     let discountPercentage = totalGrams >= 750 ? 5 : 0;
                     const discount = subtotal * (discountPercentage / 100);
                     const cost = subtotal - discount;
-
                     const mixType = 'A granel';
                     const mixCount = this.cart.filter(item => item.name.startsWith(mixType)).length + 1;
+                    
+                    // --- INICIO DE LA CORRECCIÓN ---
+                    // Se crea el objeto base del fruto
+                    let nutObject = { name: nut.name, grams: totalGrams, originalGrams: totalGrams };
 
+                    // Se añade la propiedad `cutPreference` SOLO SI el fruto está en la lista de frutos grandes.
+                    if (this.largeFruits.includes(nut.name)) {
+                        nutObject.cutPreference = 'Entero';
+                    }
+                    // --- FIN DE LA CORRECCIÓN ---
 
                     this.itemToAdd = {
                         name: `${mixType} #${mixCount}`,
-                        nuts: [{ name: nut.name, grams: totalGrams, originalGrams: totalGrams, cutPreference: this.largeFruits.includes(nut.name) ? 'Entero' : undefined }],
+                        nuts: [nutObject], // Se usa el objeto creado
                         totalGrams: totalGrams,
                         originalGrams: totalGrams,
                         cost: Math.round(cost),
