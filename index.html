@@ -38,7 +38,7 @@
         .loader {
             border: 4px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 4px solid #4A5D23; /* Color primario actualizado */
+            border-top: 4px solid #4A5D23;
             width: 20px;
             height: 20px;
             animation: spin 1s linear infinite;
@@ -57,10 +57,11 @@
         html {
             scroll-behavior: smooth;
         }
+        
+        body.overflow-hidden {
+            overflow: hidden;
+        }
 
-        /* For smooth scrolling */
-
-        /* Estilos para el tooltip de ayuda en la sección de porcentajes */
         .group:hover .group-hover\:opacity-100,
         .group:focus-within .group-hover\:opacity-100 {
             opacity: 1;
@@ -70,7 +71,6 @@
 
 <body class="bg-stone-100 text-slate-800 font-body">
 
-    <!-- Banner Fijo de Métodos de Pago -->
     <div id="payment-banner" class="fixed bottom-0 left-0 w-full bg-slate-800 text-white p-3 z-50 text-center text-sm md:text-base">
         <div class="container mx-auto">
             <p>
@@ -80,7 +80,6 @@
     </div>
 
     <div class="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8 pb-32 md:pb-24" x-data="mixBuilder()" @keydown.escape.window="handleEscape()" x-cloak>
-        <!-- Título y Encabezado -->
         <header id="header" class="text-center mb-8">
             <div class="flex justify-center items-center space-x-4">
                 <img src="https://i.ibb.co/svMK2wRn/Airbrush-Image-Enhancer-1752901262222.jpg" alt="Logo Izquierda" width="280" height="280">
@@ -90,21 +89,15 @@
             </p>
         </header>
 
-        <!-- Pestañas de Modo -->
         <div id="selection-tabs" class="mb-8">
-            <!-- Main Tabs -->
             <div class="mb-6 flex justify-center">
                 <div class="inline-flex border border-slate-300 rounded-lg p-1 bg-slate-200">
-
-                    <!-- Botón 1: Crea tu Mix -->
                     <button @click="activeTab = 0"
                             :class="{ 'bg-white text-slate-800 shadow-md': activeTab === 0, 'text-slate-600 hover:bg-slate-100': activeTab !== 0 }"
                             class="flex items-center justify-center gap-2 px-2 sm:px-4 py-3 rounded-md font-semibold text-sm sm:text-base transition-colors duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" /></svg>
                         <span class="text-center leading-tight">Crea tu<br class="hidden sm:block"> Mix</span>
                     </button>
-
-                    <!-- Botón 2: Productos -->
                     <button @click="activeTab = 1"
                             :class="{ 'bg-white text-slate-800 shadow-md': activeTab === 1, 'text-slate-600 hover:bg-slate-100': activeTab !== 1 }"
                             class="flex items-center justify-center gap-2 px-2 sm:px-4 py-3 rounded-md font-semibold text-sm sm:text-base transition-colors duration-300">
@@ -113,8 +106,6 @@
                         </svg>
                         <span class="text-center leading-tight">Productos</span>
                     </button>
-                    
-                    <!-- Botón 3: Envases & Empaques -->
                     <button @click="activeTab = 3"
                             :class="{ 'bg-white text-slate-800 shadow-md': activeTab === 3, 'text-slate-600 hover:bg-slate-100': activeTab !== 3 }"
                             class="flex items-center justify-center gap-2 px-2 sm:px-4 py-3 rounded-md font-semibold text-sm sm:text-base transition-colors duration-300">
@@ -123,8 +114,6 @@
                         </svg>
                         <span class="text-center leading-tight">Envases &<br class="hidden sm:block"> Empaques</span>
                     </button>
-
-                    <!-- Botón 4: Mixes Vitales -->
                     <button @click="activeTab = 2"
                             :class="{ 'bg-white text-slate-800 shadow-md': activeTab === 2, 'text-slate-600 hover:bg-slate-100': activeTab !== 2 }"
                             class="flex items-center justify-center gap-2 px-2 sm:px-4 py-3 rounded-md font-semibold text-sm sm:text-base transition-colors duration-300">
@@ -137,9 +126,7 @@
 
             <hr class="border-t border-slate-200 my-6">
 
-            <!-- Sub-tabs Content -->
             <div class="pt-4 pb-4">
-                <!-- Crea tu Mezcla Tab -->
                 <div :class="{ '!block': activeTab === 0 }" x-show.transition.in.opacity.duration.600="activeTab === 0" class="hidden">
                     <div class="mb-6 flex justify-center text-sm">
                         <div class="inline-flex border border-slate-300 rounded-lg p-1 bg-slate-200">
@@ -386,7 +373,6 @@
                     </div>
                 </div>
 
-                <!-- Productos Tab -->
                 <div :class="{ '!block': activeTab === 1 }" x-show.transition.in.opacity.duration.600="activeTab === 1" class="hidden">
                     <div class="mb-6">
                         <h2 class="text-3xl font-elegant font-bold text-slate-900 text-center mb-4">Nuestros Productos</h2>
@@ -426,7 +412,6 @@
                     </div>
                 </div>
                 
-                <!-- Envases & Empaques Tab -->
                 <div :class="{ '!block': activeTab === 3 }" x-show.transition.in.opacity.duration.600="activeTab === 3" class="hidden">
                     <div class="mb-6 flex justify-center text-sm">
                         <div class="inline-flex border border-slate-300 rounded-lg p-1 bg-slate-200">
@@ -443,17 +428,15 @@
                         </div>
                     </div>
 
-                    <!-- Contenido Sub-pestaña: Envases de Vidrio -->
                     <div x-show="packagingSubTab === 'glass'" x-transition>
                         <div class="mb-6">
                             <h2 class="text-3xl font-elegant font-bold text-slate-900 text-center mb-4">Nuestros Envases de Vidrio</h2>
                             <div class="text-center text-slate-700 max-w-2xl mx-auto mb-8 bg-[#eef3e6] p-4 rounded-lg border border-[#dce6cf]">
-                                <p class="font-bold text-[#4A5D23]">¿Cómo añadir un envase?</p>
-                                <p class="mt-1">Esta es una galería visual. Para seleccionar un envase, primero crea tu mix o granel en la pestaña <strong>"Crea tu Mix"</strong>. Al hacer clic en "Añadir Compra", podrás elegir el envase y etiqueta que prefieras.</p>
+                                <p class="font-bold text-[#4A5D23]">¿Cómo añadir envases?</p>
+                                <p class="mt-1">Esta es una galería visual. Para seleccionar un envase, primero crea tu mezcla o a granel en las pestañas <strong>"Crea tu Mix"</strong> y/o <strong>"Mixes Vitales"</strong> . Al hacer clic en "Añadir Compra", podrás elegir envase para regalos y seleccionar tus preferidos al igual que personalizar tu etiqueta.</p>
                             </div>
                         </div>
                         
-                        <!-- Sección de Ejemplos de Regalo -->
                         <div class="mb-12">
                             <h3 class="text-2xl font-elegant text-slate-800 text-center mb-4">Ideales para Regalo</h3>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -497,7 +480,6 @@
                         </div>
                     </div>
 
-                    <!-- Contenido Sub-pestaña: Empaques Personalizados -->
                     <div x-show="packagingSubTab === 'custom'" x-transition>
                         <div class="mb-6">
                             <h2 class="text-3xl font-elegant font-bold text-slate-900 text-center mb-4">Empaques Personalizados</h2>
@@ -535,7 +517,6 @@
                     </div>
                 </div>
 
-                <!-- Mixes Vitales Tab -->
                 <div :class="{ '!block': activeTab === 2 }" x-show.transition.in.opacity.duration.600="activeTab === 2" class="hidden">
                     <h2 class="text-3xl font-elegant font-bold text-slate-900 text-center mb-4">
                         Una Guía para tu Bienestar
@@ -837,7 +818,7 @@
                 <p class="text-sm">Añade tus mezclas perfectas para verlas aquí.</p>
             </div>
             <div x-show="cart.length > 0" class="space-y-4" x-transition>
-                <template x-for="(item, index) in cart" :key="index">
+                <template x-for="(item, index) in cart" :key="item.id">
                     <div class="bg-stone-100 p-4 rounded-lg border border-slate-200">
                         <div class="flex items-start justify-between gap-4">
                             <div class="flex-grow">
@@ -990,7 +971,6 @@
                                 </div>
                             </div>
                            
-
                             <div>
                                 <label for="address-part1" class="block font-medium">Dirección <span class="text-red-500">*</span></label>
                                 <div class="mt-1 flex items-center gap-2">
@@ -1044,7 +1024,7 @@
                         </div>
 
                        <div x-show="shippingWarningMessage" class="mt-4 text-center text-sm font-semibold text-black bg-red-200 p-3 rounded-lg border border-red-900" x-transition>
-                            <p class="font-bold">AVISO IMPORTANTE/p>
+                            <p class="font-bold">AVISO IMPORTANTE</p>
                             <p x-text="shippingWarningMessage"></p>
                         </div>
 
@@ -1086,39 +1066,36 @@
         </div>
 
     <!-- === INICIO: MODAL DE OPCIONES FINALES (PARA AÑADIR Y EDITAR) === -->
-      <div x-show="showPackagingModal"
-     @keydown.escape.window="closeOptionsEditor()"
-     class="fixed inset-0 z-[140] flex items-center justify-center bg-black bg-opacity-60 p-4" x-cloak>
-        <!-- CAMBIO: Se elimina @click.away de este div -->
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg">
-            <!-- CAMBIO: Se añade 'relative' para posicionar el botón 'X' -->
-            <div class="relative p-6">
-                <!-- CAMBIO: Se añade el botón 'X' para cerrar -->
+    <div x-show="showPackagingModal" @keydown.escape.window="closeOptionsEditor()"
+        class="fixed inset-0 z-[140] flex items-center justify-center bg-black bg-opacity-60 p-4" x-cloak>
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl flex flex-col max-h-[90vh]">
+            
+            <div class="relative p-4 border-b">
+                <h3 class="text-2xl font-elegant font-bold text-slate-800 text-center" x-text="packagingModalTitle"></h3>
+                <p class="text-center text-slate-600" x-show="packagingStep !== 'labels' && editingMode !== 'glass'">Configura las opciones para tu <strong x-text="activeItemForModal?.name"></strong></p>
                 <button @click="closeOptionsEditor()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
+            </div>
 
-                <div class="text-center">
-                    <h3 class="text-2xl font-elegant font-bold text-slate-800 mb-2" x-text="editingItem ? 'Editar Opciones' : 'FINALIZA LOS DETALLES'"></h3>
-                    <p class="text-slate-600 mb-4">Configura las opciones para tu <strong x-text="activeItemForModal?.name"></strong> de <strong x-text="activeItemForModal?.totalGrams.toFixed(0) + 'g'"></strong>.</p>
-                </div>
+            <div class="p-6 overflow-y-auto flex-1">
 
-                <div class="space-y-4 max-h-[60vh] overflow-y-auto p-2">
-                    
-                    <div x-show="activeItemHasCutOptions">
-                        <h4 class="font-bold text-slate-800 mb-2 text-center">1. Opciones de Corte</h4>
-                        <div class="space-y-2">
+                <!-- VISTA PARA AÑADIR NUEVO / EDITAR KRAFT -->
+                <div x-show="packagingStep === 'selection' && editingMode !== 'glass'" class="space-y-4">
+                    <div x-show="activeItemHasCutOptions" class="border-b pb-4 mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 text-center text-lg">1. Opciones de Corte</h4>
+                        <div class="space-y-2 max-w-md mx-auto">
                              <template x-for="nut in activeItemForModal?.nuts.filter(n => n.hasOwnProperty('cutPreference'))" :key="nut.name">
                                 <div class="flex items-center justify-between p-3 bg-slate-100 rounded-lg">
                                     <span class="font-semibold text-slate-700" x-text="nut.name.split(' (')[0] + ':'"></span>
                                     <div class="inline-flex rounded-md shadow-sm" role="group">
                                         <button type="button" @click="nut.cutPreference = 'Entero'"
-                                                :class="{'bg-indigo-700 text-white': nut.cutPreference === 'Entero', 'bg-white text-slate-700 hover:bg-slate-50': nut.cutPreference !== 'Entero'}"
+                                                :class="{'bg-cyan-800 text-white': nut.cutPreference === 'Entero', 'bg-white text-slate-700 hover:bg-slate-50': nut.cutPreference !== 'Entero'}"
                                                 class="px-4 py-1.5 text-sm font-semibold border border-slate-300 rounded-l-lg transition-colors">
                                             Entero
                                         </button>
                                         <button type="button" @click="nut.cutPreference = 'Corte en Trozos'"
-                                                :class="{'bg-indigo-700 text-white': nut.cutPreference === 'Corte en Trozos', 'bg-white text-slate-700 hover:bg-slate-50': nut.cutPreference !== 'Corte en Trozos'}"
+                                                :class="{'bg-cyan-800 text-white': nut.cutPreference === 'Corte en Trozos', 'bg-white text-slate-700 hover:bg-slate-50': nut.cutPreference !== 'Corte en Trozos'}"
                                                 class="px-4 py-1.5 text-sm font-semibold border-t border-b border-r border-slate-300 rounded-r-lg transition-colors">
                                             En Trozos
                                         </button>
@@ -1127,83 +1104,279 @@
                             </template>
                         </div>
                     </div>
-                   
-                    <div :class="{'border-t pt-4 mt-4': activeItemHasCutOptions}">
-                        <h4 class="font-bold text-slate-800 mb-2 text-center" x-text="activeItemHasCutOptions ? '2. Elige el Envase (recomendado)' : 'Elige el Envase (Recomendado)'"></h4>
-                        
-                        <div class="space-y-2 text-left">
-                            <div @click="applyPackagingChoice('default', null, false)"
-                                 class="flex items-center gap-4 p-3 rounded-lg border-2 cursor-pointer transition-all"
-                                 :class="activeItemForModal?.packaging.type === 'default' ? 'border-indigo-600 bg-indigo-50' : 'border-slate-300 hover:border-slate-400'">
-                                <div class="w-16 h-16 bg-slate-200 rounded-md flex items-center justify-center flex-shrink-0">
-                                    <img src="https://i.ibb.co/V0QLKkX2/bolsa-KRAFT.png" alt="Bolsa Kraft Personalizada" class="w-full h-auto rounded-md">
-
-                                </div>
+                    
+                    <h4 class="font-bold text-slate-800 text-center text-lg" x-text="activeItemHasCutOptions ? '2. Elige el Envase' : 'Elige el Envase'"></h4>
+                    
+                    <div x-show="editingMode === null || editingMode === 'kraft'" @click.prevent="if(editingMode === null) handleKraftSelection()" 
+                         class="flex items-center gap-4 p-3 rounded-lg border-2 transition-all"
+                         :class="{'cursor-pointer hover:border-indigo-600 hover:bg-indigo-50': editingMode === null, 'border-slate-300': editingMode === 'kraft'}">
+                        <div class="w-20 h-20 bg-slate-200 rounded-md flex items-center justify-center flex-shrink-0">
+                            <img src="https://i.ibb.co/V0QLKkX2/bolsa-KRAFT.png" alt="Bolsa Kraft Personalizada" class="w-full h-auto rounded-md">
+                        </div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start">
                                 <div>
-                                    <h4 class="font-bold text-slate-800">Bolsa Kraft con cierre hermetico</h4>
-                                    <p class="text-sm text-slate-600">Incluida (Gratis)</p>
-                                    <p class="text-sm font-semibold text-slate-600"><strong x-text="activeItemForModal.originalGrams.toFixed(0) + 'g'"></strong></p>
+                                    <h4 class="font-bold text-slate-800">Bolsa Kraft con cierre hermético</h4>
+                                    <p class="text-sm text-slate-600 mb-1">Incluida (Gratis)</p>
+                                    <div x-show="editingMode === null">
+                                        <p class="text-sm font-semibold text-cyan-800">Contenido: <strong x-text="activeItemForModal?.originalGrams.toFixed(0) + 'g'"></strong></p>
+                                    </div>
+                                    <div x-show="editingMode === 'kraft'">
+                                        <label for="kraft-grams" class="block text-sm font-medium text-cyan-800">Modificar contenido:</label>
+                                        <div class="relative mt-1 inline-block">
+    <input id="kraft-grams" type="number" min="1" step="10" x-model.number="editedKraftGrams" @click.stop
+           class="w-32 text-center border-2 border-cyan-800 rounded-md shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 pr-8">
+    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-cyan-800 select-none">g</span>
+</div>
+                                    </div>
+                                </div>
+                                <div x-show="editingMode === null" class="ml-4">
+                                     <button @click.stop="handleKraftSelection()" class="font-bold py-2 px-6 rounded-lg bg-[#4A5D23] hover:bg-[#3b4a1c] text-white shadow-lg">Añadir</button>
                                 </div>
                             </div>
-
-                            <template x-for="jar in jars.filter(j => j.capacity >= activeItemForModal.originalGrams)" :key="jar.id">
-                                <div @click="startLabelSelection(jar)"
-                                     class="p-3 rounded-lg border-2 transition-all cursor-pointer"
-                                     :class="selectedJarIdInModal === jar.id ? 'border-indigo-600 bg-indigo-50' : 'border-slate-300 hover:border-slate-400'">
-                                    <div class="flex items-center gap-4">
-                                        <div class="relative w-16 h-16 flex-shrink-0">
-                                            <img :src="jar.imageUrls[0]" :alt="jar.name" class="w-full h-full object-contain">
-                                        </div>
-                                        <div class="flex-grow">
-                                            <h4 class="font-bold text-slate-800" x-text="jar.name"></h4>
-                                            <p class="text-sm text-slate-600" x-text="`Capacidad: ${jar.capacity}g (+ ${formatCurrency(jar.price)})`"></p>
-                                            <p x-show="jar.capacity > activeItemForModal.originalGrams" class="text-sm font-semibold text-emerald-700 mt-1">Aumentará tu mix a <span x-text="jar.capacity + 'g'"></span></p>
-                                            <p x-show="selectedJarIdInModal === jar.id" class="text-sm font-semibold text-indigo-600 mt-1" x-text="`Etiqueta: ${getLabelNameById(activeItemForModal.packaging.labelId)}`"></p>
-                                        </div>
+                        </div>
+                    </div>
+                    
+                    <div x-show="editingMode === null" @click="goToJarSelection()" class="flex items-center gap-4 p-3 rounded-lg border-2 cursor-pointer transition-all border-slate-300 hover:border-teal-600 hover:bg-teal-50">
+                        <div class="w-20 h-20 bg-slate-200 rounded-md flex items-center justify-center flex-shrink-0">
+                             <img src="https://i.ibb.co/kVsQsKLT/corcho1.png" alt="Envases de vidrio" class="w-full h-auto object-contain">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">Envases para Regalos</h4>
+                            <p class="text-sm text-slate-600">Elige tus envases y personaliza las etiquetas. La cantidad total se ajustará a la capacidad de los envases que elijas.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div x-show="editingMode === 'glass'" class="space-y-4">
+                     <div x-show="activeItemHasCutOptions" class="border-b pb-4 mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 text-center text-lg">1. Opciones de Corte</h4>
+                        <div class="space-y-2 max-w-md mx-auto">
+                             <template x-for="nut in activeItemForModal?.nuts.filter(n => n.hasOwnProperty('cutPreference'))" :key="nut.name">
+                                <div class="flex items-center justify-between p-3 bg-slate-100 rounded-lg">
+                                    <span class="font-semibold text-slate-700" x-text="nut.name.split(' (')[0] + ':'"></span>
+                                    <div class="inline-flex rounded-md shadow-sm" role="group">
+                                        <button type="button" @click="nut.cutPreference = 'Entero'"
+                                                :class="{'bg-cyan-800 text-white': nut.cutPreference === 'Entero', 'bg-white text-slate-700 hover:bg-slate-50': nut.cutPreference !== 'Entero'}"
+                                                class="px-4 py-1.5 text-sm font-semibold border border-slate-300 rounded-l-lg transition-colors">
+                                            Entero
+                                        </button>
+                                        <button type="button" @click="nut.cutPreference = 'Corte en Trozos'"
+                                                :class="{'bg-cyan-800 text-white': nut.cutPreference === 'Corte en Trozos', 'bg-white text-slate-700 hover:bg-slate-50': nut.cutPreference !== 'Corte en Trozos'}"
+                                                class="px-4 py-1.5 text-sm font-semibold border-t border-b border-r border-slate-300 rounded-r-lg transition-colors">
+                                            En Trozos
+                                        </button>
                                     </div>
-                                   
                                 </div>
                             </template>
                         </div>
-                        
-                        <div x-show="jars.some(j => j.capacity < activeItemForModal.originalGrams)" class="mt-4 pt-4 border-t border-dashed">
-                            <h5 class="font-semibold text-slate-700 text-center mb-2">Otras Opciones (Requiere reducir cantidad)</h5>
-                            <div class="space-y-2 text-left">
-                                <template x-for="jar in jars.filter(j => j.capacity < activeItemForModal.originalGrams)" :key="jar.id">
-                                    <div @click="startLabelSelection(jar)"
-                                         class="p-3 rounded-lg border-2 transition-all cursor-pointer"
-                                         :class="selectedJarIdInModal === jar.id ? 'border-indigo-600 bg-indigo-50' : 'border-slate-300 hover:border-slate-400'">
-                                        <div class="flex items-center gap-4">
-                                            <div class="relative w-16 h-16 flex-shrink-0">
-                                                <img :src="jar.imageUrls[0]" :alt="jar.name" class="w-full h-full object-contain">
-                                            </div>
-                                            <div class="flex-grow">
-                                                <h4 class="font-bold text-slate-800" x-text="jar.name"></h4>
-                                                <p class="text-sm text-slate-600" x-text="`Capacidad: ${jar.capacity}g (+ ${formatCurrency(jar.price)})`"></p>
-                                                <p x-show="jar.capacity < activeItemForModal.originalGrams" class="text-sm font-semibold text-orange-700 mt-1">Reducirá tu mix a <span x-text="jar.capacity + 'g'"></span></p>
-                                                <p x-show="selectedJarIdInModal === jar.id" class="text-sm font-semibold text-indigo-600 mt-1" x-text="`Etiqueta: ${getLabelNameById(activeItemForModal.packaging.labelId)}`"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </template>
+                    </div>
+
+                    <h4 class="font-bold text-slate-800 text-center text-lg" x-text="activeItemHasCutOptions ? '2. Elige el Envase' : 'Elige el Envase'"></h4>
+                    <div class="space-y-3">
+                        <template x-for="jar in jars" :key="jar.id">
+                            <div class="flex items-center gap-4 p-2 rounded-lg border">
+                                <img @click.prevent="openJarGallery(jar)" :src="jar.imageUrls[0]" :alt="jar.name" class="w-16 h-16 object-contain flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">
+                                <div class="flex-grow">
+                                    <h4 class="font-semibold text-slate-800" x-text="jar.name"></h4>
+                                    <p class="text-sm text-slate-600" x-text="`Capacidad: ${jar.capacity}g (+ ${formatCurrency(jar.price)})`"></p>
+                                </div>
+                                <div class="flex items-center border border-slate-300 rounded-lg bg-white shadow-sm">
+                                    <button @click="decrementJar(jar)" class="px-3 py-1 text-xl font-semibold text-slate-500 hover:bg-slate-50 rounded-l-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors">-</button>
+                                    <span class="px-4 text-center font-bold text-slate-800" x-text="getJarQuantity(jar.id)"></span>
+                                    <button @click="incrementJar(jar)" class="px-3 py-1 text-xl font-semibold text-slate-500 hover:bg-slate-50 rounded-r-lg transition-colors">+</button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <div x-show="packagingStep === 'jars'" class="space-y-3">
+                    <template x-for="jar in jars" :key="jar.id">
+                        <div class="flex items-center gap-4 p-2 rounded-lg border">
+                            <img @click.prevent="openJarGallery(jar)" :src="jar.imageUrls[0]" :alt="jar.name" class="w-16 h-16 object-contain flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">
+                            <div class="flex-grow">
+                                <h4 class="font-semibold text-slate-800" x-text="jar.name"></h4>
+                                <p class="text-sm text-slate-600" x-text="`Capacidad: ${jar.capacity}g (+ ${formatCurrency(jar.price)})`"></p>
+                            </div>
+                            <div class="flex items-center border border-slate-300 rounded-lg bg-white shadow-sm">
+                                <button @click="decrementJar(jar)" class="px-3 py-1 text-xl font-semibold text-slate-500 hover:bg-slate-50 rounded-l-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors">-</button>
+                                <span class="px-4 text-center font-bold text-slate-800" x-text="getJarQuantity(jar.id)"></span>
+                                <button @click="incrementJar(jar)" class="px-3 py-1 text-xl font-semibold text-slate-500 hover:bg-slate-50 rounded-r-lg transition-colors">+</button>
                             </div>
                         </div>
+                    </template>
+                </div>
 
+                <div x-show="packagingStep === 'labels'" class="space-y-4">
+                    <div class="space-y-3">
+                        <template x-for="(selection, index) in giftJarSelections" :key="index">
+                             <div class="p-3 rounded-lg border flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <img :src="getJarById(selection.jarId)?.imageUrls[0]" class="w-12 h-12 object-contain">
+                                    <div>
+                                        <p class="font-bold" x-text="`${selection.quantity}x ${getJarById(selection.jarId)?.name}`"></p>
+                                        <p class="text-sm text-slate-500" x-text="`Capacidad: ${getJarById(selection.jarId)?.capacity}g`"></p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button @click="openLabelEditorForJar(index)" class="font-semibold py-2 px-4 rounded-lg transition-colors"
+                                        :class="selection.labelId ? 'bg-indigo-100 text-indigo-800 hover:bg-indigo-200' : 'bg-[#4A5D23] text-white hover:bg-[#3b4a1c]'">
+                                        <span x-text="selection.labelId ? `Etiqueta: '${getLabelNameById(selection.labelId)}'` : 'Elegir Etiqueta'"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                         <div class="text-center mb-4">
+                           <button @click="openLabelEditorForAll()" class="bg-[#A98B61] hover:bg-[#8c714e] text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                              Aplicar la misma etiqueta a todos
+                           </button>
+                         </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bg-slate-50 px-6 py-3 flex justify-between items-center border-t">
+                
+                <div x-show="packagingStep === 'selection' && editingMode === 'kraft'" class="w-full flex justify-end">
+                    <button @click="handlePrimaryAction()" 
+                            class="font-bold py-2 px-6 rounded-lg shadow-lg bg-slate-600 hover:bg-slate-700 text-white">
+                        <span>Guardar Cambios</span>
+                    </button>
+                </div>
+                
+                 <div x-show="editingMode === 'glass'" class="w-full flex justify-between items-center">
+                    <div class="text-center">
+                       <p class="text-sm font-bold">Total del Mix: <span class="text-lg text-[#4A5D23]" x-text="`${giftPackagingTotalGrams}g`"></span></p>
+                       <p class="text-sm font-bold">Costo Total: <span class="text-lg text-[#4A5D23]" x-text="formatCurrency(giftPackagingTotalCost)"></span></p>
+                    </div>
+                    <div>
+                        <button @click="openLabelEditorForSelection()" :disabled="giftJarSelections.length === 0"
+                                class="font-bold py-2 px-6 rounded-lg bg-[#4A5D23] hover:bg-[#3b4a1c] text-white shadow-lg disabled:bg-slate-400 disabled:cursor-not-allowed">
+                             <span>Siguiente: Personalizar Etiquetas</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div x-show="packagingStep === 'jars'" class="w-full flex justify-between items-center">
+                    <div>
+                        <button @click="backToPackagingSelection()" class="font-semibold text-slate-600 hover:text-slate-800">
+                            &larr; Volver
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm font-bold">Total del Mix: <span class="text-lg text-[#4A5D23]" x-text="`${giftPackagingTotalGrams}g`"></span></p>
+                        <p class="text-sm font-bold">Costo Total: <span class="text-lg text-[#4A5D23]" x-text="formatCurrency(giftPackagingTotalCost)"></span></p>
+                    </div>
+                    <div>
+                        <button @click="goToLabelSelection()" :disabled="giftJarSelections.length === 0"
+                            class="font-bold py-2 px-6 rounded-lg bg-[#4A5D23] hover:bg-[#3b4a1c] text-white shadow-lg disabled:bg-slate-400 disabled:cursor-not-allowed">
+                            Continuar con etiquetas
+                        </button>
+                    </div>
+                </div>
+
+                 <div x-show="packagingStep === 'labels'" class="w-full flex justify-between items-center">
+                     <div>
+                        <button @click="backToJarSelection()" class="font-semibold text-slate-600 hover:text-slate-800">
+                           &larr; Volver
+                        </button>
+                    </div>
+                    <div class="text-center">
+                       <p class="text-sm font-bold">Total del Mix: <span class="text-lg text-[#4A5D23]" x-text="`${giftPackagingTotalGrams}g`"></span></p>
+                       <p class="text-sm font-bold">Costo Total: <span class="text-lg text-[#4A5D23]" x-text="formatCurrency(giftPackagingTotalCost)"></span></p>
+                    </div>
+                    <div>
+                        <button @click="handleGiftSelection()" :disabled="!allJarsHaveLabels"
+                                class="font-bold py-2 px-6 rounded-lg bg-[#4A5D23] hover:bg-[#3b4a1c] text-white shadow-lg disabled:bg-slate-400 disabled:cursor-not-allowed">
+                             <span>Confirmar y Añadir</span>
+                        </button>
                     </div>
                 </div>
             </div>
 
+        </div>
+    </div>
+    
+    <!-- === INICIO: MODAL DE SELECCIÓN DE ETIQUETAS (PARA EDITAR) === -->
+    <div x-show="showLabelSelectionModal" @keydown.escape.window="closeLabelEditor()"
+         class="fixed inset-0 z-[150] flex items-center justify-center bg-black bg-opacity-70 p-4" x-cloak>
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <div class="p-4 border-b">
+                <h3 class="text-xl font-bold font-elegant text-slate-800 text-center">PERSONALIZA TUS ETIQUETAS</h3>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4">
+                <div class="space-y-3">
+                    <template x-for="(selection, index) in giftJarSelections" :key="index">
+                         <div class="p-3 rounded-lg border flex items-center justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <img :src="getJarById(selection.jarId)?.imageUrls[0]" class="w-12 h-12 object-contain">
+                                <div>
+                                    <p class="font-bold" x-text="`${selection.quantity}x ${getJarById(selection.jarId)?.name}`"></p>
+                                    <p class="text-sm text-slate-500" x-text="`Capacidad: ${getJarById(selection.jarId)?.capacity}g`"></p>
+                                </div>
+                            </div>
+                            <div>
+                                <button @click="openLabelEditorForJar(index)" class="font-semibold py-2 px-4 rounded-lg transition-colors"
+                                    :class="selection.labelId ? 'bg-indigo-100 text-indigo-800 hover:bg-indigo-200' : 'bg-[#4A5D23] text-white hover:bg-[#3b4a1c]'">
+                                    <span x-text="selection.labelId ? `Etiqueta: '${getLabelNameById(selection.labelId)}'` : 'Elegir Etiqueta'"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                     <div class="text-center mb-4">
+                       <button @click="openLabelEditorForAll()" class="bg-[#A98B61] hover:bg-[#8c714e] text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                          Aplicar la misma etiqueta a todos
+                       </button>
+                     </div>
+                </div>
+            </div>
             <div class="bg-slate-50 px-6 py-4 flex justify-between items-center border-t">
-                <span class="text-lg font-bold">Total del Ítem: <span x-text="formatCurrency((activeItemForModal?.cost || 0) + (activeItemForModal?.packaging.price || 0))"></span></span>
-                <button @click="editingItem ? saveEditingChanges() : confirmAndAddToCart()" 
-                        class="font-bold py-2 px-6 rounded-lg bg-[#4A5D23] hover:bg-[#3b4a1c] text-white shadow-lg">
-                    <span x-text="editingItem ? 'Guardar Cambios' : 'Confirmar y Añadir'"></span>
+                <button @click="closeLabelEditor()" type="button" class="font-semibold text-slate-600 hover:text-slate-800">&larr; Volver a Envases</button>
+                <button @click="confirmAndSaveChanges()" :disabled="!allJarsHaveLabels"
+                        class="font-bold py-2 px-6 rounded-lg bg-[#4A5D23] hover:bg-[#3b4a1c] text-white shadow-lg disabled:bg-slate-400 disabled:cursor-not-allowed">
+                     <span>Guardar Cambios</span>
                 </button>
             </div>
         </div>
     </div>
-    <!-- === FIN: MODAL DE OPCIONES FINALES === -->
-<!-- === INICIO: MODAL DE PERSONALIZACIÓN DE ETIQUETAS === -->
+    <!-- === FIN: MODAL DE SELECCIÓN DE ETIQUETAS === -->
+
+    <div x-show="showJarGalleryModal" @keydown.escape.window="closeJarGallery()"
+         class="fixed inset-0 z-[150] flex items-center justify-center bg-black bg-opacity-60 p-4" x-cloak
+         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" 
+         x-transition:leave="ease-in duration-200" x-transition:leave-end="opacity-0">
+        
+        <div @click.away="closeJarGallery()" class="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 relative"
+             x-data="{ currentImage: galleryJar ? galleryJar.imageUrls[0] : '' }"
+             x-init="$watch('galleryJar', (jar) => { if(jar) currentImage = jar.imageUrls[0] })">
+            
+            <button @click="closeJarGallery()" class="absolute -top-3 -right-3 bg-white rounded-full p-1 text-slate-700 hover:text-red-500 transition-colors shadow-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <template x-if="galleryJar">
+                <div>
+                    <h3 class="text-xl font-bold font-elegant text-slate-800 text-center mb-4" x-text="galleryJar.name"></h3>
+                    
+                    <div class="mb-4 bg-slate-100 p-2 rounded-lg border">
+                        <img :src="currentImage" :alt="galleryJar.name" class="w-full h-64 object-contain">
+                    </div>
+                    
+                    <div class="flex justify-center gap-3">
+                        <template x-for="url in galleryJar.imageUrls" :key="url">
+                            <button @click="currentImage = url" class="w-16 h-16 rounded-md overflow-hidden border-2 transition"
+                                    :class="{'border-green-600 ring-2 ring-green-300': currentImage === url, 'border-slate-300 hover:border-slate-400': currentImage !== url}">
+                                <img :src="url" class="w-full h-full object-cover">
+                            </button>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+
     <div x-show="labelCustomization.showModal"
          class="fixed inset-0 z-[160] flex items-center justify-center bg-black bg-opacity-70 p-4" x-cloak>
         <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
@@ -1213,24 +1386,7 @@
             </div>
 
             <div class="p-6 overflow-y-auto space-y-6">
-                <div x-show="labelCustomization.jar" class="mb-4">
-                    <div class="relative group/image">
-                        <img :src="labelCustomization.activeImageUrl" alt="Vista previa del envase" class="w-full h-48 object-contain rounded-lg bg-slate-100 p-2 border">
-                        <div @click="openImageModal(labelCustomization.activeImageUrl)" class="absolute inset-0 bg-black bg-opacity-0 group-hover/image:bg-opacity-50 flex items-center justify-center transition-all duration-300 rounded-md cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-8 h-8 text-white opacity-0 group-hover/image:opacity-100 transition-opacity"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Zm5-2.25a.75.75 0 0 1 .75.75v1.5h1.5a.75.75 0 0 1 0 1.5h-1.5v1.5a.75.75 0 0 1-1.5 0v-1.5h-1.5a.75.75 0 0 1 0-1.5h1.5v-1.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" /></svg>
-                        </div>
-                    </div>
-                    <div class="flex justify-center gap-2 mt-2">
-                        <template x-for="url in labelCustomization.jar.imageUrls" :key="url">
-                            <button @click="labelCustomization.activeImageUrl = url"
-                                    class="w-12 h-12 rounded-md overflow-hidden border-2 transition"
-                                    :class="{'border-green-600 ring-2 ring-green-300': labelCustomization.activeImageUrl === url, 'border-slate-300 hover:border-slate-400': labelCustomization.activeImageUrl !== url}">
-                                <img :src="url" class="w-full h-full object-cover">
-                            </button>
-                        </template>
-                    </div>
-                </div>
-
+                
                 <p class="text-center text-stone-900"><strong>Elige un diseño para tu etiqueta o crea tu etiqueta con un mensaje especial (Clic en Personaliza).</strong></p>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <template x-for="label in labelOptions" :key="label.id">
@@ -1259,10 +1415,8 @@
                 </button>
             </div>
         </div>
-    </div>
-    <!-- === FIN: MODAL DE PERSONALIZACIÓN DE ETIQUETAS === -->    
+    </div>    
 
-    <!-- === INICIO: NUEVO MODAL PARA EL MENSAJE PERSONALIZADO === -->
     <div x-show="labelCustomization.showCustomMessageModal"
          class="fixed inset-0 z-[170] flex items-center justify-center bg-black bg-opacity-70 p-4" x-cloak>
         <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
@@ -1279,7 +1433,6 @@
             </div>
         </div>
     </div>
-    <!-- === FIN: NUEVO MODAL PARA EL MENSAJE PERSONALIZADO === -->
    
         <script>
         function mixBuilder() {
@@ -1287,6 +1440,7 @@
                 activeTab: 0,
                 activeSubTab: 0,
                 packagingSubTab: 'glass',
+                cartItemIdCounter: 1, 
                 selectedIndividualNutName: null,
                 totalGramsForPercentage: 0,
                 nuts: [],
@@ -1397,7 +1551,6 @@
                     { "departamento": "Vaupés", "ciudades": [ { "nombre": "Carurú", "costo": 54850 },{ "nombre": "Mitú", "costo": 54850 },{ "nombre": "Pacoa", "costo": 54850},{ "nombre": "Papunaua", "costo": 54850 },{ "nombre": "Taraira", "costo": 54850 },{ "nombre": "Yavaraté", "costo": 54850 } ] },
                     { "departamento": "Vichada", "ciudades": [ { "nombre": "Cumaribo", "costo": 54850 },{ "nombre": "La Primavera", "costo": 49690 },{ "nombre": "Puerto Carreño", "costo": 54850 },{ "nombre": "Santa Rosalía", "costo": 49690 } ] }
                 ],
-
                 cart: [],
                 showOrderSection: false,
                 contactInfo: { name: '', phone: '', phoneError: '' },
@@ -1428,11 +1581,18 @@
                 confirmationDetails: { title: '', message: '', summary: '' },
                 orderCounter: 1,
                 mode: 'builder',
+                
                 showPackagingModal: false,
+                showLabelSelectionModal: false, // <<< NUEVO: Controla el modal de etiquetas
                 itemToAdd: null,
-                editingItem: null,
                 editingCartItemIndex: null,
-                selectedJarIdInModal: null,
+                editingMode: null, 
+                showJarGalleryModal: false,
+                galleryJar: null,
+                editedKraftGrams: 0,
+                packagingStep: 'selection',
+                giftJarSelections: [],
+                editingLabelFor: { type: null, index: -1 },
 
                 labelCustomization: {
                     showModal: false,
@@ -1441,11 +1601,54 @@
                     customMessage: '',
                     jar: null,
                     activeImageUrl: '',
-                    initialState: {}
+                },
+
+                get isAnyModalOpen() {
+                    return this.showPackagingModal || this.showLabelSelectionModal || this.showJarGalleryModal || this.labelCustomization.showModal || this.labelCustomization.showCustomMessageModal || this.showImageModal || this.showConfirmationModal || this.showPreConfirmationModal || this.selectedNut || this.selectedMix || this.customization.showModal;
                 },
 
                 get cartTotalWeight() {
                     return this.cart.reduce((acc, item) => acc + (item.totalGrams * item.quantity), 0);
+                },
+
+                get packagingModalTitle() {
+                    if (this.editingMode === 'kraft') return 'Editar Bolsa Kraft';
+                    if (this.editingMode === 'glass') return 'Editar Envase de Vidrio';
+                    
+                    switch(this.packagingStep) {
+                        case 'selection': return 'FINALIZA LOS DETALLES';
+                        case 'jars': return 'ENVASES PARA REGALOS';
+                        case 'labels': return 'ELIGE TUS ETIQUETAS';
+                        default: return 'FINALIZA LOS DETALLES';
+                    }
+                },
+                get giftPackagingTotalGrams() {
+                    if (this.giftJarSelections.length === 0) return 0;
+                    return this.giftJarSelections.reduce((acc, selection) => {
+                        const jar = this.getJarById(selection.jarId);
+                        return acc + (jar.capacity * selection.quantity);
+                    }, 0);
+                },
+                
+               // Reemplaza la función original con esta
+                get giftPackagingTotalCost() {
+                    if (!this.activeItemForModal || this.giftJarSelections.length === 0) return 0;
+
+                    const totalCostOfJars = this.giftJarSelections.reduce((acc, selection) => {
+                        const jar = this.getJarById(selection.jarId);
+                        // Aseguramos que jar exista antes de acceder a sus propiedades
+                        return acc + ((jar ? jar.price : 0) * selection.quantity);
+                    }, 0);
+                    
+                    const totalCostOfMix = this.calculateMixCostForWeight(this.giftPackagingTotalGrams);
+
+                    // Devolvemos la suma redondeada para consistencia
+                    return Math.round(totalCostOfMix + totalCostOfJars);
+                },
+
+                get allJarsHaveLabels() {
+                    if (this.giftJarSelections.length === 0) return false;
+                    return this.giftJarSelections.every(selection => !!selection.labelId);
                 },
 
                 get shippingWarningMessage() {
@@ -1464,12 +1667,7 @@
                 },
                 
                 get activeItemForModal() {
-                    return this.editingItem || this.itemToAdd;
-                },
-
-                get availableJarsForActiveItem() {
-                    if (!this.activeItemForModal) return [];
-                    return this.jars;
+                    return this.itemToAdd;
                 },
 
                 get activeItemHasCutOptions() {
@@ -1483,110 +1681,132 @@
                 },
                 
                 getLabelNameById(labelId) {
-                    if (!labelId) return 'Clásica';
+                    if (!labelId) return 'Sin etiqueta';
+                    if (labelId === 'custom') return 'Personalizada';
                     const label = this.labelOptions.find(l => l.id === labelId);
                     return label ? label.name : 'Clásica';
                 },
 
                 openOptionsEditor(index) {
                     this.editingCartItemIndex = index;
-                    this.editingItem = JSON.parse(JSON.stringify(this.cart[index])); 
-                    this.selectedJarIdInModal = this.cart[index].packaging.jarId;
+                    const originalItem = this.cart[index];
+                    this.itemToAdd = JSON.parse(JSON.stringify(originalItem));
+                    this.giftJarSelections = []; 
+                    
+                    if (originalItem.packaging.type === 'default') {
+                        this.editingMode = 'kraft';
+                        this.packagingStep = 'selection';
+                        this.editedKraftGrams = originalItem.totalGrams;
+                    } else if (originalItem.packaging.type === 'glass_jar') {
+                        this.editingMode = 'glass';
+                        this.packagingStep = 'selection'; 
+                        this.giftJarSelections.push({
+                            jarId: originalItem.packaging.jarId,
+                            quantity: originalItem.quantity,
+                            labelId: originalItem.packaging.labelId,
+                            customMessage: originalItem.packaging.customMessage
+                        });
+                    }
                     this.showPackagingModal = true;
                 },
-
-                handleJarSelection(jar) {
-                    if (!this.activeItemForModal) return;
-                    
-                    this.selectedJarIdInModal = jar.id;
-                    
-                    this.labelCustomization.initialState = {
-                        packaging: JSON.parse(JSON.stringify(this.activeItemForModal.packaging)),
-                        totalGrams: this.activeItemForModal.totalGrams,
-                        cost: this.activeItemForModal.cost,
-                        subtotal: this.activeItemForModal.subtotal,
-                        discount: this.activeItemForModal.discount
-                    };
-
-                    this.applyPackagingChoice('glass_jar', jar.id, true);
-                    this.openLabelModal(jar);
-                },
                 
-                applyPackagingChoice(type, jarId, adjustWeight = false) {
-                    const item = this.activeItemForModal;
-                    if (!item) return;
+                openJarGallery(jar) {
+                    this.galleryJar = jar;
+                    this.showJarGalleryModal = true;
+                },
+                closeJarGallery() {
+                    this.showJarGalleryModal = false;
+                    setTimeout(() => { this.galleryJar = null; }, 300);
+                },
 
-                    if (type === 'default') {
-                        this.selectedJarIdInModal = null;
-                        item.packaging = { type: 'default', jarId: null, price: 0, labelId: 'classic', customMessage: '' };
-                        this.applyWeightAdjustment(item.originalGrams);
+                goToJarSelection() {
+                    this.packagingStep = 'jars';
+                },
+
+                goToLabelSelection() {
+                    if (this.giftJarSelections.length === 0) {
+                        this.triggerAlert('Debes seleccionar al menos un envase para continuar.');
+                        return;
+                    }
+                    if (this.editingMode === 'glass') {
+                        this.openLabelEditorForSelection();
                     } else {
-                        const jar = this.getJarById(jarId);
-                        if (jar) {
-                            item.packaging = { type: 'glass_jar', jarId: jar.id, price: jar.price, labelId: 'classic', customMessage: '' };
-                            const newWeight = adjustWeight ? jar.capacity : item.originalGrams;
-                            this.applyWeightAdjustment(newWeight);
+                        this.packagingStep = 'labels';
+                    }
+                },
+                backToJarSelection() { 
+                    if (this.editingMode === 'glass') {
+                        this.closeLabelEditor();
+                    } else {
+                        this.packagingStep = 'jars';
+                    }
+                },
+                backToPackagingSelection() { this.packagingStep = 'selection'; },
+
+                getJarQuantity(jarId) {
+                    const selection = this.giftJarSelections.find(s => s.jarId === jarId);
+                    return selection ? selection.quantity : 0;
+                },
+                incrementJar(jar) {
+                    let selection = this.giftJarSelections.find(s => s.jarId === jar.id);
+                    if (selection) {
+                        selection.quantity++;
+                    } else {
+                        this.giftJarSelections.push({
+                            jarId: jar.id,
+                            quantity: 1,
+                            labelId: null,
+                            customMessage: ''
+                        });
+                    }
+                },
+                decrementJar(jar) {
+                    let selection = this.giftJarSelections.find(s => s.jarId === jar.id);
+                    if (selection) {
+                        selection.quantity--;
+                        if (selection.quantity === 0) {
+                            this.giftJarSelections = this.giftJarSelections.filter(s => s.jarId !== jar.id);
                         }
                     }
                 },
 
-                startLabelSelection(jar) {
-                    if (!this.activeItemForModal) return;
-                    this.selectedJarIdInModal = jar.id;
-                    this.labelCustomization.initialState = {
-                        packaging: JSON.parse(JSON.stringify(this.activeItemForModal.packaging)),
-                        totalGrams: this.activeItemForModal.totalGrams,
-                        cost: this.activeItemForModal.cost,
-                        subtotal: this.activeItemForModal.subtotal,
-                        discount: this.activeItemForModal.discount
-                    };
-                    this.applyPackagingChoice('glass_jar', jar.id, true);
-                    this.openLabelModal(jar);
-                },
-
-                openLabelModal(jar) {
-                    const item = this.activeItemForModal;
-                    if (!item) return;
-
-                    this.labelCustomization.jar = jar;
-                    if (jar && jar.imageUrls?.length) {
-                        this.labelCustomization.activeImageUrl = jar.imageUrls[0];
-                    }
-                    
-                    this.labelCustomization.selectedLabelId = item.packaging.labelId || 'classic';
-                    this.labelCustomization.customMessage = item.packaging.customMessage || '';
+                openLabelEditorForJar(index) {
+                    this.editingLabelFor = { type: 'single', index: index };
+                    const jarId = this.giftJarSelections[index].jarId;
+                    const jarData = this.getJarById(jarId);
+                    this.labelCustomization.jar = jarData;
+                    if(jarData) this.labelCustomization.activeImageUrl = jarData.imageUrls[0];
+                    this.labelCustomization.selectedLabelId = this.giftJarSelections[index].labelId || 'classic';
+                    this.labelCustomization.customMessage = this.giftJarSelections[index].customMessage || '';
                     this.labelCustomization.showModal = true;
                 },
 
-                cancelLabelSelection() {
-                    const item = this.activeItemForModal;
-                    if (item) {
-                        item.packaging = this.labelCustomization.initialState.packaging;
-                        item.totalGrams = this.labelCustomization.initialState.totalGrams;
-                        item.cost = this.labelCustomization.initialState.cost;
-                        item.subtotal = this.labelCustomization.initialState.subtotal;
-                        item.discount = this.labelCustomization.initialState.discount;
-                        this.selectedJarIdInModal = item.packaging.jarId;
-                    }
-                    this.labelCustomization.showModal = false;
+                openLabelEditorForAll() {
+                    this.editingLabelFor = { type: 'all', index: -1 };
                     this.labelCustomization.jar = null;
+                    this.labelCustomization.selectedLabelId = 'classic';
+                    this.labelCustomization.customMessage = '';
+                    this.labelCustomization.showModal = true;
                 },
-                // === INICIO DE LA LÓGICA CORREGIDA ===
+                
+                cancelLabelSelection() {
+                    this.labelCustomization.showModal = false;
+                },
+                
                 saveLabelSelection() {
-                    const item = this.activeItemForModal;
-                    if (item) {
-                        item.packaging.labelId = this.labelCustomization.selectedLabelId;
-                        item.packaging.customMessage = ''; // Reset custom message if not selected
+                    const { type, index } = this.editingLabelFor;
+                    const labelId = this.labelCustomization.selectedLabelId;
+
+                    if (type === 'single') {
+                        this.giftJarSelections[index].labelId = labelId;
+                        this.giftJarSelections[index].customMessage = '';
+                    } else if (type === 'all') {
+                        this.giftJarSelections.forEach(selection => {
+                            selection.labelId = labelId;
+                            selection.customMessage = '';
+                        });
                     }
                     this.labelCustomization.showModal = false;
-                    this.labelCustomization.jar = null;
-                    
-                    // Acción final: añadir al carrito directamente
-                    if (this.editingItem) {
-                        this.saveEditingChanges();
-                    } else {
-                        this.confirmAndAddToCart();
-                    }
                 },
 
                 openCustomMessageModal() {
@@ -1594,44 +1814,159 @@
                 },
 
                 saveCustomMessage() {
-                    const item = this.activeItemForModal;
-                    if (item) {
-                        this.labelCustomization.selectedLabelId = 'custom';
-                        item.packaging.labelId = 'custom';
-                        item.packaging.customMessage = this.labelCustomization.customMessage.trim();
+                    const { type, index } = this.editingLabelFor;
+                    const message = this.labelCustomization.customMessage.trim();
+                    if (!message) return;
+
+                    if (type === 'single') {
+                        this.giftJarSelections[index].labelId = 'custom';
+                        this.giftJarSelections[index].customMessage = message;
+                    } else if (type === 'all') {
+                         this.giftJarSelections.forEach(selection => {
+                            selection.labelId = 'custom';
+                            selection.customMessage = message;
+                        });
                     }
                     this.labelCustomization.showCustomMessageModal = false;
                     this.labelCustomization.showModal = false;
-                    this.labelCustomization.jar = null;
-
-                    // Acción final: añadir al carrito directamente
-                    if (this.editingItem) {
-                        this.saveEditingChanges();
+                },
+                
+                handlePrimaryAction() {
+                    if (this.editingMode === 'kraft') {
+                        if (this.editedKraftGrams <= 0) {
+                            this.triggerAlert('La cantidad de gramos debe ser mayor a cero.');
+                            return;
+                        }
+                        const originalItem = this.cart[this.editingCartItemIndex];
+                        let updatedItem = JSON.parse(JSON.stringify(originalItem));
+                        updatedItem.nuts.forEach((nut) => {
+                            const editedNut = this.itemToAdd.nuts.find(n => n.name === nut.name);
+                            if (editedNut && editedNut.hasOwnProperty('cutPreference')) {
+                                nut.cutPreference = editedNut.cutPreference;
+                            }
+                        });
+                        this.applyWeightAdjustment(updatedItem, this.editedKraftGrams);
+                        this.cart.splice(this.editingCartItemIndex, 1, updatedItem);
+                        this.closeOptionsEditor();
                     } else {
-                        this.confirmAndAddToCart();
+                        // Esta parte ahora no se usa para la acción principal del botón,
+                        // pero se deja por si se quiere reintroducir un botón "Añadir en Bolsa"
                     }
                 },
-                // === FIN DE LA LÓGICA CORREGIDA ===
 
-                applyWeightAdjustment(newWeight) {
-                    const item = this.activeItemForModal;
-                    if (!item || item.originalGrams <= 0) return;
+                handleKraftSelection() {
+                    let newItem = this.activeItemForModal;
+                    newItem.packaging = { type: 'default', jarId: null, price: 0, labelId: null, customMessage: '' };
+                    newItem.quantity = 1;
+                    this.applyWeightAdjustment(newItem, newItem.originalGrams);
+                    this.addItemToCart(newItem);
+                    this.cleanUpAfterAdding();
+                },
 
-                    const nutsWithDecimals = item.nuts.map(nut => {
-                        const idealGrams = (nut.originalGrams / item.originalGrams) * newWeight;
+                handleGiftSelection() {
+                    if (!this.allJarsHaveLabels) return;
+                    
+                    this.giftJarSelections.forEach(selection => {
+                        const jar = this.getJarById(selection.jarId);
+                        let newItem = JSON.parse(JSON.stringify(this.activeItemForModal));
+                        newItem.nuts.forEach((nut) => {
+                           const editedNut = this.itemToAdd.nuts.find(n => n.name === nut.name);
+                           if (editedNut && editedNut.hasOwnProperty('cutPreference')) {
+                               nut.cutPreference = editedNut.cutPreference;
+                           }
+                        });
+                        newItem.packaging = {
+                            type: 'glass_jar',
+                            jarId: selection.jarId,
+                            price: jar.price,
+                            labelId: selection.labelId,
+                            customMessage: selection.customMessage
+                        };
+                        this.applyWeightAdjustment(newItem, jar.capacity);
+                        newItem.quantity = selection.quantity;
+                        this.addItemToCart(newItem);
+                    });
+
+                    this.cleanUpAfterAdding();
+                },
+                
+                openLabelEditorForSelection() {
+                    if (this.giftJarSelections.length === 0) {
+                        this.triggerAlert('Debes seleccionar al menos un envase para continuar.');
+                        return;
+                    }
+                    this.showLabelSelectionModal = true;
+                },
+
+                closeLabelEditor() {
+                    this.showLabelSelectionModal = false;
+                },
+
+                confirmAndSaveChanges() {
+                    if (!this.allJarsHaveLabels) {
+                         this.triggerAlert('Por favor, elige una etiqueta para cada envase seleccionado.');
+                        return;
+                    }
+                    this.cart.splice(this.editingCartItemIndex, 1);
+                    
+                    this.giftJarSelections.forEach(selection => {
+                        if (selection.quantity > 0) {
+                            const jar = this.getJarById(selection.jarId);
+                            let newItem = JSON.parse(JSON.stringify(this.activeItemForModal));
+                            newItem.nuts.forEach((nut) => {
+                               const editedNut = this.itemToAdd.nuts.find(n => n.name === nut.name);
+                               if (editedNut && editedNut.hasOwnProperty('cutPreference')) {
+                                   nut.cutPreference = editedNut.cutPreference;
+                               }
+                            });
+                            newItem.packaging = {
+                                type: 'glass_jar',
+                                jarId: selection.jarId,
+                                price: jar.price,
+                                labelId: selection.labelId,
+                                customMessage: selection.customMessage
+                            };
+                            this.applyWeightAdjustment(newItem, jar.capacity);
+                            newItem.quantity = selection.quantity;
+                            this.addItemToCart(newItem);
+                        }
+                    });
+
+                    this.closeLabelEditor();
+                    this.cleanUpAfterAdding();
+                },
+
+                applyWeightAdjustment(item, newWeight) {
+                    if (!item.proportions || item.proportions.length === 0) {
+                        const totalOriginalGrams = item.nuts.reduce((acc, nut) => acc + nut.originalGrams, 0);
+                        if (totalOriginalGrams > 0) {
+                            item.proportions = item.nuts.map(nut => ({
+                                name: nut.name,
+                                percentage: (nut.originalGrams / totalOriginalGrams) * 100
+                            }));
+                        } else {
+                            return;
+                        }
+                    }
+
+                    const nutsWithDecimals = item.proportions.map(p => {
+                        const idealGrams = newWeight * (p.percentage / 100);
                         return {
-                            name: nut.name,
+                            name: p.name,
                             floorGrams: Math.floor(idealGrams),
                             decimalPart: idealGrams - Math.floor(idealGrams)
                         };
                     });
 
                     let currentTotalGrams = nutsWithDecimals.reduce((acc, nut) => acc + nut.floorGrams, 0);
-                    let remainder = newWeight - currentTotalGrams;
+                    let remainder = Math.round(newWeight - currentTotalGrams);
+                    
                     nutsWithDecimals.sort((a, b) => b.decimalPart - a.decimalPart);
 
                     for (let i = 0; i < remainder; i++) {
-                        nutsWithDecimals[i].floorGrams++;
+                        if (nutsWithDecimals[i]) {
+                           nutsWithDecimals[i].floorGrams++;
+                        }
                     }
 
                     let newSubtotal = 0;
@@ -1640,14 +1975,12 @@
                         if (updatedNut) {
                             nut.grams = updatedNut.floorGrams;
                             const nutData = this.getNutByName(nut.name);
-                            if (nutData) {
-                                newSubtotal += nut.grams * nutData.price;
-                            }
+                            if (nutData) newSubtotal += nut.grams * nutData.price;
                         }
                     });
 
                     item.totalGrams = item.nuts.reduce((acc, nut) => acc + nut.grams, 0);
-
+                    item.originalGrams = newWeight;
                     const discountPercentage = item.totalGrams >= 750 ? 5 : 0;
                     const discountValue = newSubtotal * (discountPercentage / 100);
                     
@@ -1656,46 +1989,8 @@
                     item.discount = Math.round(discountValue);
                     item.cost = Math.round(newSubtotal - discountValue);
                 },
-                saveEditingChanges() {
-                    if (this.editingCartItemIndex === null || !this.editingItem) return;
-                    this.cart[this.editingCartItemIndex] = this.editingItem;
-                    this.closeOptionsEditor();
-                },
-                
-                closeOptionsEditor() {
-                    this.showPackagingModal = false;
-                    this.itemToAdd = null;
-                    this.editingItem = null;
-                    this.editingCartItemIndex = null;
-                    this.selectedJarIdInModal = null;
-                },
 
-                increaseQuantity(index) {
-                    this.cart[index].quantity++;
-                },
-
-                decreaseQuantity(index) {
-                    if (this.cart[index].quantity > 1) {
-                        this.cart[index].quantity--;
-                    }
-                },
-                
-                confirmAndAddToCart() {
-                    if (!this.itemToAdd && !this.editingItem) return;
-
-                    const item = this.editingItem || this.itemToAdd;
-
-                    if (item.packaging.type === 'default') {
-                         this.applyPackagingChoice('default', null, false);
-                    }
-                    
-                    if (this.editingItem) {
-                        this.saveEditingChanges();
-                        return;
-                    }
-                    
-                    this.cart.push(this.itemToAdd);
-                    
+                cleanUpAfterAdding() {
                     if (this.activeTab === 0) {
                         if(this.activeSubTab < 2) this.changeSubTab(this.activeSubTab);
                     } else if (this.activeTab === 2) {
@@ -1704,13 +1999,61 @@
                            if (mix) mix.gramsToAdd = 0;
                         }
                     }
-
                     this.closeOptionsEditor();
                     this.$nextTick(() => this.scrollToElement('#cart'));
                 },
                 
-                handleEscape() {
-                    if (this.showImageModal) {
+                addItemToCart(newItem) {
+                    const areNutsIdentical = (nuts1, nuts2) => {
+                        if (nuts1.length !== nuts2.length) return false;
+                        const sortedNuts1 = [...nuts1].sort((a, b) => a.name.localeCompare(b.name));
+                        const sortedNuts2 = [...nuts2].sort((a, b) => a.name.localeCompare(b.name));
+                        return sortedNuts1.every((nut1, index) => {
+                            const nut2 = sortedNuts2[index];
+                            return nut1.name === nut2.name && Math.round(nut1.grams) === Math.round(nut2.grams) && nut1.cutPreference === nut2.cutPreference;
+                        });
+                    };
+
+                    const existingItemIndex = this.cart.findIndex(cartItem =>
+                        cartItem.name === newItem.name &&
+                        cartItem.packaging.type === newItem.packaging.type &&
+                        cartItem.packaging.jarId === newItem.packaging.jarId &&
+                        cartItem.packaging.labelId === newItem.packaging.labelId &&
+                        cartItem.packaging.customMessage === newItem.packaging.customMessage &&
+                        areNutsIdentical(cartItem.nuts, newItem.nuts)
+                    );
+
+                    if (existingItemIndex > -1) {
+                        this.cart[existingItemIndex].quantity += newItem.quantity;
+                    } else {
+                        newItem.id = this.cartItemIdCounter++; 
+                        this.cart.push(newItem);
+                    }
+                },
+
+                closeOptionsEditor() {
+                    this.showPackagingModal = false;
+                    this.itemToAdd = null;
+                    this.editingCartItemIndex = null;
+                    this.editingMode = null; 
+                    this.packagingStep = 'selection';
+                    this.giftJarSelections = [];
+                },
+
+                increaseQuantity(index) {
+                     this.cart[index].quantity++;
+                },
+
+                decreaseQuantity(index) {
+                    if (this.cart[index].quantity > 1) {
+                        this.cart[index].quantity--;
+                    }
+                },
+                
+               handleEscape() {
+                    if (this.showJarGalleryModal) {
+                        this.closeJarGallery();
+                    } else if (this.showImageModal) {
                         this.closeImageModal();
                     } else if (this.labelCustomization.showCustomMessageModal) {
                         this.labelCustomization.showCustomMessageModal = false;
@@ -1874,17 +2217,21 @@
                         totalGrams: totalGrams,
                         originalGrams: totalGrams,
                         cost: Math.round(cost),
+                        subtotal: Math.round(subtotal),
                         discount: Math.round(discount),
                         discountPercentage: discountPercentage,
                         quantity: 1,
                         packaging: { type: 'default', jarId: null, price: 0 }
                     };
                     
+                    this.editedKraftGrams = this.itemToAdd.totalGrams;
+
                     const originalMix = this.predefinedMixes.find(pm => pm.id === this.customization.mix.id);
                     if(originalMix) originalMix.gramsToAdd = 0;
                     
                     this.closeCustomizationModal();
-                    this.selectedJarIdInModal = null;
+                    this.packagingStep = 'selection';
+                    this.giftJarSelections = [];
                     this.showPackagingModal = true;
                 },
 
@@ -1899,6 +2246,14 @@
                 init() {
                     this.resetBuilder();
                     this.orderCounter = parseInt(localStorage.getItem('nutMixOrderCounter_v2')) || 1;
+                    
+                    this.$watch('isAnyModalOpen', (isOpen) => {
+                        if (isOpen) {
+                            document.body.classList.add('overflow-hidden');
+                        } else {
+                            document.body.classList.remove('overflow-hidden');
+                        }
+                    });
                 },
                 triggerAlert(message) {
                     this.alertMessage = message;
@@ -2086,7 +2441,9 @@
                         packaging: { type: 'default', jarId: null, price: 0 }
                     };
                     
-                    this.selectedJarIdInModal = null;
+                    this.editedKraftGrams = this.itemToAdd.totalGrams;
+                    this.packagingStep = 'selection';
+                    this.giftJarSelections = [];
                     this.showPackagingModal = true;
                 },
                 
@@ -2104,31 +2461,30 @@
                     const mixType = 'A granel';
                     const mixCount = this.cart.filter(item => item.name.startsWith(mixType)).length + 1;
                     
-                    // --- INICIO DE LA CORRECCIÓN ---
-                    // Se crea el objeto base del fruto
                     let nutObject = { name: nut.name, grams: totalGrams, originalGrams: totalGrams };
 
-                    // Se añade la propiedad `cutPreference` SOLO SI el fruto está en la lista de frutos grandes.
                     if (this.largeFruits.includes(nut.name)) {
                         nutObject.cutPreference = 'Entero';
                     }
-                    // --- FIN DE LA CORRECCIÓN ---
 
                     this.itemToAdd = {
                         name: `${mixType} #${mixCount}`,
-                        nuts: [nutObject], // Se usa el objeto creado
+                        nuts: [nutObject],
                         totalGrams: totalGrams,
                         originalGrams: totalGrams,
                         cost: Math.round(cost),
+                        subtotal: Math.round(subtotal),
                         discount: Math.round(discount),
                         discountPercentage: discountPercentage,
                         quantity: 1,
                         packaging: { type: 'default', jarId: null, price: 0 }
                     };
                     
+                    this.editedKraftGrams = this.itemToAdd.totalGrams;
                     nut.grams = 0;
                     this.selectedIndividualNutName = null;
-                    this.selectedJarIdInModal = null;
+                    this.packagingStep = 'selection';
+                    this.giftJarSelections = [];
                     this.showPackagingModal = true;
                 },
 
@@ -2163,13 +2519,16 @@
                         totalGrams: totalGrams,
                         originalGrams: totalGrams,
                         cost: Math.round(cost),
+                        subtotal: Math.round(subtotal),
                         discount: Math.round(discount),
                         discountPercentage: discountPercentage,
                         quantity: 1,
                         packaging: { type: 'default', jarId: null, price: 0 }
                     };
-                    
-                    this.selectedJarIdInModal = null;
+
+                    this.editedKraftGrams = this.itemToAdd.totalGrams;
+                    this.packagingStep = 'selection';
+                    this.giftJarSelections = [];
                     this.showPackagingModal = true;
                 },
                 handleOpenCustomization(mix) {
@@ -2534,6 +2893,30 @@
                 },
 
                 formatCurrency(value) { return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(value); },
+// --- INICIO: AÑADIR ESTA NUEVA FUNCIÓN ---
+                calculateMixCostForWeight(weight) {
+                    if (!this.activeItemForModal || weight <= 0) return 0;
+
+                    const originalMix = this.activeItemForModal;
+                    const originalTotalGrams = originalMix.nuts.reduce((acc, nut) => acc + nut.originalGrams, 0);
+
+                    if (originalTotalGrams <= 0) return 0;
+
+                    let mixSubtotal = 0;
+                    originalMix.nuts.forEach(nut => {
+                        const proportion = nut.originalGrams / originalTotalGrams;
+                        const newGrams = weight * proportion;
+                        const nutData = this.getNutByName(nut.name);
+                        if (nutData) {
+                            mixSubtotal += newGrams * nutData.price;
+                        }
+                    });
+
+                    const discount = weight >= 750 ? mixSubtotal * 0.05 : 0;
+                    return mixSubtotal - discount;
+                },
+                // --- FIN: AÑADIR ESTA NUEVA FUNCIÓN ---
+
                 calculateNutPercentage(grams) {
                     const totalGrams = this.nuts.reduce((acc, nut) => acc + (Number(nut.grams) || 0), 0);
                     if (totalGrams === 0) return '0.00'; return ((grams / totalGrams) * 100).toFixed(2);
@@ -2543,5 +2926,4 @@
         }
     </script>
 </body>
-</html>
-               
+</html>           
