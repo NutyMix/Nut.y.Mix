@@ -1124,10 +1124,10 @@
                                     <div x-show="editingMode === 'kraft'">
                                         <label for="kraft-grams" class="block text-sm font-medium text-cyan-800">Modificar contenido:</label>
                                         <div class="relative mt-1 inline-block">
-    <input id="kraft-grams" type="number" min="1" step="10" x-model.number="editedKraftGrams" @click.stop
-           class="w-32 text-center border-2 border-cyan-800 rounded-md shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 pr-8">
-    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-cyan-800 select-none">g</span>
-</div>
+                                            <input id="kraft-grams" type="number" min="1" step="10" x-model.number="editedKraftGrams" @click.stop
+                                                class="w-32 text-center border-2 border-cyan-800 rounded-md shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 pr-8">
+                                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-cyan-800 select-none">g</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div x-show="editingMode === null" class="ml-4">
@@ -1583,7 +1583,7 @@
                 mode: 'builder',
                 
                 showPackagingModal: false,
-                showLabelSelectionModal: false, // <<< NUEVO: Controla el modal de etiquetas
+                showLabelSelectionModal: false, 
                 itemToAdd: null,
                 editingCartItemIndex: null,
                 editingMode: null, 
@@ -1630,19 +1630,16 @@
                     }, 0);
                 },
                 
-               // Reemplaza la función original con esta
                 get giftPackagingTotalCost() {
                     if (!this.activeItemForModal || this.giftJarSelections.length === 0) return 0;
 
                     const totalCostOfJars = this.giftJarSelections.reduce((acc, selection) => {
                         const jar = this.getJarById(selection.jarId);
-                        // Aseguramos que jar exista antes de acceder a sus propiedades
                         return acc + ((jar ? jar.price : 0) * selection.quantity);
                     }, 0);
                     
                     const totalCostOfMix = this.calculateMixCostForWeight(this.giftPackagingTotalGrams);
 
-                    // Devolvemos la suma redondeada para consistencia
                     return Math.round(totalCostOfMix + totalCostOfJars);
                 },
 
@@ -1848,9 +1845,7 @@
                         this.applyWeightAdjustment(updatedItem, this.editedKraftGrams);
                         this.cart.splice(this.editingCartItemIndex, 1, updatedItem);
                         this.closeOptionsEditor();
-                    } else {
-                        // Esta parte ahora no se usa para la acción principal del botón,
-                        // pero se deja por si se quiere reintroducir un botón "Añadir en Bolsa"
+                        this.saveCart(); // <<< NUEVO: Guardar cambios
                     }
                 },
 
@@ -1928,12 +1923,12 @@
                             };
                             this.applyWeightAdjustment(newItem, jar.capacity);
                             newItem.quantity = selection.quantity;
-                            this.addItemToCart(newItem);
+                            this.addItemToCart(newItem); // addItemToCart ya guarda el carrito
                         }
                     });
 
                     this.closeLabelEditor();
-                    this.cleanUpAfterAdding();
+                    this.cleanUpAfterAdding(); // Esta función llama a addItemToCart que ya guarda
                 },
 
                 applyWeightAdjustment(item, newWeight) {
@@ -1963,7 +1958,7 @@
                     
                     nutsWithDecimals.sort((a, b) => b.decimalPart - a.decimalPart);
 
-                    for (let i = 0; i < remainder; i++) {
+                                        for (let i = 0; i < remainder; i++) {
                         if (nutsWithDecimals[i]) {
                            nutsWithDecimals[i].floorGrams++;
                         }
@@ -2029,6 +2024,7 @@
                         newItem.id = this.cartItemIdCounter++; 
                         this.cart.push(newItem);
                     }
+                    this.saveCart(); // <<< NUEVO: Guardar cambios
                 },
 
                 closeOptionsEditor() {
@@ -2042,11 +2038,13 @@
 
                 increaseQuantity(index) {
                      this.cart[index].quantity++;
+                     this.saveCart(); // <<< NUEVO: Guardar cambios
                 },
 
                 decreaseQuantity(index) {
                     if (this.cart[index].quantity > 1) {
                         this.cart[index].quantity--;
+                        this.saveCart(); // <<< NUEVO: Guardar cambios
                     }
                 },
                 
@@ -2242,11 +2240,29 @@
                         .normalize('NFD') 
                         .replace(/[\u0300-\u036f]/g, '');
                 },
+                
+                // <<< NUEVO: Funciones para gestionar el carrito en localStorage
+                saveCart() {
+                    localStorage.setItem('nutMixCart_v2', JSON.stringify(this.cart));
+                },
+
+                loadCart() {
+                    const savedCart = localStorage.getItem('nutMixCart_v2');
+                    if (savedCart) {
+                        this.cart = JSON.parse(savedCart);
+                    }
+                },
+
+                clearCart() {
+                    this.cart = [];
+                    localStorage.removeItem('nutMixCart_v2');
+                },
 
                 init() {
                     this.resetBuilder();
                     this.orderCounter = parseInt(localStorage.getItem('nutMixOrderCounter_v2')) || 1;
-                    
+                    this.loadCart(); // <<< NUEVO: Cargar carrito al iniciar
+
                     this.$watch('isAnyModalOpen', (isOpen) => {
                         if (isOpen) {
                             document.body.classList.add('overflow-hidden');
@@ -2711,7 +2727,10 @@
                     this.selectedNut = null;
                     this.activeTab = 1; 
                 },
-                removeFromCart(index) { this.cart.splice(index, 1); },
+                removeFromCart(index) { 
+                    this.cart.splice(index, 1); 
+                    this.saveCart(); // <<< NUEVO: Guardar cambios
+                },
 
                 get finalSummary() {
                     const subtotalMezclas = this.cart.reduce((acc, item) => acc + (item.cost * item.quantity), 0);
@@ -2830,7 +2849,7 @@
                             this.showConfirmation(orderSummary, cleanSummaryForWhatsapp);
                             this.orderCounter++;
                             localStorage.setItem('nutMixOrderCounter_v2', this.orderCounter);
-                            this.cart = [];
+                            this.clearCart(); // <<< NUEVO: Limpiar carrito y localStorage
                             this.resetBuilder();
                             this.delivery = { 
                                 mode: 'Envío', 
@@ -2875,7 +2894,7 @@
                             <p class='text-slate-700 font-semibold mb-3'>Haz clic en el botón para enviarte una copia de tu pedido a tu WhatsApp.</p>
                             <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" 
                                class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <svg xmlns="http://www.w.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                                 </svg>
                                 <span>Enviar a mi WhatsApp</span>
@@ -2893,15 +2912,12 @@
                 },
 
                 formatCurrency(value) { return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(value); },
-// --- INICIO: AÑADIR ESTA NUEVA FUNCIÓN ---
+                
                 calculateMixCostForWeight(weight) {
                     if (!this.activeItemForModal || weight <= 0) return 0;
-
                     const originalMix = this.activeItemForModal;
                     const originalTotalGrams = originalMix.nuts.reduce((acc, nut) => acc + nut.originalGrams, 0);
-
                     if (originalTotalGrams <= 0) return 0;
-
                     let mixSubtotal = 0;
                     originalMix.nuts.forEach(nut => {
                         const proportion = nut.originalGrams / originalTotalGrams;
@@ -2911,11 +2927,9 @@
                             mixSubtotal += newGrams * nutData.price;
                         }
                     });
-
                     const discount = weight >= 750 ? mixSubtotal * 0.05 : 0;
                     return mixSubtotal - discount;
                 },
-                // --- FIN: AÑADIR ESTA NUEVA FUNCIÓN ---
 
                 calculateNutPercentage(grams) {
                     const totalGrams = this.nuts.reduce((acc, nut) => acc + (Number(nut.grams) || 0), 0);
@@ -2926,4 +2940,4 @@
         }
     </script>
 </body>
-</html>           
+</html>
