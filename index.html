@@ -94,13 +94,13 @@
                 <div class="inline-flex border border-slate-300 rounded-lg p-1 bg-slate-200">
                     <button @click="activeTab = 0"
                             :class="{ 'bg-white text-slate-800 shadow-md': activeTab === 0, 'text-slate-600 hover:bg-slate-100': activeTab !== 0 }"
-                            class="flex items-center justify-center gap-2 px-2 sm:px-4 py-3 rounded-md font-semibold text-sm sm:text-base transition-colors duration-300">
+                            class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-3 rounded-md font-semibold text-sm sm:text-base transition-colors duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" /></svg>
                         <span class="text-center leading-tight">Crea tu<br class="hidden sm:block"> Mix</span>
                     </button>
                     <button @click="activeTab = 1"
                             :class="{ 'bg-white text-slate-800 shadow-md': activeTab === 1, 'text-slate-600 hover:bg-slate-100': activeTab !== 1 }"
-                            class="flex items-center justify-center gap-2 px-2 sm:px-4 py-3 rounded-md font-semibold text-sm sm:text-base transition-colors duration-300">
+                            class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-3 rounded-md font-semibold text-sm sm:text-base transition-colors duration-300">
                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
                         </svg>
@@ -108,7 +108,7 @@
                     </button>
                     <button @click="activeTab = 3"
                             :class="{ 'bg-white text-slate-800 shadow-md': activeTab === 3, 'text-slate-600 hover:bg-slate-100': activeTab !== 3 }"
-                            class="flex items-center justify-center gap-2 px-2 sm:px-4 py-3 rounded-md font-semibold text-sm sm:text-base transition-colors duration-300">
+                            class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-3 rounded-md font-semibold text-sm sm:text-base transition-colors duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5 5a3 3 0 013-3h4a3 3 0 013 3v1h-2v-1a1 1 0 00-1-1H8a1 1 0 00-1 1v1H5V5zM2 8a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd" />
                         </svg>
@@ -116,7 +116,7 @@
                     </button>
                     <button @click="activeTab = 2"
                             :class="{ 'bg-white text-slate-800 shadow-md': activeTab === 2, 'text-slate-600 hover:bg-slate-100': activeTab !== 2 }"
-                            class="flex items-center justify-center gap-2 px-2 sm:px-4 py-3 rounded-md font-semibold text-sm sm:text-base transition-colors duration-300">
+                            class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-3 rounded-md font-semibold text-sm sm:text-base transition-colors duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg>
                         <span class="text-center leading-tight">Mixes<br>Vitales</span>
                     </button>
@@ -154,14 +154,24 @@
                             <p class="font-bold text-[#4A5D23]">Aprovecha nuestro descuento por cantidad</p>
                             <p><strong>750 g o más</strong> → <span class="font-semibold">5 % de descuento</span></p>
                         </div>
-                        <div class="relative mb-4">
-                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <input type="text" x-model.debounce.300ms="mixSearchQuery" placeholder="Buscar un fruto para tu mezcla..." class="w-full rounded-lg border-2 border-slate-300 bg-white p-2 pl-10 shadow-sm transition focus:border-[#4A5D23] focus:ring-1 focus:ring-[#4A5D23]">
-                        </div>
+                        <!-- CÓDIGO MEJORADO CON BOTÓN 'X' -->
+<div class="relative">
+    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+        <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+        </svg>
+    </div>
+    <!-- MODIFICACIÓN: Añadimos 'pr-10' y lo metimos en un div -->
+    <input type="text" x-model.debounce.300ms="mixSearchQuery" placeholder="Buscar un fruto para tu mezcla..." class="w-full rounded-lg border-2 border-slate-300 bg-white p-2 pl-10 pr-10 shadow-sm transition focus:border-[#4A5D23] focus:ring-1 focus:ring-[#4A5D23]">
+    <!-- NUEVO: El botón 'X' que aparece cuando hay texto -->
+    <div x-show="mixSearchQuery.length > 0" x-transition class="absolute inset-y-0 right-0 flex items-center">
+        <button @click="mixSearchQuery = ''" type="button" class="p-2 text-slate-500 hover:text-slate-700 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+</div>
                         <div class="grid grid-cols-1 divide-y divide-slate-200">
                             <div class="grid grid-cols-[3fr,2fr] gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2">
 				                <span>FRUTO (COSTO X GRAMO)</span>
@@ -235,14 +245,24 @@
                         </div>
                         
                         <div class="mb-6 px-2">
-                            <div class="relative">
-                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <input type="text" x-model.debounce.300ms="mixSearchQuery" placeholder="Buscar un fruto para tu mezcla..." class="w-full rounded-lg border-2 border-slate-300 bg-white p-2 pl-10 shadow-sm transition focus:border-[#4A5D23] focus:ring-1 focus:ring-[#4A5D23]">
-                            </div>
+                       <!-- CÓDIGO MEJORADO CON BOTÓN 'X' -->
+<div class="relative">
+    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+        <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+        </svg>
+    </div>
+    <!-- MODIFICACIÓN: Añadimos 'pr-10' y lo metimos en un div -->
+    <input type="text" x-model.debounce.300ms="mixSearchQuery" placeholder="Buscar un fruto para tu mezcla..." class="w-full rounded-lg border-2 border-slate-300 bg-white p-2 pl-10 pr-10 shadow-sm transition focus:border-[#4A5D23] focus:ring-1 focus:ring-[#4A5D23]">
+    <!-- NUEVO: El botón 'X' que aparece cuando hay texto -->
+    <div x-show="mixSearchQuery.length > 0" x-transition class="absolute inset-y-0 right-0 flex items-center">
+        <button @click="mixSearchQuery = ''" type="button" class="p-2 text-slate-500 hover:text-slate-700 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+</div>    
                         </div>
                         <div class="relative grid grid-cols-1 divide-y divide-slate-200">
                             <div class="grid grid-cols-[3fr,2fr] gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2"><span>FRUTO (COSTO X GRAMO)</span><span class="text-center">PORCENTAJE</span></div>
@@ -284,14 +304,24 @@
                             <p><strong>750g o más</strong> → <span class="font-semibold">5 % de descuento</span></p>
                         </div>
                         <div class="grid grid-cols-1 divide-y divide-slate-200">
-                            <div class="relative mb-4">
-                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <input type="text" x-model.debounce.300ms="mixSearchQuery" placeholder="Buscar un fruto para tu mezcla..." class="w-full rounded-lg border-2 border-slate-300 bg-white p-2 pl-10 shadow-sm transition focus:border-[#4A5D23] focus:ring-1 focus:ring-[#4A5D23]">
-                            </div>
+                            <!-- CÓDIGO MEJORADO CON BOTÓN 'X' -->
+<div class="relative">
+    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+        <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+        </svg>
+    </div>
+    <!-- MODIFICACIÓN: Añadimos 'pr-10' y lo metimos en un div -->
+    <input type="text" x-model.debounce.300ms="mixSearchQuery" placeholder="Buscar un fruto para tu mezcla..." class="w-full rounded-lg border-2 border-slate-300 bg-white p-2 pl-10 pr-10 shadow-sm transition focus:border-[#4A5D23] focus:ring-1 focus:ring-[#4A5D23]">
+    <!-- NUEVO: El botón 'X' que aparece cuando hay texto -->
+    <div x-show="mixSearchQuery.length > 0" x-transition class="absolute inset-y-0 right-0 flex items-center">
+        <button @click="mixSearchQuery = ''" type="button" class="p-2 text-slate-500 hover:text-slate-700 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+</div>
                             <div class="grid grid-cols-[3fr,1.5fr,1.5fr] gap-4 font-semibold text-slate-500 pb-2 mb-2 px-2">
                                 <span>FRUTO (COSTO X GRAMO)</span>
                                 <span class="text-center">CANTIDAD</span>
@@ -378,16 +408,26 @@
                         <h2 class="text-3xl font-elegant font-bold text-slate-900 text-center mb-4">Nuestros Productos</h2>
                         <p class="text-center text-slate-600 mb-8">Explora nuestra selección premium de frutos secos y frutas deshidratadas.</p>
                     </div>
-                    <div class="mb-8 px-4 sm:px-0">
-                        <div class="relative">
-                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <input type="text" x-model.debounce.300ms="searchQuery" placeholder="Buscar un producto..." class="w-full rounded-lg border-2 border-slate-300 bg-white p-2 pl-10 shadow-sm transition focus:border-[#4A5D23] focus:ring-1 focus:ring-[#4A5D23]">
-                        </div>
-                    </div>
+<!-- CÓDIGO MEJORADO CON BOTÓN 'X' -->
+<div class="mb-8 px-4 sm:px-0">
+    <div class="relative">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+            <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        <!-- MODIFICACIÓN: Añadimos 'pr-10' para dar espacio al botón 'X' -->
+        <input type="text" x-model.debounce.300ms="searchQuery" placeholder="Buscar un producto..." class="w-full rounded-lg border-2 border-slate-300 bg-white p-2 pl-10 pr-10 shadow-sm transition focus:border-[#4A5D23] focus:ring-1 focus:ring-[#4A5D23]">
+        <!-- NUEVO: El botón 'X' que aparece cuando hay texto -->
+        <div x-show="searchQuery.length > 0" x-transition class="absolute inset-y-0 right-0 flex items-center">
+            <button @click="searchQuery = ''" type="button" class="p-2 text-slate-500 hover:text-slate-700 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
                     <div class="flex justify-center flex-wrap gap-2 mb-8">
                         <button @click="productFilter = 'Todos'; searchQuery = ''" class="px-4 py-2 text-sm font-medium rounded-full transition-colors" :class="{'bg-[#4A5D23] text-white': productFilter === 'Todos', 'bg-slate-200 text-slate-700 hover:bg-slate-300': productFilter !== 'Todos'}">Todos</button>
                         <button @click="productFilter = 'Frutos Secos'; searchQuery = ''" class="px-4 py-2 text-sm font-medium rounded-full transition-colors" :class="{'bg-[#4A5D23] text-white': productFilter === 'Frutos Secos', 'bg-slate-200 text-slate-700 hover:bg-slate-300': productFilter !== 'Frutos Secos'}">Frutos Secos</button>
@@ -543,9 +583,21 @@
                     </p><br>
                     <div class="flex justify-center"><img src="https://i.ibb.co/7J4DD40q/IMG1.png" alt="IMG1" class="rounded-lg shadow-md mb-8" width="206" height="143" >
                     </div>
-                    <div class="mb-8 px-4 sm:px-0">
-                        <input type="text" x-model.debounce.300ms="vitalMixSearchQuery" placeholder="Buscar mix vital por nombre o beneficio..." class="w-full p-3 border-2 border-slate-300 rounded-lg shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23] transition">
-                    </div>
+                    <!-- CÓDIGO MEJORADO CON BOTÓN 'X' -->
+<div class="mb-8 px-4 sm:px-0">
+    <div class="relative">
+        <!-- MODIFICACIÓN: Añadimos 'pr-10' para dar espacio al botón 'X' -->
+        <input type="text" x-model.debounce.300ms="vitalMixSearchQuery" placeholder="Buscar mix vital por nombre o beneficio..." class="w-full p-3 border-2 border-slate-300 rounded-lg shadow-sm focus:border-[#4A5D23] focus:ring-[#4A5D23] transition pr-10">
+        <!-- NUEVO: El botón 'X' que aparece cuando hay texto -->
+        <div x-show="vitalMixSearchQuery.length > 0" x-transition class="absolute inset-y-0 right-0 flex items-center pr-3">
+            <button @click="vitalMixSearchQuery = ''" type="button" class="p-2 text-slate-500 hover:text-slate-700 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <template x-for="(mix, index) in filteredPredefinedMixes" :key="mix.id">
@@ -1390,21 +1442,29 @@
                 <p class="text-center text-stone-900"><strong>Elige un diseño para tu etiqueta o crea tu etiqueta con un mensaje especial (Clic en Personaliza).</strong></p>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <template x-for="label in labelOptions" :key="label.id">
-                        <div @click="label.id === 'custom' ? openCustomMessageModal() : (labelCustomization.selectedLabelId = label.id)"
-                             class="p-3 rounded-lg border-2 text-center cursor-pointer transition-all"
-                             :class="labelCustomization.selectedLabelId === label.id ? 'border-green-600 bg-green-50 shadow-md' : 'border-slate-200 bg-white hover:border-slate-400'">
-                            
-                            <div class="relative w-full h-32 rounded-md mb-2 group/image">
-                                <img :src="label.imageUrl" :alt="label.name" class="w-full h-full object-cover rounded-md">
-                                <div @click.stop="openImageModal(label.imageUrl)" class="absolute inset-0 bg-black bg-opacity-0 group-hover/image:bg-opacity-50 flex items-center justify-center transition-all duration-300 rounded-md">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6 text-white opacity-0 group-hover/image:opacity-100 transition-opacity">
-                                        <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Zm5-2.25a.75.75 0 0 1 .75.75v1.5h1.5a.75.75 0 0 1 0 1.5h-1.5v1.5a.75.75 0 0 1-1.5 0v-1.5h-1.5a.75.75 0 0 1 0-1.5h1.5v-1.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <p class="font-semibold text-slate-700 text-sm" x-text="label.name"></p>
-                        </div>
-                    </template>
+    <!-- El @click principal sigue aquí. Ahora, al hacer clic en la imagen, este evento se disparará. -->
+    <div @click="label.id === 'custom' ? openCustomMessageModal() : (labelCustomization.selectedLabelId = label.id)"
+         class="p-3 rounded-lg border-2 text-center cursor-pointer transition-all"
+         :class="labelCustomization.selectedLabelId === label.id ? 'border-green-600 bg-green-50 shadow-md' : 'border-slate-200 bg-white hover:border-slate-400'">
+        
+        <div class="relative w-full h-32 rounded-md mb-2 group">
+            <!-- La imagen ya no tiene un overlay que bloquee el clic -->
+            <img :src="label.imageUrl" :alt="label.name" class="w-full h-full object-cover rounded-md">
+            
+            <!-- NUEVO: Este es el botón de zoom, pequeño y en la esquina. -->
+            <!-- Solo este botón tiene el @click.stop, que abre el modal de imagen y detiene la selección. -->
+            <button @click.stop="openImageModal(label.imageUrl)" type="button" 
+        class="absolute top-1.5 right-1.5 bg-slate-800 bg-opacity-60 text-white rounded-full p-1 transition-opacity duration-300 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-white opacity-100 md:opacity-0 md:group-hover:opacity-100">
+                <span class="sr-only">Agrandar imagen</span> <!-- Para accesibilidad -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.25 13.25a.75.75 0 001.5 0V9.75h3.5a.75.75 0 000-1.5h-3.5V4.75a.75.75 0 00-1.5 0v3.5h-3.5a.75.75 0 000 1.5h3.5v3.5z" />
+                  <path fill-rule="evenodd" d="M1.5 10a8.5 8.5 0 1117 0 8.5 8.5 0 01-17 0zM10 2.5a7.5 7.5 0 100 15 7.5 7.5 0 000-15z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+        <p class="font-semibold text-slate-700 text-sm" x-text="label.name"></p>
+    </div>
+</template>
                 </div>
             </div>
 
@@ -1605,6 +1665,13 @@
 
                 get isAnyModalOpen() {
                     return this.showPackagingModal || this.showLabelSelectionModal || this.showJarGalleryModal || this.labelCustomization.showModal || this.labelCustomization.showCustomMessageModal || this.showImageModal || this.showConfirmationModal || this.showPreConfirmationModal || this.selectedNut || this.selectedMix || this.customization.showModal;
+                },
+
+                // <<< NUEVO: AÑADE ESTA FUNCIÓN
+                syncStateWithStorage() {
+                    // // // console.log('Sincronizando estado con sessionStorage...');
+                    this.loadCart();
+                    this.orderCounter = parseInt(sessionStorage.getItem('nutMixOrderCounter_v2')) || 1;
                 },
 
                 get cartTotalWeight() {
@@ -1850,13 +1917,19 @@
                 },
 
                 handleKraftSelection() {
-                    let newItem = this.activeItemForModal;
-                    newItem.packaging = { type: 'default', jarId: null, price: 0, labelId: null, customMessage: '' };
-                    newItem.quantity = 1;
-                    this.applyWeightAdjustment(newItem, newItem.originalGrams);
-                    this.addItemToCart(newItem);
-                    this.cleanUpAfterAdding();
-                },
+    // // // console.log("Paso 2: Se seleccionó 'Bolsa Kraft'.");
+    // // // console.log("El item activo para el modal es:", JSON.parse(JSON.stringify(this.activeItemForModal)));
+    
+    let newItem = this.activeItemForModal;
+    newItem.packaging = { type: 'default', jarId: null, price: 0, labelId: null, customMessage: '' };
+    newItem.quantity = 1;
+    this.applyWeightAdjustment(newItem, newItem.originalGrams);
+
+    // // // console.log("Paso 2.1: El item está listo para ser añadido al carrito:", JSON.parse(JSON.stringify(newItem)));
+    
+    this.addItemToCart(newItem);
+    this.cleanUpAfterAdding();
+},
 
                 handleGiftSelection() {
                     if (!this.allJarsHaveLabels) return;
@@ -1999,33 +2072,44 @@
                 },
                 
                 addItemToCart(newItem) {
-                    const areNutsIdentical = (nuts1, nuts2) => {
-                        if (nuts1.length !== nuts2.length) return false;
-                        const sortedNuts1 = [...nuts1].sort((a, b) => a.name.localeCompare(b.name));
-                        const sortedNuts2 = [...nuts2].sort((a, b) => a.name.localeCompare(b.name));
-                        return sortedNuts1.every((nut1, index) => {
-                            const nut2 = sortedNuts2[index];
-                            return nut1.name === nut2.name && Math.round(nut1.grams) === Math.round(nut2.grams) && nut1.cutPreference === nut2.cutPreference;
-                        });
-                    };
+ // // // console.log("Paso 3: Ejecutando 'addItemToCart'.");
+    // // // console.log("Carrito ANTES de añadir:", JSON.parse(JSON.stringify(this.cart)));
+    // // // console.log("Item que se va a añadir:", JSON.parse(JSON.stringify(newItem)));
 
-                    const existingItemIndex = this.cart.findIndex(cartItem =>
-                        cartItem.name === newItem.name &&
-                        cartItem.packaging.type === newItem.packaging.type &&
-                        cartItem.packaging.jarId === newItem.packaging.jarId &&
-                        cartItem.packaging.labelId === newItem.packaging.labelId &&
-                        cartItem.packaging.customMessage === newItem.packaging.customMessage &&
-                        areNutsIdentical(cartItem.nuts, newItem.nuts)
-                    );
+    // Esta es una copia de la lógica original para encontrar duplicados
+    const areNutsIdentical = (nuts1, nuts2) => {
+        if (nuts1.length !== nuts2.length) return false;
+        const sortedNuts1 = [...nuts1].sort((a, b) => a.name.localeCompare(b.name));
+        const sortedNuts2 = [...nuts2].sort((a, b) => a.name.localeCompare(b.name));
+        return sortedNuts1.every((nut1, index) => {
+            const nut2 = sortedNuts2[index];
+            return nut1.name === nut2.name && Math.round(nut1.grams) === Math.round(nut2.grams) && nut1.cutPreference === nut2.cutPreference;
+        });
+    };
 
-                    if (existingItemIndex > -1) {
-                        this.cart[existingItemIndex].quantity += newItem.quantity;
-                    } else {
-                        newItem.id = this.cartItemIdCounter++; 
-                        this.cart.push(newItem);
-                    }
-                    this.saveCart(); // <<< NUEVO: Guardar cambios
-                },
+    const existingItemIndex = this.cart.findIndex(cartItem =>
+        cartItem.name === newItem.name &&
+        cartItem.packaging.type === newItem.packaging.type &&
+        cartItem.packaging.jarId === newItem.packaging.jarId &&
+        cartItem.packaging.labelId === newItem.packaging.labelId &&
+        cartItem.packaging.customMessage === newItem.packaging.customMessage &&
+        areNutsIdentical(cartItem.nuts, newItem.nuts)
+    );
+
+    if (existingItemIndex > -1) {
+        // // // console.log("Se encontró un item idéntico. Aumentando cantidad.");
+        this.cart[existingItemIndex].quantity += newItem.quantity;
+    } else {
+        // // // console.log("No se encontró item idéntico. Añadiendo nuevo item.");
+        // --- LA MAGIA ESTÁ AQUÍ ---
+        // Generamos un ID único garantizado usando el timestamp + un número aleatorio.
+        newItem.id = Date.now() + Math.random(); 
+        this.cart.push(newItem);
+    }
+    
+    // // // console.log("Carrito DESPUÉS de añadir:", JSON.parse(JSON.stringify(this.cart)));
+    this.saveCart();
+},
 
                 closeOptionsEditor() {
                     this.showPackagingModal = false;
@@ -2241,26 +2325,62 @@
                         .replace(/[\u0300-\u036f]/g, '');
                 },
                 
-                // <<< NUEVO: Funciones para gestionar el carrito en localStorage
+                // <<< NUEVO: Funciones para gestionar el carrito en sessionStorage
                 saveCart() {
-                    localStorage.setItem('nutMixCart_v2', JSON.stringify(this.cart));
-                },
+    // // // console.log("Paso 4: Ejecutando 'saveCart'. Guardando en sessionStorage.");
+    sessionStorage.setItem('nutMixCart_v2', JSON.stringify(this.cart));
+    // // // console.log("----- FIN PROCESO DE AÑADIR -----");
+},
 
-                loadCart() {
-                    const savedCart = localStorage.getItem('nutMixCart_v2');
-                    if (savedCart) {
-                        this.cart = JSON.parse(savedCart);
+                // <<< REEMPLAZA TU loadCart CON ESTA VERSIÓN
+loadCart() {
+ // // // console.log("Ejecutando 'loadCart' para cargar/refrescar el estado del carrito.");
+    const savedCart = sessionStorage.getItem('nutMixCart_v2');
+    
+    // Vaciamos el array actual sin reemplazarlo para mantener la reactividad
+    this.cart.length = 0; 
+
+    if (savedCart) {
+        try {
+            const parsedCart = JSON.parse(savedCart);
+            // // // console.log("Se encontró un carrito guardado en sessionStorage:", parsedCart);
+
+            if (Array.isArray(parsedCart) && parsedCart.length > 0) {
+                
+                // --- LÓGICA DE AUTOCORRECCIÓN ---
+                // Iteramos sobre cada item del carrito guardado.
+                parsedCart.forEach(item => {
+                    // Si un item no tiene un ID válido (es nulo, undefined, 0, etc.)
+                    if (!item.id) {
+                        // // // console.warn("Se encontró un item corrupto (sin ID). Asignando uno nuevo.", item);
+                        // Le asignamos un ID nuevo, único e infalible.
+                        item.id = Date.now() + Math.random();
                     }
-                },
+                    this.cart.push(item);
+                });
 
+                // Después de reparar, guardamos inmediatamente el carrito corregido.
+                // Esto asegura que en la próxima carga ya estará limpio.
+                this.saveCart(); 
+            }
+        } catch (e) {
+            // // // console.error("Error al parsear el carrito. Se limpiará para evitar problemas.", e);
+            // Si el JSON está tan corrupto que ni siquiera se puede leer, lo mejor es empezar de cero.
+            sessionStorage.removeItem('nutMixCart_v2');
+            this.cart.length = 0;
+        }
+    } else {
+        // // // console.log("No se encontró carrito en sessionStorage. El carrito está vacío.");
+    }
+},
                 clearCart() {
                     this.cart = [];
-                    localStorage.removeItem('nutMixCart_v2');
+                    sessionStorage.removeItem('nutMixCart_v2');
                 },
 
                 init() {
                     this.resetBuilder();
-                    this.orderCounter = parseInt(localStorage.getItem('nutMixOrderCounter_v2')) || 1;
+                    this.orderCounter = parseInt(sessionStorage.getItem('nutMixOrderCounter_v2')) || 1;
                     this.loadCart(); // <<< NUEVO: Cargar carrito al iniciar
 
                     this.$watch('isAnyModalOpen', (isOpen) => {
@@ -2268,6 +2388,25 @@
                             document.body.classList.add('overflow-hidden');
                         } else {
                             document.body.classList.remove('overflow-hidden');
+                        }
+                    });
+  // <<< MODIFICACIÓN: AÑADE ESTOS EVENT LISTENERS
+                    // Se ejecuta cuando vuelves a la pestaña
+                    window.addEventListener('visibilitychange', () => {
+                        if (!document.hidden) {
+                            this.syncStateWithStorage();
+                        }
+                    });
+
+                    // Se ejecuta cuando la ventana del navegador vuelve a tener foco
+                    window.addEventListener('focus', () => {
+                        this.syncStateWithStorage();
+                    });
+
+                    // Importante para el cache de "atrás" y "adelante" del navegador (bfcache)
+                    window.addEventListener('pageshow', (event) => {
+                        if (event.persisted) {
+                            this.syncStateWithStorage();
                         }
                     });
                 },
@@ -2432,36 +2571,43 @@
                     document.querySelector(selector).scrollIntoView({ behavior: 'smooth' });
                 },
                 handleAddToCart() {
-                    if (this.justAdded) return;
-                    if (!this.isActionEnabled) {
-                        if (this.activeSubTab === 0) {
-                            this.triggerAlert('Debes añadir gramos a al menos un fruto para crear tu mezcla.');
-                        } else if (this.activeSubTab === 1) {
-                            if (this.currentMix.totalGrams <= 0) {
-                                this.triggerAlert('Debes definir un peso total para tu mezcla antes de añadirla.');
-                            } else if (this.currentMix.totalPercentage !== 100) {
-                                this.triggerAlert('La suma de los porcentajes debe ser exactamente 100%.');
-                            }
-                        }
-                        return;
-                    }
-                    
-                    const current = this.currentMix;
-                    const mixType = this.activeSubTab === 0 ? 'Mezcla por Cantidad' : 'Mezcla por Porcentaje';
-                    const mixCount = this.cart.filter(item => item.name.startsWith(mixType)).length + 1;
+    // // // console.log("----- INICIO PROCESO DE AÑADIR -----");
+    // // // console.log("Paso 1: Click en 'Añadir Compra'.");
 
-                    this.itemToAdd = {
-                        ...current,
-                        name: `${mixType} #${mixCount}`,
-                        quantity: 1,
-                        packaging: { type: 'default', jarId: null, price: 0 }
-                    };
-                    
-                    this.editedKraftGrams = this.itemToAdd.totalGrams;
-                    this.packagingStep = 'selection';
-                    this.giftJarSelections = [];
-                    this.showPackagingModal = true;
-                },
+    if (this.justAdded) return;
+    if (!this.isActionEnabled) {
+        // // // console.warn("Acción bloqueada. 'isActionEnabled' es falso.");
+        if (this.activeSubTab === 0) {
+            this.triggerAlert('Debes añadir gramos a al menos un fruto para crear tu mezcla.');
+        } else if (this.activeSubTab === 1) {
+            if (this.currentMix.totalGrams <= 0) {
+                this.triggerAlert('Debes definir un peso total para tu mezcla antes de añadirla.');
+            } else if (this.currentMix.totalPercentage !== 100) {
+                this.triggerAlert('La suma de los porcentajes debe ser exactamente 100%.');
+            }
+        }
+        return;
+    }
+    
+    const current = this.currentMix;
+    const mixType = this.activeSubTab === 0 ? 'Mezcla por Cantidad' : 'Mezcla por Porcentaje';
+    const mixCount = this.cart.filter(item => item.name.startsWith(mixType)).length + 1;
+
+    this.itemToAdd = {
+        ...current,
+        name: `${mixType} #${mixCount}`,
+        quantity: 1,
+        packaging: { type: 'default', jarId: null, price: 0 }
+    };
+    
+    // // // console.log("Paso 1.1: Se ha creado el objeto 'itemToAdd'. Abriendo modal de empaque.", this.itemToAdd);
+    
+    this.editedKraftGrams = this.itemToAdd.totalGrams;
+    this.packagingStep = 'selection';
+    this.giftJarSelections = [];
+    this.showPackagingModal = true;
+},
+
                 
                 handleIndividualAddToCart(nut) {
                     if (!nut || !nut.grams || nut.grams <= 0) {
@@ -2633,19 +2779,20 @@
         ], 
         gramsToAdd: 0 
     },
-    { 
-        id: 18, 
-        name: 'Mix Dulces Sueños', 
-        subtitle: 'Mejora la Calidad del Sueño', 
-        description1: 'Una ayuda natural para conciliar el sueño y mejorar su calidad.',
-        description2: 'Esta mezcla está diseñada para preparar tu cuerpo para el descanso. La Almendra y el Pistacho son dos de las mejores fuentes naturales de melatonina, la hormona que regula el ciclo del sueño. Además, la Almendra aporta una dosis de magnesio que ayuda a relajar los músculos y calmar la mente, promoviendo un sueño más profundo y reparador.',
-        ingredients: ['60% Almendra Americana NPX natural', '40% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)'], 
-        proportions: [
-            { name: 'Almendra Americana NPX natural', percentage: 60 },
-            { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 40 }
-        ], 
-        gramsToAdd: 0 
-    },
+{ 
+    id: 18, 
+    name: 'Mix Dulces Sueños', 
+    subtitle: 'Mejora la Calidad del Sueño', 
+    description1: 'Una ayuda natural y potente para conciliar el sueño y mejorar su calidad.',
+    description2: 'Esta mezcla es la "Trifecta del Descanso". La Almendra aporta Magnesio para relajar el sistema nervioso y también melatonina. El Pistacho es rico en Vitamina B6, que ayuda al cuerpo a producir su propia melatonina. Finalmente, las Bayas de Goji, son una de las pocas frutas que contienen melatonina de forma natural, añadiendo un impulso directo y una deliciosa textura a la mezcla.',
+    ingredients: ['50% Almendra Americana NPX natural', '30% Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', '20% Baya Tibetana de Goji'], 
+    proportions: [
+        { name: 'Almendra Americana NPX natural', percentage: 50 },
+        { name: 'Pistacho Californiano tostado ligeramente salado (Bajo en sodio - Sin cáscara)', percentage: 30 },
+        { name: 'Baya Tibetana de Goji', percentage: 20 }
+    ], 
+    gramsToAdd: 0 
+},
     { 
         id: 19, 
         name: 'Mix Glucocontrol', 
@@ -2848,8 +2995,8 @@
                         if (response.ok) {
                             this.showConfirmation(orderSummary, cleanSummaryForWhatsapp);
                             this.orderCounter++;
-                            localStorage.setItem('nutMixOrderCounter_v2', this.orderCounter);
-                            this.clearCart(); // <<< NUEVO: Limpiar carrito y localStorage
+                            sessionStorage.setItem('nutMixOrderCounter_v2', this.orderCounter);
+                            this.clearCart(); // <<< NUEVO: Limpiar carrito y sessionStorage
                             this.resetBuilder();
                             this.delivery = { 
                                 mode: 'Envío', 
