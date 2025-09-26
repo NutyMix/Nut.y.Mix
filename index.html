@@ -875,8 +875,8 @@
             </div>
         </div>
 
-        <section id="cart" class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200"
-            x-show="!selectedNut && !selectedMix">
+       <section id="cart" class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200"
+    x-show="!selectedNut && !selectedMix && (activeTab === 0 || activeTab === 2)">
             <h2 class="text-2xl font-bold text-slate-800 mb-4">Revisa tu Carrito</h2>
             <div x-show="cart.length === 0"
                 class="text-center text-slate-500 py-8 border-2 border-dashed border-slate-300 rounded-lg">
@@ -941,7 +941,7 @@
         </section>
 
         <div id="order-section" class="overflow-hidden transition-height"
-            :style="cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0'" x-show="!selectedNut && !selectedMix">
+    :style="cart.length > 0 ? 'max-height: 2000px' : 'max-height: 0'" x-show="!selectedNut && !selectedMix && (activeTab === 0 || activeTab === 2)">>
             <section class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-slate-200">
                 <form id="order-form" @submit.prevent="placeOrder">
                     <h2 class="text-2xl font-bold text-slate-800 mb-4">Completa tu Pedido</h2>
