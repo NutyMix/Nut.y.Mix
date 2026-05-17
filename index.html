@@ -544,8 +544,8 @@
                             <div class="space-y-12">
                                 <template x-for="set in customPackagingSets" :key="set.title">
                                     <div>
-                                        <h3 class="text-2xl font-elegant text-slate-800 mb-4" x-text="set.title"></h3>
-                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <h3 class="text-2xl font-elegant text-slate-800 mb-4 text-center" x-text="set.title"></h3>
+                                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                                             <template x-for="image in set.images" :key="image.alt">
                                                 <div @click="openImageModal(image.imageUrl)" class="cursor-pointer group">
                                                     <div class="relative">
@@ -596,7 +596,7 @@
                     <p class="text-xs text-slate-500 max-w-xl text-center mx-auto italic">
                         Nota: Estas sugerencias no reemplazan el consejo de un profesional de la salud.
                     </p><br>
-                    <div class="flex justify-center"><img src="https://i.ibb.co/7J4DD40q/IMG1.png" alt="IMG1" class="rounded-lg shadow-md mb-8" width="206" height="143" >
+                    <div class="flex justify-center"><img src="img/empaques/9.jpeg" alt="IMG1" class="rounded-lg shadow-md mb-8" width="420" height="280" >
                     </div>
                     <!-- CÓDIGO MEJORADO CON BOTÓN 'X' -->
 <div class="mb-8 px-4 sm:px-0">
@@ -1531,28 +1531,26 @@
                 justAdded: false,
                 predefinedMixes: [],
                 giftJarExamples: [
-                    { imageUrl: 'https://i.ibb.co/QF9kSZY5/envase1.jpg', alt: 'Envase de regalo 1' },
-                    { imageUrl: 'https://i.ibb.co/Kp41r5BG/envase2.jpg', alt: 'Envase de regalo 2' },
-                    { imageUrl: 'https://i.ibb.co/vv16Hh2d/envase3.jpg', alt: 'Envase de regalo 3' },
-                    { imageUrl: 'https://i.ibb.co/5w5Xbfp/envase4.jpg', alt: 'Envase de regalo 4' },
+                    { imageUrl: 'img/envases/env1.webp', alt: 'Envase de regalo 1' },
+                    { imageUrl: 'img/envases/env2.webp', alt: 'Envase de regalo 2' },
+                    { imageUrl: 'img/envases/env3.webp', alt: 'Envase de regalo 3' },
+                    { imageUrl: 'img/envases/env4.webp', alt: 'Envase de regalo 4' },
                 ],
                 customPackagingSets: [
                     { 
                         title: 'Regalos',
                         images: [
-                            { imageUrl: 'https://i.ibb.co/rGtrs2VM/1.jpg', alt: 'Empaque personalizado 1' },
-                            { imageUrl: 'https://i.ibb.co/k2sg3S3y/2.jpg', alt: 'Empaque personalizado 2' },
-                            { imageUrl: 'https://i.ibb.co/8ghQSdxm/3.jpg', alt: 'Empaque personalizado 3' },
-                            { imageUrl: 'https://i.ibb.co/4RGNTyGd/4.jpg', alt: 'Empaque personalizado 4' },
+                            { imageUrl: 'img/empaques/4.jpeg', alt: 'Empaque personalizado 1' },
+                            { imageUrl: 'img/empaques/5.jpeg', alt: 'Empaque personalizado 2' },
+                            { imageUrl: 'img/empaques/6.jpeg', alt: 'Empaque personalizado 3' },
                         ]
                     },
                     { 
                         title: 'Recordatorios',
                         images: [
-                            { imageUrl: 'https://i.ibb.co/mCC5F49y/Whats-App-Image-2025-08-26-at-11-09-31-AM.jpg', alt: 'Empaque corporativo con logo 1' },
-                            { imageUrl: 'https://i.ibb.co/bgmFytKr/Whats-App-Image-2025-08-26-at-11-06-50-AM.jpg', alt: 'Empaque corporativo con logo 2' },
-                            { imageUrl: 'https://i.ibb.co/hJK6Lsj9/Whats-App-Image-2025-08-26-at-11-08-01-AM.jpg', alt: 'Empaque corporativo con logo 3' },
-                            { imageUrl: 'https://i.ibb.co/7t6Tm99z/Whats-App-Image-2025-08-26-at-11-11-41-AM.jpg', alt: 'Empaque corporativo con logo 4' },
+                            { imageUrl: 'img/empaques/3.jpeg', alt: 'Empaque corporativo con logo 1' },
+                            { imageUrl: 'img/empaques/1.jpeg', alt: 'Empaque corporativo con logo 2' },
+                            { imageUrl: 'img/empaques/7.jpeg', alt: 'Empaque corporativo con logo 3' },
                         ]
                     }
                 ],
@@ -1566,27 +1564,24 @@
                 ],
 
                 jars: [
-                    { id: 'jar_100', name: 'Envase vidrio redondo Tapa Corcho', capacity: 100, price: 4300, imageUrls: ['https://i.ibb.co/kVsQsKLT/corcho1.png', 'https://i.ibb.co/DPQBQ2Kg/corcho2.png', 'https://i.ibb.co/93CsMLFD/corcho3.png'] },
-                    { id: 'jar_105', name: 'Envase vidrio Hexagonal Tapa Blanca', capacity: 105, price: 3100, imageUrls: ['https://i.ibb.co/tMqxSNzy/Chat-GPT-Image-15-sept-2025-05-38-07-p-m.png', 'https://i.ibb.co/27B3RK6x/Chat-GPT-Image-15-sept-2025-05-33-28-p-m.png', 'https://i.ibb.co/3yN1pcJv/Chat-GPT-Image-15-sept-2025-05-47-03-p-m.png'] },
-		            { id: 'jar_130', name: 'Envase vidrio cuadrado Tapa Plateada', capacity: 130, price: 3500, imageUrls: ['https://i.ibb.co/GfdjZ05R/Chat-GPT-Image-15-sept-2025-07-44-54-p-m.png', 'https://i.ibb.co/zWkKQ9MD/Chat-GPT-Image-15-sept-2025-07-53-58-p-m.png', 'https://i.ibb.co/pBMrhWXW/Chat-GPT-Image-15-sept-2025-07-52-42-p-m.png'] },
-		            { id: 'jar_155', name: 'Envase vidrio diamante Tapa Dorada', capacity: 155, price: 3950, imageUrls: ['https://i.ibb.co/TDk1QgJH/Chat-GPT-Image-15-sept-2025-10-17-41-p-m.png', 'https://i.ibb.co/5hzbSkCN/esmeralda2.png', 'https://i.ibb.co/RT8qCCNh/esmeralda3.png'] },
-		            { id: 'jar_250', name: 'Envase vidrio redondo Tapa Dorada', capacity: 250, price: 5600, imageUrls: ['https://i.ibb.co/hRxQj7yS/Chat-GPT-Image-15-sept-2025-10-37-28-p-m.png', 'https://i.ibb.co/jPvzrKGK/Chat-GPT-Image-15-sept-2025-10-54-29-p-m.png', 'https://i.ibb.co/r2ppLMFB/Chat-GPT-Image-15-sept-2025-10-51-52-p-m.png'] },
-                    { id: 'jar_435', name: 'Envase vidrio Flint redondo Tapa Dorada', capacity: 435, price: 4800, imageUrls: ['https://i.ibb.co/yFvRjXrL/430g1.png', 'https://i.ibb.co/KjWGWm04/430g2.png', 'https://i.ibb.co/2YkSXQNM/e113b1be-1c2e-495f-80e4-70c9386afb15.png'] }
+                    { id: 'jar_100', name: 'Envase vidrio redondo Tapa Corcho', capacity: 100, price: 4300, imageUrls: ['img/envases/corcho1.webp', 'img/envases/corcho2.webp', 'img/envases/corcho3.webp'] },
+                    { id: 'jar_105', name: 'Envase vidrio Hexagonal Tapa Blanca', capacity: 105, price: 3100, imageUrls: ['img/envases/hexagonal1.webp', 'img/envases/hexagonal2.webp', 'img/envases/hexagonal3.webp'] },
+		            { id: 'jar_130', name: 'Envase vidrio cuadrado Tapa Plateada', capacity: 130, price: 3500, imageUrls: ['img/envases/cuadrado1.webp', 'img/envases/cuadrado2.webp', 'img/envases/cuadrado3.webp'] },
+		            { id: 'jar_155', name: 'Envase vidrio diamante Tapa Dorada', capacity: 155, price: 3950, imageUrls: ['img/envases/esmeralda1.webp', 'img/envases/esmeralda2.webp', 'img/envases/esmeralda3.webp'] },
+		            { id: 'jar_250', name: 'Envase vidrio redondo Tapa Dorada', capacity: 250, price: 5600, imageUrls: ['img/envases/2501.webp', 'img/envases/2502.webp', 'img/envases/2503.webp'] },
+                    { id: 'jar_435', name: 'Envase vidrio Flint redondo Tapa Dorada', capacity: 435, price: 4800, imageUrls: ['img/envases/4301.webp', 'img/envases/4302.webp', 'img/envases/4303.webp'] }
                 ],
 
                 labelOptions: [
-                    { id: 'custom', name: 'Personaliza: Crea tu Mensaje', type: 'custom', imageUrl: 'https://i.ibb.co/5grFp6hk/ETIQpersonalizada.png' },
-                    { id: 'classic', name: 'Etiqueta 1', imageUrl: 'https://i.ibb.co/2YNZb5BD/ETIQ1.png' },
-                    { id: 'minimalist', name: 'Etiqueta 2', imageUrl: 'https://i.ibb.co/V02p9hcd/ETIQ2.png' },
-                    { id: 'label_3', name: 'Etiqueta 3', imageUrl: 'https://i.ibb.co/hz6DtcM/ETIQ3.png' },
-                    { id: 'label_4', name: 'Etiqueta 4', imageUrl: 'https://i.ibb.co/ZzsGkFnX/ETIQ4.png' },
-                    { id: 'label_5', name: 'Etiqueta 5', imageUrl: 'https://i.ibb.co/mZ1dDwC/ETIQ5.png' },
-                    { id: 'label_6', name: 'Etiqueta 6', imageUrl: 'https://i.ibb.co/vvzKzZFd/ETIQ6.png' },
-                    { id: 'label_7', name: 'Etiqueta 7', imageUrl: 'https://i.ibb.co/Kjbg4skp/ETIQ7.png' },
-                    { id: 'label_8', name: 'Etiqueta 8', imageUrl: 'https://i.ibb.co/WvkhQSgV/ETIQ7.png' },
-                    { id: 'label_9', name: 'Etiqueta 9', imageUrl: 'https://i.ibb.co/4wXGSSX3/ETIQ9.png' },
-                    { id: 'label_10', name: 'Etiqueta 10', imageUrl: 'https://i.ibb.co/Y7VDN9dJ/ETIQ10.png' },
-                    { id: 'label_11', name: 'Etiqueta 11', imageUrl: 'https://i.ibb.co/JWHVswfW/ETIQ11.png' }
+                    { id: 'custom', name: 'Personaliza: Crea tu Mensaje', type: 'custom', imageUrl: 'img/etiquetas/etiq0.webp' },
+                    { id: 'classic', name: 'Etiqueta 1', imageUrl: 'img/etiquetas/etiq1.webp' },
+                    { id: 'minimalist', name: 'Etiqueta 2', imageUrl: 'img/etiquetas/etiq2.webp' },
+                    { id: 'label_3', name: 'Etiqueta 3', imageUrl: 'img/etiquetas/etiq3.webp' },
+                    { id: 'label_4', name: 'Etiqueta 4', imageUrl: 'img/etiquetas/etiq4.webp' },
+                    { id: 'label_5', name: 'Etiqueta 5', imageUrl: 'img/etiquetas/etiq5.webp' },
+                    { id: 'label_6', name: 'Etiqueta 6', imageUrl: 'img/etiquetas/etiq6.webp' },
+                    { id: 'label_7', name: 'Etiqueta 7', imageUrl: 'img/etiquetas/etiq7.webp' },
+                    { id: 'label_8', name: 'Etiqueta 8', imageUrl: 'img/etiquetas/etiq8.webp' }
                 ],
 
                 colombiaData: [
